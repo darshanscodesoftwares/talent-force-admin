@@ -1,0 +1,187 @@
+/* ===== Layout ===== */
+.greet-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f8f5f5;
+}
+.login-logo{
+    margin-bottom: 15px;
+}
+/* ===== Card ===== */
+.login-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+}
+
+.login-title-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* negative gap isn’t valid; use margins on children instead */
+}
+
+.login1 {
+    margin: 0;
+    color: #333333ce;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.login2 {
+    margin: 10px 0 20px 0;
+    color: #1e1e1e80;
+    font-size: 14px;
+    font-weight: 200;
+}
+
+/* ===== Form ===== */
+.login-form .form-group {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Base input style (no icon padding here) */
+.login-form input {
+    width: 100%;
+    padding: 10px;
+    /* base padding */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.3s;
+    box-sizing: border-box;
+}
+
+.login-form input:focus {
+    border-color: #007bff;
+}
+
+/* ===== Input with left icon ===== */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* MORE SPECIFIC selector and placed AFTER base input rule */
+.login-form .input-wrapper input {
+    padding-left: 40px;
+    /* ensures placeholder/text clears the icon */
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    color: #666;
+    font-size: 15px;
+    pointer-events: none;
+    /* clicks go to input */
+    line-height: 1;
+}
+
+/* ===== Button ===== */
+.login-btn {
+    width: 100%;
+    padding: 0.7rem;
+    background: #ff750c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-btn:hover {
+    background: #ff7104;
+    /* darker orange */
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    /* left vs right */
+    margin: 1.4rem 0 0rem;
+    font-size: 0.9rem;
+}
+
+.remember-me input {
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+  margin: 0;
+  
+  appearance: none;          /* remove default browser style */
+  -webkit-appearance: none;  /* Safari fix */
+  -moz-appearance: none;     /* Firefox fix */
+
+  background-color: #efeaea;    /* grey background */
+  border: none;              /* remove border */
+  border-radius: 3px;        /* optional: rounded corners */
+}
+
+/* Show a checkmark when checked */
+.remember-me input:checked {
+  background-color: #c6cdd4; /* bluish when checked */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath fill='none' stroke='white' stroke-width='2' d='M1 5l3 3 7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10px 10px;
+}
+
+
+
+/* .remember-me input {
+  transform: scale(0.85);   
+  accent-color: #007bff;    
+  cursor: pointer;
+  margin: 0;
+} */
+
+.remember-me p {
+    margin: 0;
+    /* remove default <p> margins */
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.forgot-password {
+    color: #b6b6b6;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.tick-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}

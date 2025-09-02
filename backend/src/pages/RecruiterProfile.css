@@ -1,0 +1,190 @@
+.recruiterprofile-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.recruiterprofile-top-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.recruiterprofile-small-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px; 
+}
+
+.recruiterprofile-cards-container {
+  display: flex;
+  gap: 20px;
+}
+
+.recruiterprofile-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;     
+  justify-content: center;
+  background: white;
+  height: 80px;
+  width: 240px;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.recruiterprofile-card:hover {
+  transform: translateY(-3px);
+}
+
+.recruiterprofile-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recruiterprofile-card-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.recruiterprofile-card-icon {
+  font-size: 30px;
+  background: #fadacb;   
+  padding: 10px;
+  border-radius: 8px;
+  color: #ef6a37;        
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recruiterprofile-card-body h4 {
+  font-size: large;
+  font-weight: 400;
+}
+
+.recruiterprofile-amount {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e2a38b0;
+  margin: 0;
+  padding-left: 2px;
+}
+
+/* Sections */
+.recruiterprofile-rec-seek {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.recruiterprofile-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.recruiterprofile-section h2 {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #444;
+}
+
+.recruiterprofile-table-container {
+  overflow-x: auto;
+}
+
+.recruiterprofile-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.recruiterprofile-table th:first-child {
+  width: 40px;
+}
+
+.recruiterprofile-table th,
+.recruiterprofile-table td {
+  padding: 20px 33px;
+  color: #7c8c9d;
+  text-align: left;
+  border-bottom: 1px solid #eeeeeeca;
+}
+
+.recruiterprofile-table th {
+  background: #becbdb19;
+  color: #444;
+  font-weight: 500;
+}
+
+.recruiterprofile-table tr:hover {
+  background: #f9f9f9;
+}
+
+/* Status badge */
+.recruiterprofile-status.seeking {
+  color: #16a34a;
+  font-weight: 600;
+}
+.recruiterprofile-status.not-seeking {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.recruiterprofile-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  gap: 8px;
+}
+
+.recruiterprofile-pagination button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.recruiterprofile-pagination button:hover {
+  background: #f1f1f1;
+}
+
+.recruiterprofile-pagination button.active {
+  background: #ef6a37; 
+  color: white;
+  border-color: #ef6a37;
+}
+
+.recruiterprofile-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recruiterprofile-membership {
+  font-weight: 300;
+}
+
+.recruiterprofile-membership.advanced {
+  color: #f07e21;
+}
+
+.recruiterprofile-membership.basic {
+  color: #444;
+} 
+
+.icon-school{
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}

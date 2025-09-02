@@ -1,0 +1,231 @@
+.dashboard-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.top-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.small-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  gap: 20px; 
+}
+
+.card {
+  display: flex; 
+  flex-direction: column;     
+  align-items: stretch;      
+  gap: 15px;
+  background: white;
+  height: 130px;
+  width: 200px;
+  border-radius: 12px;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+
+.card-body {
+  /* padding: 20px; */
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-footer {
+  background-color: #f7f8fb;
+  color: rgb(78, 78, 78);
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  margin-top: auto;
+  /* width: calc(100% + 40px); */
+  margin-left: -20px;
+  margin-right: -20px;  
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card-icon {
+  font-size: 24px;
+  background: #fadacb;
+  padding: 12px 12px;
+  border-radius: 8px;
+  height: 28px;
+  width: 24px;
+  color: #ef6a37;
+}
+
+.font-num {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* push text to the right side */
+}
+
+.font-num h4 {
+  font-size: 11.5px;
+  color: #666;
+  margin: 0;
+  align-self: flex-start; /* keep heading left */
+}
+
+.font-num p {
+  font-size: 20px;
+  font-weight: 500;
+  color: #1e2a38;
+  margin: 2px 0 0 0;
+  align-self: flex-end; /* number goes right */
+} 
+
+.card h4 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin: 0;
+}
+
+.card p {
+  font-size: 20px;
+  font-weight: 500;
+  color: #1e2a38;
+}
+
+/* Graph box */
+.graph-box {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.graph-box h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #444;
+}
+
+/* Recent Jobs */
+.dashboard-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.dashboard-section h2 {
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #444;
+}
+
+.dashboard-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.dashboard-section li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.dashboard-section li:last-child {
+  border-bottom: none;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.recruiter-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.recruiter-table th,
+.recruiter-table td {
+  padding: 20px 33px;
+  color: #7c8c9d;
+  text-align: left;
+  border-bottom: 1px solid #eeeeeeca;
+}
+
+.recruiter-table th {
+  background: #becbdb19;
+  color: #444;
+  font-weight: 500;
+}
+
+.recruiter-table tr:hover {
+  background: #f9f9f9;
+}
+
+.school-logo {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.membership {
+  font-weight: 300;
+}
+
+.membership.advanced {
+  color: #f07e21;
+}
+
+.membership.basic {
+  color: #444;
+}
+
+.rec-seek{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* .currency-amt {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; 
+  gap: 2px;            
+  margin: 0;             
+} */
+
+.currency {
+  font-size: 14.5px;
+  color: #3f3f3f;
+}
+
+.amount {
+  font-size: 20px;
+  font-weight: 500;
+  color: #1e2a38;
+}

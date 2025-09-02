@@ -1,0 +1,102 @@
+.generalinfo-container {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.generalinfo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.generalinfo-header h2 {
+  font-size: 18px;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.block-btn {
+  background: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.block-btn:hover {
+  background: #dc2626;
+}
+
+.generalinfo-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.profile-icon {
+  font-size: 80px;
+  color: #94a3b8;
+}
+
+.generalinfo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.generalinfo-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.generalinfo-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.generalinfo-field.full {
+  flex: 100%;
+}
+
+.generalinfo-field label {
+  font-size: 14px;
+  color: #334155d1;
+  font-weight: 500;
+}
+
+.generalinfo-field input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+.generalinfo-field input:focus {
+  border-color: #ef6a37;
+}
+
+.generalinfo-back {
+  display: flex;           /* Align icon and text horizontally */
+  align-items: center;     /* Vertical centering */
+  gap: 8px;                /* Space between icon and text */
+  font-size: 18px;
+  color: #1e293b;
+  font-weight: 500;
+  cursor: pointer;         /* Hover cursor */
+  transition: color 0.2s ease;
+}
+
+.generalinfo-back:hover {
+  color: #ef6a37;          /* Optional hover color change */
+}
+
+.back-icon {
+  font-size: 20px;         /* Adjust icon size if needed */
+}
