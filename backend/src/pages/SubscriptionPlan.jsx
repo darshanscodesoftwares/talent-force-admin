@@ -4,38 +4,53 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { TbCoinRupeeFilled } from "react-icons/tb";
 import "./SubscriptionPlan.css";
 import { useState } from "react";
-import { subscribers } from "../data/contentData.js";
+import { subscribers as initialSubscribers } from "../data/contentData.js";
 
 import SubscriptionModal from "../editpages/SubscriptionModal.jsx";
+import SubscriptionAddModal from "../editpages/SubscriptionAddModal.jsx";
 
 export default function SubscriptionPlan() {
+  const [subscribers, setSubscribers] = useState(initialSubscribers);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSub, setSelectedSub] = useState(null);
 
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // Edit subscription
   const handleEdit = (sub) => {
     setSelectedSub(sub);
     setIsModalOpen(true);
   };
 
   const handleSave = (updatedSub) => {
-    console.log("Save clicked with:", updatedSub);
+    setSubscribers((prev) =>
+      prev.map((s) => (s.id === updatedSub.id ? updatedSub : s))
+    );
     setIsModalOpen(false);
     setSelectedSub(null);
-    // later: update state/data with new values
   };
 
+  // Add subscription
+  const handleAdd = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleSaveAdd = (newSub) => {
+    setSubscribers([...subscribers, { id: Date.now(), ...newSub }]);
+    setIsAddModalOpen(false);
+  };
+
+  // Delete subscription
   const handleDelete = (id) => {
-    console.log("Delete clicked for:", id);
-    // later: remove sub from state
+    setSubscribers((prev) => prev.filter((s) => s.id !== id));
   };
 
   return (
     <div className="subscription-container">
+      {/* Top Cards */}
       <div className="subscription-top-row">
         <div className="subscription-small-cards">
-
           <div className="subscription-cards-container">
-
             {/* Card 1 */}
             <div className="subscription-card">
               <div className="subscription-card-body">
@@ -45,7 +60,7 @@ export default function SubscriptionPlan() {
                   </div>
                   <h4>Subscribed Users</h4>
                 </div>
-                <p className="subscription-amount">200</p>
+                <p className="subscription-amount">{subscribers.length}</p>
               </div>
             </div>
 
@@ -58,58 +73,77 @@ export default function SubscriptionPlan() {
                   </div>
                   <h4>Total Revenue</h4>
                 </div>
-                <p className="subscription-amount">50,000</p>
+                <p className="subscription-amount">
+                  {subscribers.reduce((acc, sub) => {
+                    const priceNum = Number(sub.price.replace(/[^0-9]/g, ""));
+                    return acc + (isNaN(priceNum) ? 0 : priceNum);
+                  }, 0)}
+                </p>
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
 
+      {/* Subscription Table */}
       <div className="subscription-rec-seek">
-        {/* Recruiter List Table */}
         <div className="subscription-section">
-          <h2>Subscription List</h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h2>Subscription List</h2>
+            <button className="subscription-add-btn" onClick={handleAdd}>
+              Add Subscription
+            </button>
+          </div>
           <div className="subscription-table-container">
             <table className="subscription-table">
               <thead>
                 <tr>
-                  {/* <th></th> */}
                   <th>Plan Name</th>
                   <th>Membership</th>
                   <th>Price</th>
                   <th>Posted On</th>
-                  <th>Created By</th>
+                  <th>Timespan</th>
+                  <th>Content</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {subscribers.map((sub) => (
                   <tr key={sub.id}>
-                    {/* <td><input type="checkbox" /></td> */}
                     <td>{sub.name}</td>
                     <td>
-                      {sub.membership === "Advance" ? (
-                        <span className="subscription-membership advanced">👑 Advance</span>
-                      ) : (
+                      {sub.membership === "Free-Trial" && (
+                        <span className="subscription-membership free">🎁 Free-Trial</span>
+                      )}
+                      {sub.membership === "Basic" && (
                         <span className="subscription-membership basic">● Basic</span>
                       )}
+                      {sub.membership === "Advance" && (
+                        <span className="subscription-membership advanced">👑 Advance</span>
+                      )}
+                      {sub.membership === "Premium" && (
+                        <span className="subscription-membership premium">⭐ Premium</span>
+                      )}
+                      {sub.membership === "Enterprise" && (
+                        <span className="subscription-membership enterprise">🏢 Enterprise</span>
+                      )}
                     </td>
+
                     <td>{sub.price}</td>
                     <td>{sub.postedOn}</td>
-                    <td>{sub.createdBy}</td>
+                    <td>{sub.timespan}</td>
+                    <td>
+                      <ul className="subscription-content-list">
+                        {sub.content.map((item, idx) => (
+                          <li key={idx}>{item}</li>
+                        ))}
+                      </ul>
+                    </td>
                     <td className="subscription-actions">
-                      <button
-                        className="subscription-btn edit-btn"
-                        onClick={() => handleEdit(sub)}
-                      >
+                      <button className="subscription-btn edit-btn" onClick={() => handleEdit(sub)}>
                         <BiSolidEdit />
                       </button>
-                      <button
-                        className="subscription-btn delete-btn"
-                        onClick={() => handleDelete(sub.id)}
-                      >
+                      <button className="subscription-btn delete-btn" onClick={() => handleDelete(sub.id)}>
                         <AiOutlineDelete />
                       </button>
                     </td>
@@ -121,13 +155,22 @@ export default function SubscriptionPlan() {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Edit Modal */}
       {isModalOpen && (
         <SubscriptionModal
           subscription={selectedSub}
-          isOpen={isModalOpen} 
+          isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSave={handleSave}
+        />
+      )}
+
+      {/* Add Modal */}
+      {isAddModalOpen && (
+        <SubscriptionAddModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          onSave={handleSaveAdd}
         />
       )}
     </div>

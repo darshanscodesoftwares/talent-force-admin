@@ -15,10 +15,10 @@ export default function AddExperienceModal({ isOpen, onClose, onSave }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="addExperienceModal-overlay">
+      <div className="addExperienceModal-content">
         <h3>Add Experience</h3>
-        <div className="modal-field">
+        <div className="addExperienceModal-field">
           <label>Experience</label>
           <input
             type="text"
@@ -28,11 +28,11 @@ export default function AddExperienceModal({ isOpen, onClose, onSave }) {
           />
         </div>
 
-        <div className="modal-actions">
-          <button className="cancel-btn" onClick={onClose}>
+        <div className="addExperienceModal-actions">
+          <button className="addExperienceModal-cancel-btn" onClick={onClose}>
             Cancel
           </button>
-          <button className="save-btn" onClick={handleSubmit}>
+          <button className="addExperienceModal-save-btn" onClick={handleSubmit}>
             Create
           </button>
         </div>
@@ -40,4 +40,3 @@ export default function AddExperienceModal({ isOpen, onClose, onSave }) {
     </div>
   );
 }
-

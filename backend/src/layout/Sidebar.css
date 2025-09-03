@@ -89,4 +89,34 @@
   margin-bottom: 7px;
   margin-left: 50px;
   background-color: #4d5c76;
+  border-radius: 15px;
+}
+
+/* Logout button styling */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #9097a7;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  width: 100%;
+  border: none;
+  background: transparent;
+}
+
+.logout-btn .icon {
+  font-size: 20px;
+}
+
+.logout-btn:hover {
+  background-color: #334155;  
+  color: #fff;
+}
+
+.logout-btn:hover .icon {
+  color: #f07e21;
 }

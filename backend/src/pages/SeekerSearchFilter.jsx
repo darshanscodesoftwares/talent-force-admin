@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
-import { FaRegEye } from "react-icons/fa";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "./SeekerSearchFilter.css";
-
-// import centralized data
 import { seekerSearchPages, seekerFilterRoutes } from "../data/contentData.js";
 
 export default function SeekerSearchFilter() {
   const [filterList, setFilterList] = useState(seekerSearchPages);
+  const [hiddenRows, setHiddenRows] = useState([]); // store ids of hidden rows
   const navigate = useNavigate();
 
   const handleEdit = (filter) => {
@@ -18,6 +17,14 @@ export default function SeekerSearchFilter() {
 
   const handleDelete = (id) => {
     setFilterList(filterList.filter((f) => f.id !== id));
+  };
+
+  const toggleHideRow = (id) => {
+    if (hiddenRows.includes(id)) {
+      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+    } else {
+      setHiddenRows([...hiddenRows, id]);
+    }
   };
 
   return (
@@ -30,7 +37,6 @@ export default function SeekerSearchFilter() {
             <table className="seekerfilter-table">
               <thead>
                 <tr>
-                  {/* <th></th> */}
                   <th>Specification</th>
                   <th>Posted on</th>
                   <th>Created by</th>
@@ -39,19 +45,23 @@ export default function SeekerSearchFilter() {
               </thead>
               <tbody>
                 {filterList.map((filter) => (
-                  <tr key={filter.id}>
-                    {/* <td>
-                      <input type="checkbox" />
-                    </td> */}
+                  <tr
+                    key={filter.id}
+                    className={hiddenRows.includes(filter.id) ? "hidden-row" : ""}
+                  >
                     <td>{filter.specifications}</td>
                     <td>{filter.postedOn}</td>
                     <td>{filter.createdBy}</td>
                     <td className="seekerfilter-actions">
                       <button
                         className="seekerfilter-btn view-btn"
-                        onClick={() => console.log("View", filter)}
+                        onClick={() => toggleHideRow(filter.id)}
                       >
-                        <FaRegEye />
+                        {hiddenRows.includes(filter.id) ? (
+                          <FaRegEyeSlash />
+                        ) : (
+                          <FaRegEye />
+                        )}
                       </button>
 
                       {filter.specifications !== "Location" && (
@@ -62,13 +72,6 @@ export default function SeekerSearchFilter() {
                           <BiSolidEdit />
                         </button>
                       )}
-
-                      {/* <button
-                        className="seekerfilter-btn delete-btn"
-                        onClick={() => handleDelete(filter.id)}
-                      >
-                        <AiOutlineDelete />
-                      </button> */}
                     </td>
                   </tr>
                 ))}

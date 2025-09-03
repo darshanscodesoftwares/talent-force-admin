@@ -12,8 +12,8 @@ const ExperienceModal = ({ isOpen, onClose, onSave, experience }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
+    <div className="experienceModal-overlay">
+      <div className="experienceModal-content">
         <h3>Edit Experience</h3>
         <form onSubmit={handleSubmit}>
           <label>Experience</label>
@@ -23,11 +23,11 @@ const ExperienceModal = ({ isOpen, onClose, onSave, experience }) => {
             onChange={(e) => setExpValue(e.target.value)}
           />
 
-          <div className="modal-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
+          <div className="experienceModal-actions">
+            <button type="button" className="experienceModal-cancel-btn" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="save-btn">
+            <button type="submit" className="experienceModal-save-btn">
               Save
             </button>
           </div>

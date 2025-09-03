@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { FaRegEye } from "react-icons/fa";
-import { AiOutlineDelete } from "react-icons/ai";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -12,12 +11,12 @@ import EditSalaryModal from "./EditSalaryModal";
 export default function ExpectedSalary() {
   const navigate = useNavigate();
   const [filters, setFilters] = useState(expectedSalaryFilter);
+  const [hiddenRows, setHiddenRows] = useState([]); // track hidden rows
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
   const totalPages = Math.ceil(filters.length / itemsPerPage);
-
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filters.slice(startIndex, startIndex + itemsPerPage);
 
@@ -49,9 +48,7 @@ export default function ExpectedSalary() {
 
   const handleUpdateSalary = () => {
     setFilters(
-      filters.map((f) =>
-        f.id === editId ? { ...f, range: newRange } : f
-      )
+      filters.map((f) => (f.id === editId ? { ...f, range: newRange } : f))
     );
     setShowEditModal(false);
     setNewRange("");
@@ -60,6 +57,15 @@ export default function ExpectedSalary() {
 
   const handleDelete = (id) => {
     setFilters(filters.filter((f) => f.id !== id));
+    setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+  };
+
+  const toggleHideRow = (id) => {
+    if (hiddenRows.includes(id)) {
+      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+    } else {
+      setHiddenRows([...hiddenRows, id]);
+    }
   };
 
   return (
@@ -87,7 +93,6 @@ export default function ExpectedSalary() {
             <table className="expectedSalary-table">
               <thead>
                 <tr>
-                  {/* <th></th> */}
                   <th>Salary Range</th>
                   <th>Posted on</th>
                   <th>Created by</th>
@@ -96,16 +101,23 @@ export default function ExpectedSalary() {
               </thead>
               <tbody>
                 {paginatedData.map((salary) => (
-                  <tr key={salary.id}>
-                    {/* <td>
-                      <input type="checkbox" />
-                    </td> */}
+                  <tr
+                    key={salary.id}
+                    className={hiddenRows.includes(salary.id) ? "hidden-row" : ""}
+                  >
                     <td>{salary.range}</td>
                     <td>{salary.postedOn}</td>
                     <td>{salary.createdBy}</td>
                     <td className="expectedSalary-actions">
-                      <button className="expectedSalary-btn view-btn">
-                        <FaRegEye />
+                      <button
+                        className="expectedSalary-btn view-btn"
+                        onClick={() => toggleHideRow(salary.id)}
+                      >
+                        {hiddenRows.includes(salary.id) ? (
+                          <FaRegEyeSlash />
+                        ) : (
+                          <FaRegEye />
+                        )}
                       </button>
                       <button
                         className="expectedSalary-btn edit-btn"

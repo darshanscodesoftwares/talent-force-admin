@@ -14,7 +14,7 @@
 
 .generalinfo-header h2 {
   font-size: 18px;
-  color: #1e293b;
+  color: #1e293bd2;
   font-weight: 500;
 }
 
@@ -33,7 +33,7 @@
 
 .generalinfo-icon {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   margin-bottom: 20px;
 }
 .profile-icon {
@@ -60,13 +60,9 @@
   gap: 6px;
 }
 
-.generalinfo-field.full {
-  flex: 100%;
-}
-
 .generalinfo-field label {
   font-size: 14px;
-  color: #334155d1;
+  color: #334155ad;
   font-weight: 500;
 }
 
@@ -77,7 +73,9 @@
   font-size: 14px;
   outline: none;
   transition: border 0.2s ease;
+  color: #adadad;
 }
+
 .generalinfo-field input:focus {
   border-color: #ef6a37;
 }
@@ -99,4 +97,84 @@
 
 .back-icon {
   font-size: 20px;         /* Adjust icon size if needed */
+}
+
+.resume-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background-color: #ef6a37;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.resume-link:hover {
+  background-color: #dc2626;
+}
+
+/* Resume Row */
+.generalinfo-row-resume {
+  display: flex;
+  justify-content: flex-start; /* keep aligned left */
+  margin-top: 10px;
+}
+
+/* Resume Field */
+.generalinfo-field-resume {
+  flex: none;
+}
+
+.resume-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+
+  /* Box look */
+  width: 200px;
+  height: 70px;
+  padding: 0 12px;
+  background-color: #fdf2f2;
+  border-radius: 10px;
+  text-decoration: none;
+
+  /* Font */
+  color: rgb(102, 102, 102);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+
+  /* Interaction */
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.resume-link:hover {
+  background-color: #f9a9a9;
+}
+
+.pdf-icon {
+  font-size: 34px;
+  color: #fb0101;
+}
+
+/* Column layout for text */
+.resume-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.7;
+}
+
+.resume-text {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.resume-size {
+  font-size: 10px;
+  opacity: 0.9;
 }

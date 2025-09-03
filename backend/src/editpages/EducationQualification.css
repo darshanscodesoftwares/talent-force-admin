@@ -172,3 +172,8 @@
   color: #fff;
   border-style: none;
 }
+
+.hidden-row {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}

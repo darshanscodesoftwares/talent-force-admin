@@ -112,3 +112,8 @@
 .delete-btn:hover {
   background-color: #ffd9c8;
 }
+
+.hidden-row {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}

@@ -1,23 +1,30 @@
-.subject-container {
+.subjectfilter-container {
   padding: 20px;
   background: #f9fafc;
   min-height: 100vh;
 }
 
-.subject-rec {
+.subjectfilter-rec {
   max-width: 1100px;
   margin: 0 auto;
 }
 
-.subject-section {
+.subjectfilter-section {
   background: #fff;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Title & Header */
-.subject-title {
+/* Header & Title */
+.subjectfilter-title-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.subjectfilter-title {
   font-size: 15px;
   font-weight: 600;
   color: #444;
@@ -28,18 +35,11 @@
   transition: color 0.2s ease-in-out;
 }
 
-.subject-title:hover {
+.subjectfilter-title:hover {
   color: #f26422c5;
 }
 
-.title-button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.subject-add-btn {
+.subjectfilter-add-btn {
   background: #ef6b37d7;
   color: #fff;
   border: none;
@@ -52,44 +52,44 @@
   transition: background 0.3s ease;
 }
 
-.subject-add-btn:hover {
+.subjectfilter-add-btn:hover {
   background: #d95b28;
 }
 
 /* Table */
-.subject-table-container {
+.subjectfilter-table-container {
   overflow-x: auto;
 }
 
-.subject-table {
+.subjectfilter-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-.subject-table th,
-.subject-table td {
+.subjectfilter-table th,
+.subjectfilter-table td {
   padding: 14px 20px;
   text-align: left;
   border-bottom: 1px solid #e5e7eb;
 }
 
-.subject-table th {
+.subjectfilter-table th {
   background: #becbdb19;
   font-weight: 500;
   color: #444;
 }
 
-.subject-table td {
+.subjectfilter-table td {
   color: #7c8c9d;
 }
 
 /* Buttons */
-.subject-actions {
+.subjectfilter-actions {
   white-space: nowrap;
 }
 
-.subject-btn {
+.subjectfilter-btn {
   padding: 10px 14px;
   margin: 0 4px;
   border-radius: 6px;
@@ -99,25 +99,25 @@
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.subject-btn:hover {
+.subjectfilter-btn:hover {
   transform: translateY(-2px);
 }
 
-.subject-btn.view-btn {
+.subjectfilter-btn.view-btn {
   background-color: #e6f0ff;
   color: #3d6dff;
 }
 
-.subject-btn.delete-btn {
+.subjectfilter-btn.delete-btn {
   background-color: #ffeee6;
   color: #df4646;
 }
 
-.subject-btn.view-btn:hover {
+.subjectfilter-btn.view-btn:hover {
   background-color: #c4ddfe;
 }
 
-.subject-btn.delete-btn:hover {
+.subjectfilter-btn.delete-btn:hover {
   background-color: #ffd9c8;
 }
 
@@ -146,4 +146,9 @@
   background: #007bff;
   color: #fff;
   border-color: #007bff;
+}
+
+.hidden-row {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
 }

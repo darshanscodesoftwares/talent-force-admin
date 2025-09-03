@@ -19,7 +19,11 @@
   cursor: pointer;
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: #333333;
+}
+
+.recruitergeneralinfo-back:hover{
+  color: #ef6a37;
 }
 
 .back-icon {
@@ -40,7 +44,7 @@
 }
 
 .recruitergeneralinfo-icon {
-  text-align: center;
+  /* text-align: center; */
   margin-bottom: 20px;
 }
 
@@ -76,10 +80,124 @@
   font-weight: 500;
   margin-bottom: 6px;
   font-size: 14px;
+  color: #586473;
 }
 
 .recruitergeneralinfo-field input {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
+}
+
+.detail-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fce9e0;
+  padding: 10px;
+  border-radius: 13px;
+  width: 100px;
+  height: 105px;
+  box-sizing: border-box;
+  
+  /* transition for smooth hover effect */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.detail-card:hover {
+  transform: translateY(-5px) scale(1.05);
+}
+
+.detail-card h2{
+  font-size: 42px;
+  font-weight: 500;
+  margin: 0;
+  height: 55px;
+  color: #ef6a37;
+}
+
+.detail-card span{
+  font-size: 13px;
+  color: #ef6a37;
+  text-align: center;
+  margin: 0%;
+}
+
+.detailCard-wrap {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* Job Table Section */
+.recruiter-jobs-section {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.recruiter-jobs-section h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.recruiter-jobs-table-container {
+  overflow-x: auto;
+}
+
+.recruiter-jobs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.recruiter-jobs-table th,
+.recruiter-jobs-table td {
+  padding: 19px 26px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+.recruiter-jobs-table th {
+  background-color: #f4f4f4;
+  font-weight: 600;
+  color: #333;
+}
+
+.recruiter-jobs-row:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+/* Status badges */
+.job-status {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: center;
+  display: inline-block;
+  font-size: 13px;
+}
+
+.job-status.active {
+  /* background-color: #d4f4dd; */
+  color: #2e7d32;
+}
+
+.job-status.closed {
+  /* background-color: #ffe0e0; */
+  color: #c62828;
+}
+
+.job-status.expired {
+  /* background-color: #fff3cd; */
+  color: #856404;
 }

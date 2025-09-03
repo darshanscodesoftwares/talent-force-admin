@@ -11,7 +11,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     // Hardcoded
-    const TEST_EMAIL = "admin@talentforce.com";
+    const TEST_EMAIL = "talentforce@gmail.com";
     const TEST_PASSWORD = "123456";
 
     const handleSubmit = (e) => {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./compartmentlevel.css";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { compartmentLevelFilter } from "../data/contentData.js";
@@ -9,17 +9,26 @@ import { compartmentLevelFilter } from "../data/contentData.js";
 const CompartmentLevel = () => {
   const navigate = useNavigate();
   const [levels, setLevels] = useState(compartmentLevelFilter);
+  const [hiddenRows, setHiddenRows] = useState([]); // track hidden rows
 
   // --- Pagination logic ---
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9; // show 9 rows per page
+  const itemsPerPage = 9;
   const totalPages = Math.ceil(levels.length / itemsPerPage);
-
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = levels.slice(startIndex, startIndex + itemsPerPage);
 
   const handleDelete = (id) => {
     setLevels(levels.filter((item) => item.id !== id));
+    setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+  };
+
+  const toggleHideRow = (id) => {
+    if (hiddenRows.includes(id)) {
+      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+    } else {
+      setHiddenRows([...hiddenRows, id]);
+    }
   };
 
   return (
@@ -31,16 +40,10 @@ const CompartmentLevel = () => {
             <h2
               className="compartment-title back-title"
               onClick={() => navigate("/dashboard/seeker-search-filter")}
-              style={{
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-              }}
+              style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}
             >
               <IoChevronBackOutline /> Compartment / Level List
             </h2>
-            {/* <button className="compartment-add-btn">+ Add Compartment / Level</button> */}
           </div>
 
           {/* Table */}
@@ -48,7 +51,6 @@ const CompartmentLevel = () => {
             <table className="compartment-table">
               <thead>
                 <tr>
-                  {/* <th></th> */}
                   <th>Compartment / Level</th>
                   <th>Posted on</th>
                   <th>Created by</th>
@@ -57,17 +59,21 @@ const CompartmentLevel = () => {
               </thead>
               <tbody>
                 {paginatedData.map((item) => (
-                  <tr key={item.id}>
-                    {/* <td>
-                      <input type="checkbox" />
-                    </td> */}
+                  <tr
+                    key={item.id}
+                    className={hiddenRows.includes(item.id) ? "hidden-row" : ""}
+                  >
                     <td>{item.level}</td>
                     <td>{item.postedOn}</td>
                     <td>{item.createdBy}</td>
                     <td className="compartment-actions">
-                      <button className="compartment-btn view-btn">
-                        <FaEye />
+                      <button
+                        className="compartment-btn view-btn"
+                        onClick={() => toggleHideRow(item.id)}
+                      >
+                        {hiddenRows.includes(item.id) ? <FaRegEyeSlash /> : <FaEye />}
                       </button>
+                      {/* Optional Delete */}
                       {/* <button
                         className="compartment-btn delete-btn"
                         onClick={() => handleDelete(item.id)}
@@ -88,7 +94,6 @@ const CompartmentLevel = () => {
               >
                 Prev
               </button>
-
               {[...Array(totalPages)].map((_, index) => (
                 <button
                   key={index + 1}
@@ -98,7 +103,6 @@ const CompartmentLevel = () => {
                   {index + 1}
                 </button>
               ))}
-
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(currentPage + 1)}

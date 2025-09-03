@@ -1,4 +1,4 @@
-.modal-overlay {
+.experienceModal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,23 +11,23 @@
   z-index: 999;
 }
 
-.modal-content {
+.experienceModal-content {
   background: #fff;
-  padding: 20px;
+  padding: 20px 20px;
   border-radius: 10px;
   width: 450px;
   max-width: 95%;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-.modal-content h3 {
+.experienceModal-content h3 {
   font-size: 18px;
   font-weight: 300;
   margin-bottom: 16px;
   color: #1f2937;
 }
 
-.modal-content label {
+.experienceModal-content label {
   font-size: 14px;
   font-weight: 500;
   color: #374151a9;
@@ -35,7 +35,7 @@
   margin-bottom: 6px;
 }
 
-.modal-content input {
+.experienceModal-content input {
   width: 90%;
   padding: 10px 12px;
   border: 1px solid #d1d5db;
@@ -45,20 +45,20 @@
   outline: none;
 }
 
-.modal-content input:focus {
+.experienceModal-content input:focus {
   border-color: #ef6b37;
   box-shadow: 0 0 0 2px rgba(239, 107, 55, 0.2);
 }
 
 /* Footer Buttons */
-.modal-actions {
+.experienceModal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   margin-top: 20px;
 }
 
-.cancel-btn {
+.experienceModal-cancel-btn {
   background: #f9fafb;
   color: #374151;
   border: 1px solid #d1d5db;
@@ -69,11 +69,11 @@
   transition: background 0.2s;
 }
 
-.cancel-btn:hover {
+.experienceModal-cancel-btn:hover {
   background: #f3f4f6;
 }
 
-.save-btn {
+.experienceModal-save-btn {
   background: #ef6b37;
   color: #fff;
   border: none;
@@ -85,6 +85,6 @@
   transition: background 0.2s;
 }
 
-.save-btn:hover {
+.experienceModal-save-btn:hover {
   background: #d95b28;
 }

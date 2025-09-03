@@ -129,3 +129,8 @@
 .expectedSalary-add-btn:hover {
   background: #d95b28;
 }
+
+.hidden-row {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}

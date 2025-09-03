@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
-import { AiOutlineDelete } from "react-icons/ai";
-import { FaRegEye } from "react-icons/fa";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { IoChevronBackOutline } from "react-icons/io5";
 import "./ExperienceFilter.css";
 import { experienceFilters as initialExperienceFilters } from "../data/contentData.js";
-import ExperienceModal from "../editpages/ExperienceModal.jsx"; // Edit Modal
-import AddExperienceModal from "../editpages/AddExperienceModal.jsx"; // Add Modal
+import ExperienceModal from "../editpages/ExperienceModal.jsx";
+import AddExperienceModal from "../editpages/AddExperienceModal.jsx";
 
 export default function ExperienceFilter() {
   const navigate = useNavigate();
   const [experienceFilters, setExperienceFilters] = useState(initialExperienceFilters);
+  const [hiddenRows, setHiddenRows] = useState([]); // track hidden rows
 
   // Edit Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -52,6 +52,14 @@ export default function ExperienceFilter() {
     setIsAddModalOpen(false);
   };
 
+  const toggleHideRow = (id) => {
+    if (hiddenRows.includes(id)) {
+      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+    } else {
+      setHiddenRows([...hiddenRows, id]);
+    }
+  };
+
   return (
     <div className="experiencefilter-container">
       <div className="experiencefilter-rec">
@@ -74,7 +82,6 @@ export default function ExperienceFilter() {
             <table className="experiencefilter-table">
               <thead>
                 <tr>
-                  {/* <th></th> */}
                   <th>Specification</th>
                   <th>Posted on</th>
                   <th>Created by</th>
@@ -83,14 +90,19 @@ export default function ExperienceFilter() {
               </thead>
               <tbody>
                 {experienceFilters.map((filter) => (
-                  <tr key={filter.id}>
-                    {/* <td><input type="checkbox" /></td> */}
+                  <tr
+                    key={filter.id}
+                    className={hiddenRows.includes(filter.id) ? "hidden-row" : ""}
+                  >
                     <td>{filter.specification}</td>
                     <td>{filter.postedOn}</td>
                     <td>{filter.createdBy}</td>
                     <td className="experiencefilter-actions">
-                      <button className="experiencefilter-btn view-btn">
-                        <FaRegEye />
+                      <button
+                        className="experiencefilter-btn view-btn"
+                        onClick={() => toggleHideRow(filter.id)}
+                      >
+                        {hiddenRows.includes(filter.id) ? <FaRegEyeSlash /> : <FaRegEye />}
                       </button>
                       <button
                         className="experiencefilter-btn edit-btn"
@@ -98,12 +110,6 @@ export default function ExperienceFilter() {
                       >
                         <BiSolidEdit />
                       </button>
-                      {/* <button
-                        className="experiencefilter-btn delete-btn"
-                        onClick={() => handleDelete(filter.id)}
-                      >
-                        <AiOutlineDelete />
-                      </button> */}
                     </td>
                   </tr>
                 ))}
@@ -113,7 +119,6 @@ export default function ExperienceFilter() {
         </div>
       </div>
 
-      {/* Add Modal */}
       {isAddModalOpen && (
         <AddExperienceModal
           isOpen={isAddModalOpen}
@@ -122,7 +127,6 @@ export default function ExperienceFilter() {
         />
       )}
 
-      {/* Edit Modal */}
       {isEditModalOpen && (
         <ExperienceModal
           experience={selectedExp}

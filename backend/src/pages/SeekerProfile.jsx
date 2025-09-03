@@ -12,39 +12,50 @@ export default function SeekerProfile() {
   const [currentPage, setCurrentPage] = useState(1);
   const seekersPerPage = 5;
 
-  // ✅ Track selected checkboxes
+  // Track selected checkboxes
   const [selectedSeekers, setSelectedSeekers] = useState([]);
 
-  // calculate indexes
+  // Track visible columns
+  const allColumns = [
+    { key: "user", label: "User" },
+    { key: "Specialization", label: "Specialization" },
+    { key: "mail", label: "Email" },
+    { key: "phoneNo", label: "Phone" },
+    { key: "pincodeNo", label: "Pincode" },
+    { key: "status", label: "Status" },
+  ];
+
+  const [visibleColumns, setVisibleColumns] = useState(
+    allColumns.map((col) => col.key)
+  );
+
+  // Track if filter panel is open
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  // Pagination
   const indexOfLast = currentPage * seekersPerPage;
   const indexOfFirst = indexOfLast - seekersPerPage;
   const currentSeekers = seekerData.slice(indexOfFirst, indexOfLast);
-
   const totalPages = Math.ceil(seekerData.length / seekersPerPage);
 
   const navigate = useNavigate();
 
-  // ✅ Check if all current page seekers are selected
   const allSelected =
     currentSeekers.length > 0 &&
     currentSeekers.every((s) => selectedSeekers.includes(s.id));
 
-  // ✅ Toggle select all
   const handleSelectAll = () => {
     if (allSelected) {
-      // unselect all from current page
       setSelectedSeekers((prev) =>
         prev.filter((id) => !currentSeekers.some((s) => s.id === id))
       );
     } else {
-      // select all from current page
       setSelectedSeekers((prev) => [
         ...new Set([...prev, ...currentSeekers.map((s) => s.id)]),
       ]);
     }
   };
 
-  // ✅ Toggle single row
   const handleSelectOne = (id) => {
     setSelectedSeekers((prev) =>
       prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
@@ -53,6 +64,7 @@ export default function SeekerProfile() {
 
   return (
     <div className="seekerprofile-container">
+      {/* Top cards */}
       <div className="seekerprofile-top-row">
         <div className="seekerprofile-small-cards">
           <div className="seekerprofile-cards-container">
@@ -68,7 +80,6 @@ export default function SeekerProfile() {
                 <p className="seekerprofile-amount">15,000</p>
               </div>
             </div>
-
             {/* Card 2 */}
             <div className="seekerprofile-card">
               <div className="seekerprofile-card-body">
@@ -81,7 +92,6 @@ export default function SeekerProfile() {
                 <p className="seekerprofile-amount">13,000</p>
               </div>
             </div>
-
             {/* Card 3 */}
             <div className="seekerprofile-card">
               <div className="seekerprofile-card-body">
@@ -98,19 +108,52 @@ export default function SeekerProfile() {
         </div>
       </div>
 
+      {/* Table Section */}
       <div className="seekerprofile-rec-seek">
-        {/* Seeker List Table */}
         <div className="seekerprofile-section">
+          {/* Header with Download & Filter */}
           <div className="seekerprofile-section-header">
             <h2>Seeker Profiles List</h2>
-            <button
-              className="seekerprofile-add-btn"
-              onClick={() => navigate("/dashboard/seeker-profile/download")}
-            >
-              Download
-            </button>
+            <div className="seekerprofile-header-buttons">
+              <button
+                className="seekerprofile-add-btn"
+                onClick={() => navigate("/dashboard/seeker-profile/download")}
+              >
+                Download
+              </button>
+              <button
+                className="seekerprofile-filter-btn"
+                onClick={() => setFilterOpen((prev) => !prev)}
+              >
+                Filter Columns
+              </button>
+            </div>
           </div>
 
+          {/* Column Filter Panel */}
+          {filterOpen && (
+            <div className="column-filter-panel">
+              <h4>Select Columns to Display:</h4>
+              {allColumns.map((col) => (
+                <label key={col.key} className="column-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={visibleColumns.includes(col.key)}
+                    onChange={() =>
+                      setVisibleColumns((prev) =>
+                        prev.includes(col.key)
+                          ? prev.filter((c) => c !== col.key)
+                          : [...prev, col.key]
+                      )
+                    }
+                  />
+                  {col.label}
+                </label>
+              ))}
+            </div>
+          )}
+
+          {/* Table */}
           <div className="seekerprofile-table-container">
             <table className="seekerprofile-table">
               <thead>
@@ -122,12 +165,11 @@ export default function SeekerProfile() {
                       onChange={handleSelectAll}
                     />
                   </th>
-                  <th>User</th>
-                  <th>Specialization</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Pincode</th>
-                  <th>Status</th>
+                  {allColumns
+                    .filter((col) => visibleColumns.includes(col.key))
+                    .map((col) => (
+                      <th key={col.key}>{col.label}</th>
+                    ))}
                 </tr>
               </thead>
               <tbody>
@@ -152,30 +194,26 @@ export default function SeekerProfile() {
                         readOnly
                       />
                     </td>
-                    <td>
-                      <FaUserCircle className="school-logo" /> {seeker.user}
-                    </td>
-                    <td>{seeker.Specialization}</td>
-                    <td>{seeker.mail}</td>
-                    <td>{seeker.phoneNo}</td>
-                    <td>{seeker.pincodeNo}</td>
-                    <td>
-                      <span
-                        className={`seekerprofile-status ${
-                          seeker.status === "Seeking"
-                            ? "seeking"
-                            : "not-seeking"
-                        }`}
-                      >
-                        {seeker.status}
-                      </span>
-                    </td>
+                    {allColumns
+                      .filter((col) => visibleColumns.includes(col.key))
+                      .map((col) => (
+                        <td key={col.key}>
+                          {col.key === "user" ? (
+                            <>
+                              <FaUserCircle className="school-logo" />{" "}
+                              {seeker[col.key]}
+                            </>
+                          ) : (
+                            seeker[col.key]
+                          )}
+                        </td>
+                      ))}
                   </tr>
                 ))}
               </tbody>
             </table>
 
-            {/* Pagination Controls */}
+            {/* Pagination */}
             <div className="seekerprofile-pagination">
               <button
                 disabled={currentPage === 1}

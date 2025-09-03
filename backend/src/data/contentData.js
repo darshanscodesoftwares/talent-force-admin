@@ -110,25 +110,99 @@ export const seekers = [
   },
 ];
 
-// subscribers list
+// Membership plan schemas
+export const membershipSchemas = {
+  "Free-Trial": {
+    name: "Free-Trial",
+    price: "₹ 0",
+    timespan: "Monthly", // fixed
+    content: [
+      "Limited access to Seeker Data",
+      "Explore Free Users",
+      "Basic Support",
+    ],
+  },
+  Basic: {
+    name: "Basic",
+    price: "₹ 500",
+    timespan: "Monthly", // default (can also be Annual)
+    content: [
+      "Restricted access to Seeker Data",
+      "Explore Basic Users",
+      "Email Support",
+    ],
+  },
+  Advance: {
+    name: "Advance",
+    price: "₹ 1400",
+    timespan: "Monthly", // default (can also be Annual)
+    content: [
+      "Unlimited access to Seeker Data",
+      "Export Seeker Data",
+      "Explore All Users",
+      "Priority Email Support",
+    ],
+  },
+  Premium: {
+    name: "Premium",
+    price: "₹ 3000",
+    timespan: "Monthly", // default (can also be Annual)
+    content: [
+      "All Advance features",
+      "Priority Support (Phone & Email)",
+      "Exclusive Reports",
+      "Advanced Analytics",
+    ],
+  },
+  Enterprise: {
+    name: "Enterprise",
+    price: "₹ 5000",
+    timespan: "Annual", // default (enterprise is usually yearly)
+    content: [
+      "All Premium features",
+      "Dedicated Account Manager",
+      "Custom Integrations",
+      "24/7 Support",
+    ],
+  },
+};
+
+// Subscribers list derived from schemas
 export const subscribers = [
   {
     id: 1,
-    name: "Basic",
-    membership: "Basic",
-    price: "₹ 0",
+    ...membershipSchemas["Free-Trial"],
     postedOn: "13 April 2025",
-    createdBy: "Admin",
+    membership: "Free-Trial",
   },
   {
     id: 2,
-    name: "Advance",
-    membership: "Advance",
-    price: "₹ 1400",
+    ...membershipSchemas["Basic"],
     postedOn: "13 April 2025",
-    createdBy: "Admin",
-  }
+    membership: "Basic",
+  },
+  {
+    id: 3,
+    ...membershipSchemas["Advance"],
+    postedOn: "13 April 2025",
+    membership: "Advance",
+  },
+  {
+    id: 4,
+    ...membershipSchemas["Premium"],
+    postedOn: "13 April 2025",
+    membership: "Premium",
+  },
+  {
+    id: 5,
+    ...membershipSchemas["Enterprise"],
+    postedOn: "13 April 2025",
+    membership: "Enterprise",
+  },
 ];
+
+
+
 
 // banner list
 export const banners = [
@@ -186,7 +260,7 @@ export const seekerSearch = [
   },
 ];
 
-// seekerProfile
+// src/data/contentData.js
 export const seekerData = [
   {
     id: 1,
@@ -196,6 +270,7 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "608 502",
     status: "Seeking",
+    resume: "/resumes/rajan_resume.pdf"
   },
   {
     id: 2,
@@ -205,6 +280,7 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "608 502",
     status: "Not Seeking",
+    resume: "/resumes/anbu_resume.pdf"
   },
   {
     id: 3,
@@ -214,6 +290,7 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "608 502",
     status: "Seeking",
+    resume: "/resumes/guna_resume.pdf"
   },
   {
     id: 4,
@@ -223,6 +300,7 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "608 502",
     status: "Seeking",
+    resume: "/resumes/senthil_resume.pdf"
   },
   {
     id: 5,
@@ -232,6 +310,7 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "608 502",
     status: "Not Seeking",
+    resume: "/resumes/velu_resume.pdf"
   },
   {
     id: 6,
@@ -241,6 +320,7 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "600 001",
     status: "Seeking",
+    resume: "/resumes/kumar_resume.pdf"
   },
   {
     id: 7,
@@ -250,6 +330,7 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "600 002",
     status: "Not Seeking",
+    resume: "/resumes/muthu_resume.pdf"
   },
   {
     id: 8,
@@ -259,6 +340,7 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "600 003",
     status: "Seeking",
+    resume: "/resumes/priya_resume.pdf"
   },
   {
     id: 9,
@@ -268,6 +350,7 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "600 004",
     status: "Not Seeking",
+    resume: "/resumes/sathya_resume.pdf"
   },
   {
     id: 10,
@@ -277,8 +360,10 @@ export const seekerData = [
     phoneNo: "+91-9876543210",
     pincodeNo: "600 005",
     status: "Seeking",
+    resume: "/resumes/deepa_resume.pdf"
   }
 ];
+
 
 // jobPostFilter
 export const jobPostFilter = [
@@ -440,19 +525,19 @@ export const seekerFilterRoutes = {
 
 // main search list
 export const seekerSearchPages = [
-    {
+  {
     id: 1,
     specifications: "Location",
     postedOn: "13 April 2025",
     createdBy: "Admin",
   },
-    {
+  {
     id: 2,
     specifications: "Experience",
     postedOn: "13 April 2025",
     createdBy: "Admin",
   },
-  
+
   {
     id: 3,
     specifications: "Education Qualification",
@@ -530,7 +615,7 @@ export const subjectFilter = [
 
 //ExpectedSalaryFilter
 export const expectedSalaryFilter = [
-   {
+  {
     id: 1,
     range: "₹10,000 - ₹20,000",
     postedOn: "14 April 2025",
@@ -554,4 +639,202 @@ export const expectedSalaryFilter = [
     postedOn: "14 April 2025",
     createdBy: "Admin",
   },
+];
+
+// recruiterJobsData
+
+export const recruiterJobsData = [
+  {
+    id: 1,
+    jobName: "Science Teacher",
+    postedDate: "15 April 2025",
+    applicants: 550,
+    alInvite: 50,
+    selected: 5,
+    status: "Active",
+  },
+  {
+    id: 2,
+    jobName: "English Teacher",
+    postedDate: "01 March 2025",
+    applicants: 582,
+    alInvite: 40,
+    selected: 5,
+    status: "Closed",
+  },
+  {
+    id: 3,
+    jobName: "Tamil Teacher",
+    postedDate: "13 April 2025",
+    applicants: 640,
+    alInvite: 30,
+    selected: 3,
+    status: "Active",
+  },
+  {
+    id: 4,
+    jobName: "Social Teacher",
+    postedDate: "01 March 2025",
+    applicants: 253,
+    alInvite: 20,
+    selected: 2,
+    status: "Expired",
+  },
+  {
+    id: 5,
+    jobName: "Hindi Teacher",
+    postedDate: "10 April 2025",
+    applicants: 913,
+    alInvite: 10,
+    selected: 1,
+    status: "Active",
+  },
+];
+
+// job post filters route map
+export const jobPostFilterRoutes = {
+  "Job Role": "/dashboard/jobpost-filters/jobrole",
+  "Subject": "/dashboard/jobpost-filters/subject",
+  "Work Type": "/dashboard/jobpost-filters/worktype",
+  "Experience": "/dashboard/jobpost-filters/experience",
+  "Compartment Level": "/dashboard/jobpost-filters/compartment",
+  "Education Qualification": "/dashboard/jobpost-filters/education",
+  "Expected Salary": "/dashboard/jobpost-filters/salary",
+  "Pincode": "/dashboard/jobpost-filters/pincode",
+  "Number Of Opening": "/dashboard/jobpost-filters/openings",
+  "End-Date": "/dashboard/jobpost-filters/enddate",
+};
+
+// main job post search list
+export const jobPostSearchPages = [
+  {
+    id: 1,
+    specifications: "Job Role",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 2,
+    specifications: "Subject",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 3,
+    specifications: "Work Type",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 4,
+    specifications: "Experience",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 5,
+    specifications: "Compartment Level",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 6,
+    specifications: "Education Qualification",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 7,
+    specifications: "Expected Salary",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 8,
+    specifications: "Pincode",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 9,
+    specifications: "Number Of Opening",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 10,
+    specifications: "End-Date",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+];
+
+// experience schema
+export const jobPostExperienceFilters = [
+  { id: 1, experience: "Min", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 2, experience: "Max", postedOn: "13 April 2025", createdBy: "Admin" }
+];
+
+// education qualification schema
+export const jobPostEducationQualificationFilter = [
+  { id: 1, qualification: "D.Ed / D.T.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 2, qualification: "B.Ed + Any Bachelor's Degree", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 3, qualification: "B.A / B.Sc + B.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 4, qualification: "B.Com + B.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 5, qualification: "M.A / M.Sc + B.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 6, qualification: "M.A / M.Sc + M.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 7, qualification: "BCA / MCA + B.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 8, qualification: "NTT + 12th Pass", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 9, qualification: "B.F.A + B.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 10, qualification: "B.P.Ed / M.P.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 11, qualification: "Ph.D + M.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 12, qualification: "M.Com + B.Ed", postedOn: "13 April 2025", createdBy: "Admin" },
+];
+
+// compartment level schema
+export const jobPostCompartmentLevel = [
+  { id: 1, level: "Pre-Primary (Nursery to UKG)", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 2, level: "Primary (Classes 1-5)", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 3, level: "Upper Primary (Classes 6-8)", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 4, level: "Secondary (Classes 9-10)", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 5, level: "Higher Secondary (Classes 11-12)", postedOn: "13 April 2025", createdBy: "Admin" },
+];
+
+// subject schema
+export const jobPostSubjectFilter = [
+  { id: 1, name: "Mathematics", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 2, name: "English", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 3, name: "Science", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 4, name: "Social Studies", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 5, name: "Computer Science", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 6, name: "Physics", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 7, name: "Chemistry", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 8, name: "Biology", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 9, name: "Economics", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 10, name: "History", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 11, name: "Geography", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 12, name: "Political Science", postedOn: "13 April 2025", createdBy: "Admin" },
+];
+
+// expected salary schema
+export const jobPostExpectedSalary = [
+  { id: 1, expectedSalary: "Min", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 2, expectedSalary: "Max", postedOn: "13 April 2025", createdBy: "Admin" }
+];
+
+// End Date schema
+export const endDateFilter = [
+  { id: 1, endDate: "15 Days", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 2, endDate: "30 Days", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 3, endDate: "45 Days", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 4, endDate: "60 Days", postedOn: "13 April 2025", createdBy: "Admin" },
+];
+
+// Work Type schema
+export const workTypeFilter = [
+  { id: 1, type: "Full Time", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 2, type: "Part Time", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 3, type: "Guest Lecturer", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 4, type: "Contract Basis", postedOn: "13 April 2025", createdBy: "Admin" },
+  { id: 5, type: "Internship", postedOn: "13 April 2025", createdBy: "Admin" },
 ];

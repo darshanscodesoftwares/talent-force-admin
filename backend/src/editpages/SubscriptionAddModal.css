@@ -1,0 +1,164 @@
+.subscriptionaddmodal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.subscriptionaddmodal-content {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  width: 600px;
+  max-width: 90vw;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.subscriptionaddmodal-content h3 {
+  margin-bottom: 20px;
+}
+
+.subscriptionaddmodal-content label {
+  display: block;
+  margin: 10px 0 6px;
+}
+
+.subscriptionaddmodal-content input,
+.subscriptionaddmodal-content select {
+  width: 95%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.add-content-btn {
+  margin-bottom: 15px;
+  background: #ef6a37;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.subscriptionaddmodal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancel-btn {
+  background: #f1f1f1;
+  color: #333;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: #a63d3d;
+}
+.save-btn {
+  background: #ef6a37;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.membership-select {
+  width: 95%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  margin-bottom: 10px;
+  background-color: #bfbfbf5d;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.membership-select:focus {
+  border-color: #6f6f6fc7;
+  background-color: #bfbfbf5d;
+  outline: none;
+}
+.content-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.content-line input {
+  flex: 1;
+}
+
+.remove-content-btn {
+  background: #ff5f5ff9;
+  color: white;
+  border: none;
+  padding: 4px 6px;  
+  border-radius: 25%;   
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.remove-content-btn:hover {
+  background: #fb0000;
+  transform: scale(1.2); 
+}
+
+.reset-btn {
+  background: transparent;
+  color: #555;
+  border: 1px solid #ccc;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+}
+
+.reset-btn:hover {
+  background: #ea3636;
+  border-color: #ea3636;
+  color: #e3e3e3;
+}
+
+.membership-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cancel-membership-btn {
+  background: #ff5f5ff9;
+  color: white;
+  border: none;
+  padding: 4px 6px;  
+  border-radius: 25%;  
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.cancel-membership-btn:hover {
+  background: #fb0000;
+  transform: scale(1.2); 
+}
+

@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // auth
 import Login from "/src/auth/Login";
@@ -11,7 +13,6 @@ import MainLayout from "/src/layout/MainLayout";
 import Dashboard from "/src/pages/Dashboard";
 import HomeBanner from "/src/pages/HomeBanner";
 import JobPostFilter from "/src/pages/JobPostFilter";
-import Logout from "/src/pages/Logout";
 import RecruiterProfile from "/src/pages/RecruiterProfile";
 import SeekerProfile from "/src/pages/SeekerProfile";
 import SeekerSearchFilter from "/src/pages/SeekerSearchFilter";
@@ -28,50 +29,80 @@ import CompartmentLevel from "./editpages/CompartmentLevel";
 import Subject from "./editpages/Subject";
 import ExpectedSalary from "./editpages/ExpectedSalary";
 
-// seekerProfile
+// profiles
 import GeneralInformation from "./editpages/GeneralInformation.jsx";
-
-// recruiterProfile
 import RecruiterGeneralInfo from "./editpages/RecruiterGeneralInfo.jsx";
+
+// jobPostFilter 
+import JobPostExperienceFilter from "./filterpages/JobPostExperience.jsx";
+import JobPostSubjectFilter from "./filterpages/JobPostSubject.jsx";
+import JobPostExpectedSalary from './filterpages/JobPostExpectedSalary.jsx';
+import JobPostCompartmentLevel from "./filterpages/JobPostCompartmentLevel.jsx";
+import JobPostEducationQualification from "./filterpages/JobPostEducationQualification.jsx";
+import WorkTypeFilter from "./filterpages/WorkTypeFilter.jsx";
+import JobPostEndDateFilter from "./filterpages/JobPostEndDateFilter.jsx";
 
 const App = () => {
   return (
-    <Routes>
-      {/* Public route */}
-      <Route path="/" element={<Login />} />
+    <>
+      {/* Toast container - top level */}
+      <ToastContainer 
+        position="top-right" 
+        autoClose={1000} 
+        hideProgressBar={false} 
+        newestOnTop={false} 
+        closeOnClick 
+        rtl={false} 
+        pauseOnFocusLoss 
+        draggable 
+        pauseOnHover 
+      />
 
-      {/* Protected routes */}
-      <Route path="/dashboard" element={<MainLayout />}>
-        <Route index element={<Dashboard />} />
+      <Routes>
+        {/* Public route */}
+        <Route path="/" element={<Login />} />
 
-        {/* main pages */}
-        <Route path="home-banner" element={<HomeBanner />} />
-        <Route path="job-post-filter" element={<JobPostFilter />} />
-        <Route path="recruiter-profile" element={<RecruiterProfile />} />
-        <Route path="seeker-profile" element={<SeekerProfile />} />
-        <Route path="seeker-search-filter" element={<SeekerSearchFilter />} />
-        <Route path="subscription-plan" element={<SubscriptionPlan />} />
-        <Route path="logout" element={<Logout />} />
+        {/* Protected routes */}
+        <Route path="/dashboard" element={<MainLayout />}>
+          <Route index element={<Dashboard />} />
 
-        {/* edit pages (nested under home-banner) */}
-        <Route path="home-banner/add" element={<AddBanner />} />
-        <Route path="home-banner/edit/:id" element={<EditBanner />} />
+          {/* main pages */}
+          <Route path="home-banner" element={<HomeBanner />} />
+          <Route path="job-post-filter" element={<JobPostFilter />} />
+          <Route path="recruiter-profile" element={<RecruiterProfile />} />
+          <Route path="seeker-profile" element={<SeekerProfile />} />
+          <Route path="seeker-search-filter" element={<SeekerSearchFilter />} />
+          <Route path="subscription-plan" element={<SubscriptionPlan />} />
 
-        {/* seeker filters nested */}
-        <Route path="seeker-filters/experience" element={<ExperienceFilter />} />
-        <Route path="seeker-filters/education" element={<EducationQualification />} />
-        <Route path="seeker-filters/compartment" element={<CompartmentLevel />} />
-        <Route path="/dashboard/seeker-filters/subject" element={<Subject />} />
-        <Route path="/dashboard/seeker-filters/salary" element={<ExpectedSalary />} />
-         
-        {/* seeker profile nested */}
-        <Route path="/dashboard/seeker-profile/:id" element={<GeneralInformation />} />
+          {/* edit pages */}
+          <Route path="home-banner/add" element={<AddBanner />} />
+          <Route path="home-banner/edit/:id" element={<EditBanner />} />
 
-        {/* recruiter profile nested */}
-        <Route path="/dashboard/recruiter-profile/:id" element={<RecruiterGeneralInfo />} />
+          {/* seeker filters */}
+          <Route path="seeker-filters/experience" element={<ExperienceFilter />} />
+          <Route path="seeker-filters/education" element={<EducationQualification />} />
+          <Route path="seeker-filters/compartment" element={<CompartmentLevel />} />
+          <Route path="seeker-filters/subject" element={<Subject />} />
+          <Route path="seeker-filters/salary" element={<ExpectedSalary />} />
 
-      </Route>
-    </Routes>
+          {/* recruiter filters */}
+          <Route path="recruiter-filters/education" element={<EducationQualification />} />
+
+          {/* nested profiles */}
+          <Route path="seeker-profile/:id" element={<GeneralInformation />} />
+          <Route path="recruiter-profile/:id" element={<RecruiterGeneralInfo />} />
+
+          {/* job post filters */}
+          <Route path="jobpost-filters/experience" element={<JobPostExperienceFilter />} />
+          <Route path="jobpost-filters/subject" element={<JobPostSubjectFilter />} />
+          <Route path="jobpost-filters/salary" element={<JobPostExpectedSalary />} />
+          <Route path="jobpost-filters/compartment" element={<JobPostCompartmentLevel />} />
+          <Route path="jobpost-filters/education" element={<JobPostEducationQualification />} />
+          <Route path="jobpost-filters/worktype" element={<WorkTypeFilter />} />
+          <Route path="jobpost-filters/enddate" element={<JobPostEndDateFilter />} />
+        </Route>
+      </Routes>
+    </>
   );
 };
 
