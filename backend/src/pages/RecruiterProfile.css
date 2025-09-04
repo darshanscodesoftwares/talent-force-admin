@@ -112,7 +112,7 @@
 
 .recruiterprofile-table th,
 .recruiterprofile-table td {
-  padding: 20px 33px;
+  padding: 20px 30px;
   color: #7c8c9d;
   text-align: left;
   border-bottom: 1px solid #eeeeeeca;
@@ -187,4 +187,5 @@
   gap: 12px;
   justify-content: center;
   align-items: center;
+  width: 110px;
 }

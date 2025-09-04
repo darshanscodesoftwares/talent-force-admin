@@ -15,17 +15,20 @@ import { MdPeopleAlt } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
 import { TbCoinRupeeFilled } from "react-icons/tb";
 import { LuIndianRupee } from "react-icons/lu";
+import { useNavigate } from "react-router-dom"; // ✅ add this
 import "./Dashboard.css";
 
 import { chartData, recruiters, seekers } from "../data/contentData";
 
-
 const Dashboard = () => {
+  const navigate = useNavigate(); // ✅ hook for navigation
+
   return (
     <div className="dashboard-container">
       <div className="top-row">
-
         <div className="small-cards">
+
+          {/* Seeker Card */}
           <div className="card">
             <div className="card-body">
               <div className="card-icon">
@@ -34,13 +37,18 @@ const Dashboard = () => {
               <div className="font-num">
                 <h4>Total Seeker</h4>
                 <p>
-                  <span className="amount">{`13,902`}</span>
+                  <span className="amount">13,902</span>
                 </p>
               </div>
             </div>
-            <div className="card-footer">View More</div>
+            <div className="card-footer">
+              <button onClick={() => navigate("/dashboard/seeker-profile")}>
+                View More
+              </button>
+            </div>
           </div>
 
+          {/* Recruiter Card */}
           <div className="card">
             <div className="card-body">
               <div className="card-icon">
@@ -49,43 +57,48 @@ const Dashboard = () => {
               <div className="font-num">
                 <h4>Total Recruiter</h4>
                 <p>
-                  <span className="amount">{`913`}</span>
+                  <span className="amount">913</span>
                 </p>
               </div>
             </div>
-            <div className="card-footer">View More</div>
+            <div className="card-footer">
+              <button onClick={() => navigate("/dashboard/recruiter-profile")}>
+                View More
+              </button>
+            </div>
           </div>
 
-          <div className="card">
-            <div className="card-body">
-              <div className="card-icon">
+          {/* Subscribed Users */}
+          <div className="card-2">
+            <div className="card-body2">
+              <div className="card-icon2">
                 <MdPeopleAlt />
               </div>
-              <div className="font-num">
+              <div className="font-num2">
                 <h4>Subscribed Users</h4>
                 <p>
-                  <span className="amount">{`200`}</span>
+                  <span className="amount2">200</span>
                 </p>
               </div>
             </div>
-            <div className="card-footer">View More</div>
           </div>
 
-          <div className="card">
-            <div className="card-body">
-              <div className="card-icon">
+          {/* Revenue */}
+          <div className="card-2">
+            <div className="card-body2">
+              <div className="card-icon2">
                 <TbCoinRupeeFilled />
               </div>
-              <div className="font-num">
+              <div className="font-num2">
                 <h4>Total Revenue</h4>
                 <p>
-                  <span className="currency"><LuIndianRupee /></span>
-                  <span className="amount">{`50,000`}</span>
+                  <span className="currency2"><LuIndianRupee /></span>
+                  <span className="amount2">50,000</span>
                 </p>
               </div>
             </div>
-            <div className="card-footer">View More</div>
           </div>
+
         </div>
 
 
@@ -127,8 +140,8 @@ const Dashboard = () => {
                 )}
               />
 
-              <Bar dataKey="seeker" fill="#e5671eff" radius={[20, 20, 20, 20]} />
-              <Bar dataKey="recruiter" fill="#3dca5eff" radius={[20, 20, 20, 20]} />
+              <Bar dataKey="recruiter" fill="#e5671eff" radius={[20, 20, 20, 20]} />
+              <Bar dataKey="seeker" fill="#3dca5eff" radius={[20, 20, 20, 20]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -138,7 +151,15 @@ const Dashboard = () => {
 
         {/* Recruiter List Table */}
         <div className="dashboard-section">
+          
+          <div className="title-button2">
           <h2>All Recruiter List</h2>
+            <div className="card-footer2">
+              <button onClick={() => navigate("/dashboard/recruiter-profile")}>
+                View More
+              </button>
+            </div>
+            </div>
           <div className="table-container">
             <table className="recruiter-table">
               <thead>
@@ -181,7 +202,15 @@ const Dashboard = () => {
 
         {/* Seekers */}
         <div className="dashboard-section">
+
+          <div className="title-button2">
           <h2>All Seeker List</h2>
+            <div className="card-footer2">
+              <button onClick={() => navigate("/dashboard/seeker-profile")}>
+                View More
+              </button>
+            </div>
+            </div>
           <div className="table-container">
             <table className="recruiter-table">
               <thead>

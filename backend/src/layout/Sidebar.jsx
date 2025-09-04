@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,21 +13,26 @@ import { SlLogout } from "react-icons/sl";
 import "./Sidebar.css";
 import logo from "../assets/talentforce.png";
 
+import LogoutModal from "../editpages/LogoutModal"; // import modal
+
 function Sidebar() {
   const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // state to show modal
 
-  const handleLogout = (e) => {
-    e.preventDefault();
- navigate("/");
-    // Show toast
-    toast.success("Logged out successfully!")};
+  const handleLogout = () => {
+    // Close modal and logout
+    setShowLogoutModal(false);
+    localStorage.removeItem("authToken"); // optional
+    navigate("/");
+    toast.success("Logged out successfully!");
+  };
 
   return (
     <aside className="sidebar">
       <nav>
         <img src={logo} alt="template Logo" className="sidebar-logo" />
 
-        {/* General */}
+        {/* GENERAL */}
         <div className="sidebar-section">
           <p className="section-title">GENERAL</p>
           <ul>
@@ -44,7 +49,7 @@ function Sidebar() {
           </ul>
         </div>
 
-        {/* Seeker App */}
+        {/* SEEKER APP */}
         <div className="sidebar-section">
           <p className="section-title">SEEKER APP</p>
           <ul>
@@ -66,7 +71,7 @@ function Sidebar() {
           </ul>
         </div>
 
-        {/* Recruiter App */}
+        {/* RECRUITER APP */}
         <div className="sidebar-section">
           <p className="section-title">RECRUITER APP</p>
           <ul>
@@ -83,18 +88,28 @@ function Sidebar() {
           </ul>
         </div>
 
-        {/* Other */}
+        {/* OTHER */}
         <div className="sidebar-section">
           <p className="section-title">OTHER</p>
           <ul>
             <li>
-              <button onClick={handleLogout} className="logout-btn">
+              <button
+                onClick={() => setShowLogoutModal(true)}
+                className="logout-btn"
+              >
                 <SlLogout className="icon" /> Logout
               </button>
             </li>
           </ul>
         </div>
       </nav>
+
+      {/* Logout Modal */}
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onConfirm={handleLogout}
+        onCancel={() => setShowLogoutModal(false)}
+      />
     </aside>
   );
 }

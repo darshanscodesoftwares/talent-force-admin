@@ -262,107 +262,28 @@ export const seekerSearch = [
 
 // src/data/contentData.js
 export const seekerData = [
-  {
-    id: 1,
-    user: "Rajan",
-    Specialization: "Biology",
-    mail: "rajan@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "608 502",
-    status: "Seeking",
-    resume: "/resumes/rajan_resume.pdf"
-  },
-  {
-    id: 2,
-    user: "Anbu",
-    Specialization: "Mathematics",
-    mail: "gnbu@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "608 502",
-    status: "Not Seeking",
-    resume: "/resumes/anbu_resume.pdf"
-  },
-  {
-    id: 3,
-    user: "Guna",
-    Specialization: "Physics",
-    mail: "guna@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "608 502",
-    status: "Seeking",
-    resume: "/resumes/guna_resume.pdf"
-  },
-  {
-    id: 4,
-    user: "Senthil",
-    Specialization: "Chemistry",
-    mail: "senthil@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "608 502",
-    status: "Seeking",
-    resume: "/resumes/senthil_resume.pdf"
-  },
-  {
-    id: 5,
-    user: "Velu",
-    Specialization: "English",
-    mail: "velu@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "608 502",
-    status: "Not Seeking",
-    resume: "/resumes/velu_resume.pdf"
-  },
-  {
-    id: 6,
-    user: "Kumar",
-    Specialization: "Computer Science",
-    mail: "kumar@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "600 001",
-    status: "Seeking",
-    resume: "/resumes/kumar_resume.pdf"
-  },
-  {
-    id: 7,
-    user: "Muthu",
-    Specialization: "History",
-    mail: "muthu@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "600 002",
-    status: "Not Seeking",
-    resume: "/resumes/muthu_resume.pdf"
-  },
-  {
-    id: 8,
-    user: "Priya",
-    Specialization: "Economics",
-    mail: "priya@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "600 003",
-    status: "Seeking",
-    resume: "/resumes/priya_resume.pdf"
-  },
-  {
-    id: 9,
-    user: "Sathya",
-    Specialization: "Political Science",
-    mail: "sathya@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "600 004",
-    status: "Not Seeking",
-    resume: "/resumes/sathya_resume.pdf"
-  },
-  {
-    id: 10,
-    user: "Deepa",
-    Specialization: "Zoology",
-    mail: "deepa@gmail.com",
-    phoneNo: "+91-9876543210",
-    pincodeNo: "600 005",
-    status: "Seeking",
-    resume: "/resumes/deepa_resume.pdf"
-  }
+  { id: 1, user: "Rajan", Specialization: "Biology", mail: "rajan@gmail.com", phoneNo: "+91-9876543210", pincodeNo: "608502", status: "Seeking", resume: "/resumes/rajan_resume.pdf" },
+  { id: 2, user: "Anbu", Specialization: "Mathematics", mail: "anbu@gmail.com", phoneNo: "+91-9876543211", pincodeNo: "608502", status: "Not Seeking", resume: "/resumes/anbu_resume.pdf" },
+  { id: 3, user: "Guna", Specialization: "Physics", mail: "guna@gmail.com", phoneNo: "+91-9876543212", pincodeNo: "608503", status: "Seeking", resume: "/resumes/guna_resume.pdf" },
+  { id: 4, user: "Senthil", Specialization: "Chemistry", mail: "senthil@gmail.com", phoneNo: "+91-9876543213", pincodeNo: "608504", status: "Seeking", resume: "/resumes/senthil_resume.pdf" },
+  { id: 5, user: "Velu", Specialization: "English", mail: "velu@gmail.com", phoneNo: "+91-9876543214", pincodeNo: "608505", status: "Not Seeking", resume: "/resumes/velu_resume.pdf" },
+  { id: 6, user: "Kumar", Specialization: "Computer Science", mail: "kumar@gmail.com", phoneNo: "+91-9876543215", pincodeNo: "600001", status: "Seeking", resume: "/resumes/kumar_resume.pdf" },
+  { id: 7, user: "Muthu", Specialization: "History", mail: "muthu@gmail.com", phoneNo: "+91-9876543216", pincodeNo: "600002", status: "Not Seeking", resume: "/resumes/muthu_resume.pdf" },
+  { id: 8, user: "Priya", Specialization: "Economics", mail: "priya@gmail.com", phoneNo: "+91-9876543217", pincodeNo: "600003", status: "Seeking", resume: "/resumes/priya_resume.pdf" },
+  { id: 9, user: "Sathya", Specialization: "Political Science", mail: "sathya@gmail.com", phoneNo: "+91-9876543218", pincodeNo: "600004", status: "Not Seeking", resume: "/resumes/sathya_resume.pdf" },
+  { id: 10, user: "Deepa", Specialization: "Zoology", mail: "deepa@gmail.com", phoneNo: "+91-9876543219", pincodeNo: "600005", status: "Seeking", resume: "/resumes/deepa_resume.pdf" },
+  { id: 11, user: "Arun", Specialization: "Mathematics", mail: "arun@gmail.com", phoneNo: "+91-9876543220", pincodeNo: "608502", status: "Seeking", resume: "/resumes/arun_resume.pdf" },
+  { id: 12, user: "Divya", Specialization: "Physics", mail: "divya@gmail.com", phoneNo: "+91-9876543221", pincodeNo: "608503", status: "Not Seeking", resume: "/resumes/divya_resume.pdf" },
+  { id: 13, user: "Ramesh", Specialization: "Chemistry", mail: "ramesh@gmail.com", phoneNo: "+91-9876543222", pincodeNo: "608504", status: "Seeking", resume: "/resumes/ramesh_resume.pdf" },
+  { id: 14, user: "Shanthi", Specialization: "English", mail: "shanthi@gmail.com", phoneNo: "+91-9876543223", pincodeNo: "608505", status: "Seeking", resume: "/resumes/shanthi_resume.pdf" },
+  { id: 15, user: "Karthik", Specialization: "Computer Science", mail: "karthik@gmail.com", phoneNo: "+91-9876543224", pincodeNo: "600001", status: "Not Seeking", resume: "/resumes/karthik_resume.pdf" },
+  { id: 16, user: "Mani", Specialization: "History", mail: "mani@gmail.com", phoneNo: "+91-9876543225", pincodeNo: "600002", status: "Seeking", resume: "/resumes/mani_resume.pdf" },
+  { id: 17, user: "Anitha", Specialization: "Economics", mail: "anitha@gmail.com", phoneNo: "+91-9876543226", pincodeNo: "600003", status: "Not Seeking", resume: "/resumes/anitha_resume.pdf" },
+  { id: 18, user: "Vikram", Specialization: "Political Science", mail: "vikram@gmail.com", phoneNo: "+91-9876543227", pincodeNo: "600004", status: "Seeking", resume: "/resumes/vikram_resume.pdf" },
+  { id: 19, user: "Rekha", Specialization: "Zoology", mail: "rekha@gmail.com", phoneNo: "+91-9876543228", pincodeNo: "600005", status: "Not Seeking", resume: "/resumes/rekha_resume.pdf" },
+  { id: 20, user: "Suresh", Specialization: "Biology", mail: "suresh@gmail.com", phoneNo: "+91-9876543229", pincodeNo: "608502", status: "Seeking", resume: "/resumes/suresh_resume.pdf" },
 ];
+
 
 
 // jobPostFilter

@@ -91,7 +91,7 @@
   font-weight: 500;
   color: #1e2a38;
   margin: 2px 0 0 0;
-  align-self: flex-end; /* number goes right */
+  align-self: flex-end;
 } 
 
 .card h4 {
@@ -228,4 +228,130 @@
   font-size: 20px;
   font-weight: 500;
   color: #1e2a38;
+}
+
+.card-footer button {
+  background-color: #f7f8fb;
+  color: #3f3f3f;
+  font-size: 15px;
+  border-style: none;
+  width: 150px;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 6px; /* optional: makes it cleaner */
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.card-footer button:hover {
+  transform: scale(1.09);
+  background-color: #f7f8fb;
+}
+
+
+
+.card-2 {
+  display: flex; 
+  flex-direction: column;     
+  align-items: stretch;      
+  gap: 15px;
+  background: white;
+  height: 80px;
+  width: 200px;
+  border-radius: 12px;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+
+.card-body2 {
+  /* padding: 20px; */
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-2:hover {
+  transform: translateY(-3px);
+}
+
+.card-icon2 {
+  font-size: 24px;
+  background: #fadacb;
+  padding: 12px 12px;
+  border-radius: 8px;
+  height: 28px;
+  width: 24px;
+  color: #ef6a37;
+}
+
+.font-num2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* push text to the right side */
+}
+
+.font-num2 h4 {
+  font-size: 11.5px;
+  color: #666;
+  margin: 0;
+  align-self: flex-start; /* keep heading left */
+}
+
+.font-num2 p {
+  font-size: 20px;
+  font-weight: 500;
+  color: #1e2a38;
+  margin: 2px 0 0 0;
+  align-self: flex-end;
+} 
+
+.card-2 h4 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin: 0;
+}
+
+.card-2 p {
+  font-size: 20px;
+  font-weight: 500;
+  color: #1e2a38;
+}
+
+.title-button2{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items:center ;
+}
+
+.card-footer2 {
+  text-align: center;
+  padding: 16px;
+  margin-top: auto;
+  margin-left: -20px;
+  margin-right: -20px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.card-footer2 button {
+  background-color: #ef6b37c4; 
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-right: 30px;
+}
+
+.card-footer2 button:hover {
+  background-color: #ef6a37; 
 }
