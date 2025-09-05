@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -57,7 +57,7 @@ const App = () => {
         draggable 
         pauseOnHover 
       />
-
+   <BrowserRouter>
       <Routes>
         {/* Public route */}
         <Route path="/" element={<Login />} />
@@ -102,6 +102,7 @@ const App = () => {
           <Route path="jobpost-filters/enddate" element={<JobPostEndDateFilter />} />
         </Route>
       </Routes>
+      </BrowserRouter>
     </>
   );
 };
