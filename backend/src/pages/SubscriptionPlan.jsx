@@ -60,7 +60,7 @@ export default function SubscriptionPlan() {
                   </div>
                   <h4>Subscribed Users</h4>
                 </div>
-                <p className="subscription-amount">{subscribers.length}</p>
+                <p className="subscription-amount">{`200`}</p>
               </div>
             </div>
 

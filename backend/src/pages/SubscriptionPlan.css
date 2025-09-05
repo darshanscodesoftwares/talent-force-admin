@@ -246,10 +246,10 @@
 }
 
 .subscription-add-btn {
-  background-color: #f96b32; /* main orange color */
+  background-color: #ff6a2fd5; /* main orange color */
   color: #fff;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 10px 15px;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -257,7 +257,7 @@
 }
 
 .subscription-add-btn:hover {
-  background-color: #ff6a2fd5;
+  background-color: #f96b32;
 }
 
 .hidden-row {

@@ -406,6 +406,22 @@
   background-color: #7f8c8d;
 }
 
+.seekerprofile-section-header h2 {
+  /* display: flex;
+  align-items: center;
+  gap: 8px; */
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.seeker-count {
+  font-size: 16px;
+  font-weight: 500;
+  color: #d6691c;       /* Indigo-like highlight */
+  /* background: #eef2ff; */
+  padding: 2px 8px;
+  border-radius: 8px;
+}
 
 
 /* .seekerprofile-actions {

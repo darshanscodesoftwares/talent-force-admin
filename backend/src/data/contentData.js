@@ -1,5 +1,6 @@
 import banner1 from "../assets/banner.jpg";
 import banner2 from "../assets/banner2.jpg";
+import rajanResume from "../assets/resumes/rajan_resume.pdf";
 
 // Chart Data
 export const chartData = [
@@ -262,7 +263,7 @@ export const seekerSearch = [
 
 // src/data/contentData.js
 export const seekerData = [
-  { id: 1, user: "Rajan", Specialization: "Biology", mail: "rajan@gmail.com", phoneNo: "+91-9876543210", pincodeNo: "608502", status: "Seeking", resume: "/resumes/rajan_resume.pdf" },
+  { id: 1, user: "Rajan", Specialization: "Biology", mail: "rajan@gmail.com", phoneNo: "+91-9876543210", pincodeNo: "608502", status: "Seeking", resume: rajanResume },
   { id: 2, user: "Anbu", Specialization: "Mathematics", mail: "anbu@gmail.com", phoneNo: "+91-9876543211", pincodeNo: "608502", status: "Not Seeking", resume: "/resumes/anbu_resume.pdf" },
   { id: 3, user: "Guna", Specialization: "Physics", mail: "guna@gmail.com", phoneNo: "+91-9876543212", pincodeNo: "608503", status: "Seeking", resume: "/resumes/guna_resume.pdf" },
   { id: 4, user: "Senthil", Specialization: "Chemistry", mail: "senthil@gmail.com", phoneNo: "+91-9876543213", pincodeNo: "608504", status: "Seeking", resume: "/resumes/senthil_resume.pdf" },

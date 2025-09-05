@@ -14,7 +14,7 @@ import { saveAs } from "file-saver";
 export default function SeekerProfile() {
   const [seekers] = useState(seekerData);
   const [currentPage, setCurrentPage] = useState(1);
-  const seekersPerPage = 8;
+  const seekersPerPage = 10;
   const [selectedSeekers, setSelectedSeekers] = useState([]);
   const navigate = useNavigate();
 
@@ -120,36 +120,39 @@ export default function SeekerProfile() {
         </div>
       </div>
 
-      {/* Table Section */}
-      <div className="seekerprofile-rec-seek">
-        <div className="seekerprofile-section">
-          <div className="seekerprofile-section-header">
-            <h2>Seeker Profiles List</h2>
-            <div className="seekerprofile-header-buttons">
+{/* Table Section */}
+<div className="seekerprofile-rec-seek">
+  <div className="seekerprofile-section">
+    <div className="seekerprofile-section-header">
+      <h2>
+        Seeker Profiles List{" "}
+        <span className="seeker-count">({filteredSeekers.length})</span>
+      </h2>
+      <div className="seekerprofile-header-buttons">
 
-              {/* Reset Table */}
-              {/* <button className="seekerprofile-reset-btn" onClick={() => {
-                setFilters({ specialization: "", pincode: "", status: "" });
-                setVisibleColumns(allColumns.map(c => c.key));
-                setTempColumns(allColumns.map(c => c.key));
-                setCurrentPage(1);
-              }}>Reset Table</button> */}
+        {/* Reset Table */}
+        {/* <button className="seekerprofile-reset-btn" onClick={() => {
+          setFilters({ specialization: "", pincode: "", status: "" });
+          setVisibleColumns(allColumns.map(c => c.key));
+          setTempColumns(allColumns.map(c => c.key));
+          setCurrentPage(1);
+        }}>Reset Table</button> */}
 
-              {/* Download */}
-              <button className="seekerprofile-add-btn" onClick={handleDownload}>Download</button>
+        {/* Download */}
+        <button className="seekerprofile-add-btn" onClick={handleDownload}>Download</button>
 
-              {/* Filter Columns */}
-              {/* <button className="seekerprofile-filter-btn" onClick={() => setFilterOpen(prev => !prev)}>
-                <div className="title-icon2">Filter Columns <FaAngleDown /></div>
-              </button> */}
+        {/* Filter Columns */}
+        {/* <button className="seekerprofile-filter-btn" onClick={() => setFilterOpen(prev => !prev)}>
+          <div className="title-icon2">Filter Columns <FaAngleDown /></div>
+        </button> */}
 
-              {/* 🔹 Advanced Search Modal */}
-              <button className="seekerprofile-search-btn" onClick={() => setSearchModalOpen(true)}>
-                <div className="title-icon2">Advanced Search <FaAngleDown /></div>
-              </button>
+        {/* 🔹 Advanced Search Modal */}
+        <button className="seekerprofile-search-btn" onClick={() => setSearchModalOpen(true)}>
+          <div className="title-icon2">Advanced Search <FaAngleDown /></div>
+        </button>
 
-            </div>
-          </div>
+      </div>
+    </div>
 
           {/* Column Filter Panel */}
           {filterOpen && (
