@@ -12,37 +12,42 @@ export default function AddBanner() {
   const { addBanner } = useContext(HomeBannerContext);
   const navigate = useNavigate();
 
+  // Handle file change
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
       setPreview(URL.createObjectURL(selectedFile));
-      setErrorMsg(""); // clear error if user selects a new file
+      setErrorMsg(""); // clear error when new file is selected
     }
   };
 
+  // Save banner
   const handleSave = async () => {
     if (!file) {
       setErrorMsg("Please select an image before saving.");
       return;
     }
 
-    if (loading) return; // prevent duplicate uploads
+    if (loading) return; // avoid multiple clicks
 
     setLoading(true);
     setErrorMsg("");
 
     const formData = new FormData();
-    formData.append("banner_image", file); // must match backend key
+    formData.append("banner_image", file); // ✅ backend expects this key
 
     try {
+      for (let [key, value] of formData.entries()) {
+  console.log(key, value);
+}
+
       await addBanner(formData);
 
-      // reset form
+      // Reset state after success
       setFile(null);
       setPreview(null);
 
-      // go back to list
       navigate("/dashboard/home-banner");
     } catch (err) {
       console.error("Add banner failed:", err.response?.data || err.message);

@@ -4,16 +4,15 @@ import "./HomeBanner.css";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { HomeBannerContext } from "../UseContexts/SeekerUseContext/HomeBannerContext";
+import { BannerLoader } from "../Loader/Loader"; // ✅ import loader
 
 export default function HomeBanner() {
-  const { banners, loading, error, deleteBanner } = useContext(HomeBannerContext);
+  const { banners, loading, error } = useContext(HomeBannerContext);
   const [viewedRows, setViewedRows] = useState([]);
   const navigate = useNavigate();
 
-  // 🔹 Ensure banners is always an array
   const bannerList = Array.isArray(banners) ? banners : banners?.data || [];
 
-  // ✅ toggle row highlight
   const handleView = (id) => {
     setViewedRows((prev) =>
       prev.includes(id)
@@ -22,13 +21,7 @@ export default function HomeBanner() {
     );
   };
 
-  // ✅ delete using context
-  // const handleDelete = (id) => {
-  //   deleteBanner(id);
-  //   setViewedRows((prev) => prev.filter((rowId) => rowId !== id));
-  // };
-
-  if (loading) return <p>Loading banners...</p>;
+  if (loading) return <BannerLoader />; // ✅ shimmer effect
   if (error) return <p>Error: {error}</p>;
 
   return (
@@ -36,7 +29,7 @@ export default function HomeBanner() {
       {/* --- Top Preview Section --- */}
       <div className="homebanner-top-row">
         {bannerList.length > 0 ? (
-          bannerList.slice(0, 2).map((banner, index) => (
+          bannerList.slice(0, 6).map((banner, index) => (
             <div className="homebanner-card" key={banner.id}>
               <img src={banner.banner_image} alt="Banner" />
               <p>Banner {index + 1}</p>
@@ -97,7 +90,7 @@ export default function HomeBanner() {
                             <FaRegEyeSlash />
                           ) : (
                             <FaRegEye />
-                          )}
+                          )}  
                         </button>
                         <button
                           className="homebanner-btn edit-btn"
@@ -107,12 +100,6 @@ export default function HomeBanner() {
                         >
                           <BiSolidEdit />
                         </button>
-                        {/* <button
-                          className="homebanner-btn delete-btn"
-                          onClick={() => handleDelete(banner.id)}
-                        >
-                          🗑️
-                        </button> */}
                       </td>
                     </tr>
                   ))

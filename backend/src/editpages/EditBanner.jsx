@@ -7,7 +7,7 @@ import "./EditBanner.css";
 export default function EditBanner() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { banners, setBanners } = useContext(HomeBannerContext);
+  const { banners, updateBanner } = useContext(HomeBannerContext); // ✅ use updateBanner from context
 
   const [banner, setBanner] = useState(null);
   const [file, setFile] = useState(null);
@@ -15,17 +15,19 @@ export default function EditBanner() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  useEffect(() => {
-    if (Array.isArray(banners)) {
-      const foundBanner = banners.find((b) => b.id.toString() === id);
-      if (foundBanner) {
-        setBanner(foundBanner);
-        setPreview(foundBanner.banner_image);
-      } else {
-        setErrorMsg("Banner not found");
-      }
+  // Load banner details
+useEffect(() => {
+  if (Array.isArray(banners) && banners.length > 0) {
+    const foundBanner = banners.find((b) => b?.id?.toString() === id);
+    if (foundBanner) {
+      setBanner(foundBanner);
+      setPreview(foundBanner.banner_image);
+    } else {
+      setErrorMsg("Banner not found");
     }
-  }, [id, banners]);
+  }
+}, [id, banners]);
+
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -45,20 +47,7 @@ export default function EditBanner() {
       const formData = new FormData();
       if (file) formData.append("banner_image", file);
 
-      // PUT request
-      const response = await fetch(`http://192.168.29.163:8000/api/banners/${id}`, {
-        method: "PUT",
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error("Failed to update banner");
-
-      const updatedBanner = await response.json();
-
-      // update context
-      setBanners((prev) =>
-        prev.map((b) => (b.id.toString() === id ? updatedBanner.data : b))
-      );
+      await updateBanner(id, formData); // ✅ delegate to context
 
       navigate("/dashboard/home-banner");
     } catch (err) {
@@ -93,7 +82,11 @@ export default function EditBanner() {
 
       <div className="editbanner-preview-box">
         {preview && (
-          <img src={preview} alt="Banner Preview" className="editbanner-preview-img" />
+          <img
+            src={preview}
+            alt="Banner Preview"
+            className="editbanner-preview-img"
+          />
         )}
       </div>
 
