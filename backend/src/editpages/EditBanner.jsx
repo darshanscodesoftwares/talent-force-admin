@@ -7,7 +7,7 @@ import "./EditBanner.css";
 export default function EditBanner() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { banners, updateBanner } = useContext(HomeBannerContext); // ✅ use updateBanner from context
+  const { banners, updateBanner } = useContext(HomeBannerContext);
 
   const [banner, setBanner] = useState(null);
   const [file, setFile] = useState(null);
@@ -15,18 +15,18 @@ export default function EditBanner() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Load banner details
-useEffect(() => {
-  if (Array.isArray(banners) && banners.length > 0) {
-    const foundBanner = banners.find((b) => b?.id?.toString() === id);
-    if (foundBanner) {
-      setBanner(foundBanner);
-      setPreview(foundBanner.banner_image);
-    } else {
-      setErrorMsg("Banner not found");
+  // Load banner details whenever banners update
+  useEffect(() => {
+    if (Array.isArray(banners) && banners.length > 0) {
+      const foundBanner = banners.find((b) => b?.id?.toString() === id);
+      if (foundBanner) {
+        setBanner(foundBanner);
+        setPreview(foundBanner.banner_image);
+      } else {
+        setErrorMsg("Banner not found");
+      }
     }
-  }
-}, [id, banners]);
+  }, [id, banners]);
 
 
   const handleImageChange = (e) => {
@@ -47,8 +47,14 @@ useEffect(() => {
       const formData = new FormData();
       if (file) formData.append("banner_image", file);
 
-      await updateBanner(id, formData); // ✅ delegate to context
+      const updatedBanner = await updateBanner(id, formData);
 
+      // Update local preview immediately
+      if (updatedBanner?.banner_image) {
+        setPreview(updatedBanner.banner_image);
+      }
+
+      // Navigate back after saving
       navigate("/dashboard/home-banner");
     } catch (err) {
       console.error(err);
@@ -57,8 +63,6 @@ useEffect(() => {
       setLoading(false);
     }
   };
-
-  if (!banner) return <p>{errorMsg || "Loading banner..."}</p>;
 
   return (
     <div className="editbanner-container">

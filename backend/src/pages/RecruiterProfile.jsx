@@ -3,15 +3,17 @@ import { FaUserCheck } from "react-icons/fa6";
 import { FaSchool } from "react-icons/fa";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import "./RecruiterProfile.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { recruiterProfile } from "../data/contentData.js";
 import { useNavigate } from "react-router-dom";
+import RecruiterProfileLoader from "../Loader/Loader.jsx"
 
 export default function RecruiterProfile() {
   const [recruiters] = useState(recruiterProfile);
   const [currentPage, setCurrentPage] = useState(1);
   const recruitersPerPage = 5;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true)
 
   // calculate indexes
   const indexOfLast = currentPage * recruitersPerPage;
@@ -19,6 +21,14 @@ export default function RecruiterProfile() {
   const currentRecruiters = recruiters.slice(indexOfFirst, indexOfLast);
 
   const totalPages = Math.ceil(recruiters.length / recruitersPerPage);
+
+  // remove this before production
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <RecruiterProfileLoader />
 
   return (
     <div className="recruiterprofile-container">
@@ -98,8 +108,8 @@ export default function RecruiterProfile() {
                   >
                     <td>
                       <div className="icon-school">
-                      <FaSchool className="school-logo" />
-                      {recruiter.school}
+                        <FaSchool className="school-logo" />
+                        {recruiter.school}
                       </div>
                     </td>
                     <td>{recruiter.email}</td>

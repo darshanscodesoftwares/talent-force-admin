@@ -4,7 +4,7 @@ import "./HomeBanner.css";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { HomeBannerContext } from "../UseContexts/SeekerUseContext/HomeBannerContext";
-import { BannerLoader } from "../Loader/Loader"; // ✅ import loader
+import { BannerLoader } from "../Loader/Loader"; // ✅ shimmer effect
 
 export default function HomeBanner() {
   const { banners, loading, error } = useContext(HomeBannerContext);
@@ -21,8 +21,9 @@ export default function HomeBanner() {
     );
   };
 
-  if (loading) return <BannerLoader />; // ✅ shimmer effect
-  if (error) return <p>Error: {error}</p>;
+  // ✅ Context-driven shimmer effect
+  if (loading) return <BannerLoader />;
+  if (error) return <p className="error-msg">Error: {error}</p>;
 
   return (
     <div className="homebanner-container">
@@ -90,7 +91,7 @@ export default function HomeBanner() {
                             <FaRegEyeSlash />
                           ) : (
                             <FaRegEye />
-                          )}  
+                          )}
                         </button>
                         <button
                           className="homebanner-btn edit-btn"

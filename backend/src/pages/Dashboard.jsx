@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -15,80 +15,70 @@ import { MdPeopleAlt } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
 import { TbCoinRupeeFilled } from "react-icons/tb";
 import { LuIndianRupee } from "react-icons/lu";
-import { useNavigate } from "react-router-dom"; // ✅ add this
+import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
 import { chartData, recruiters, seekers } from "../data/contentData";
+import { DashboardLoader } from "../Loader/Loader";
 
 const Dashboard = () => {
-  const navigate = useNavigate(); // ✅ hook for navigation
+  const navigate = useNavigate();
+
+  // simulate loading for shimmer
+  const [loading, setLoading] = useState(true);
+
+ // remove this before production
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500); // 1.5s fake loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <DashboardLoader />;
 
   return (
     <div className="dashboard-container">
+      {/* --- Top Row Cards --- */}
       <div className="top-row">
         <div className="small-cards">
-
-          {/* Seeker Card */}
           <div className="card">
             <div className="card-body">
-              <div className="card-icon">
-                <IoIosPeople />
-              </div>
+              <div className="card-icon"><IoIosPeople /></div>
               <div className="font-num">
                 <h4>Total Seeker</h4>
-                <p>
-                  <span className="amount">13,902</span>
-                </p>
+                <p><span className="amount">13,902</span></p>
               </div>
             </div>
             <div className="card-footer">
-              <button onClick={() => navigate("/dashboard/seeker-profile")}>
-                View More
-              </button>
+              <button onClick={() => navigate("/dashboard/seeker-profile")}>View More</button>
             </div>
           </div>
 
-          {/* Recruiter Card */}
           <div className="card">
             <div className="card-body">
-              <div className="card-icon">
-                <HiMiniBriefcase />
-              </div>
+              <div className="card-icon"><HiMiniBriefcase /></div>
               <div className="font-num">
                 <h4>Total Recruiter</h4>
-                <p>
-                  <span className="amount">913</span>
-                </p>
+                <p><span className="amount">913</span></p>
               </div>
             </div>
             <div className="card-footer">
-              <button onClick={() => navigate("/dashboard/recruiter-profile")}>
-                View More
-              </button>
+              <button onClick={() => navigate("/dashboard/recruiter-profile")}>View More</button>
             </div>
           </div>
 
-          {/* Subscribed Users */}
           <div className="card-2">
             <div className="card-body2">
-              <div className="card-icon2">
-                <MdPeopleAlt />
-              </div>
+              <div className="card-icon2"><MdPeopleAlt /></div>
               <div className="font-num2">
                 <h4>Subscribed Users</h4>
-                <p>
-                  <span className="amount2">200</span>
-                </p>
+                <p><span className="amount2">200</span></p>
               </div>
             </div>
           </div>
 
-          {/* Revenue */}
           <div className="card-2">
             <div className="card-body2">
-              <div className="card-icon2">
-                <TbCoinRupeeFilled />
-              </div>
+              <div className="card-icon2"><TbCoinRupeeFilled /></div>
               <div className="font-num2">
                 <h4>Total Revenue</h4>
                 <p>
@@ -98,48 +88,18 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-
         </div>
 
-
-        {/* Graph box */}
+        {/* --- Graph Box --- */}
         <div className="graph-box">
           <h3>User Active</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              data={chartData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 5 }}
-              barSize={8}
-
-            >
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 5 }} barSize={8}>
               <CartesianGrid stroke="#ccc" strokeDasharray="3 3" vertical={false} opacity={0.3} />
-
-              <XAxis
-                dataKey="month"
-                tick={{ fontSize: 12, fill: "#6666668b" }}
-                axisLine={false}
-                tickLine={false}
-              />
-
-              <YAxis
-                tick={{ fontSize: 12, fill: "#6666668b" }}
-                domain={[0, 800]}
-                tickCount={9}
-                axisLine={false}
-                tickLine={false}
-              />
-
+              <XAxis dataKey="month" tick={{ fontSize: 12, fill: "#6666668b" }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 12, fill: "#6666668b" }} domain={[0, 800]} tickCount={9} axisLine={false} tickLine={false} />
               <Tooltip contentStyle={{ fontSize: "13px" }} />
-
-              <Legend
-                iconType="circle"
-                iconSize={6}
-                wrapperStyle={{ fontSize: "12px", color: "#666" }}
-                formatter={(value) => (
-                  <span style={{ color: "#666" }}>{value}</span> // text grey
-                )}
-              />
-
+              <Legend iconType="circle" iconSize={6} wrapperStyle={{ fontSize: "12px", color: "#666" }} formatter={value => <span style={{ color: "#666" }}>{value}</span>} />
               <Bar dataKey="recruiter" fill="#e5671eff" radius={[20, 20, 20, 20]} />
               <Bar dataKey="seeker" fill="#3dca5eff" radius={[20, 20, 20, 20]} />
             </BarChart>
@@ -148,23 +108,18 @@ const Dashboard = () => {
       </div>
 
       <div className="rec-seek">
-
-        {/* Recruiter List Table */}
+        {/* --- Recruiters Table --- */}
         <div className="dashboard-section">
-          
-          <div className="title-button2">
-          <h2>All Recruiter List</h2>
+          <div className="title-button2 flex justify-between">
+            <h2>All Recruiter List</h2>
             <div className="card-footer2">
-              <button onClick={() => navigate("/dashboard/recruiter-profile")}>
-                View More
-              </button>
+              <button onClick={() => navigate("/dashboard/recruiter-profile")}>View More</button>
             </div>
-            </div>
+          </div>
           <div className="table-container">
             <table className="recruiter-table">
               <thead>
                 <tr>
-                  {/* <th></th> */}
                   <th>School Name</th>
                   <th>Mail ID</th>
                   <th>Phone</th>
@@ -173,49 +128,32 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {recruiters.map((rec) => (
+                {recruiters.map(rec => (
                   <tr key={rec.id}>
-                    {/* <td>
-                      <input type="checkbox" />
-                    </td> */}
-                    <td>
-                      <FaSchool className="school-logo" /> {rec.school}
-                    </td>
+                    <td><FaSchool className="school-logo" /> {rec.school}</td>
                     <td>{rec.email}</td>
                     <td>{rec.phone}</td>
                     <td>{rec.pincode}</td>
-                    <td>
-                      {rec.membership === "Advanced" ? (
-                        <span className="membership advanced">👑 Advanced</span>
-                      ) : (
-                        <span className="membership basic">● Basic</span>
-                      )}
-                    </td>
+                    <td>{rec.membership === "Advanced" ? <span className="membership advanced">👑 Advanced</span> : <span className="membership basic">● Basic</span>}</td>
                   </tr>
                 ))}
-
               </tbody>
             </table>
           </div>
         </div>
 
-
-        {/* Seekers */}
+        {/* --- Seekers Table --- */}
         <div className="dashboard-section">
-
-          <div className="title-button2">
-          <h2>All Seeker List</h2>
+          <div className="title-button2 flex justify-between">
+            <h2>All Seeker List</h2>
             <div className="card-footer2">
-              <button onClick={() => navigate("/dashboard/seeker-profile")}>
-                View More
-              </button>
+              <button onClick={() => navigate("/dashboard/seeker-profile")}>View More</button>
             </div>
-            </div>
+          </div>
           <div className="table-container">
             <table className="recruiter-table">
               <thead>
                 <tr>
-                  {/* <th></th> */}
                   <th>User Name</th>
                   <th>Specialization</th>
                   <th>Mail ID</th>
@@ -225,37 +163,22 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {seekers.map((seeker) => (
+                {seekers.map(seeker => (
                   <tr key={seeker.id}>
-                    {/* <td>
-                      <input type="checkbox" />
-                    </td> */}
-                    <td>
-                      <FaUserCircle className="school-logo" /> {seeker.user}
-                    </td>
+                    <td><FaUserCircle className="school-logo" /> {seeker.user}</td>
                     <td>{seeker.Specialization}</td>
                     <td>{seeker.mail}</td>
                     <td>{seeker.phoneNo}</td>
                     <td>{seeker.pincodeNo}</td>
-                    <td>
-                      {seeker.status === "Seeking" ? (
-                        <span className="status seeking">Seeking</span>
-                      ) : (
-                        <span className="status not-seeking">Not Seeking</span>
-                      )}
-                    </td>
+                    <td>{seeker.status === "Seeking" ? <span className="status seeking">Seeking</span> : <span className="status not-seeking">Not Seeking</span>}</td>
                   </tr>
                 ))}
-
               </tbody>
             </table>
           </div>
         </div>
-
       </div>
-
     </div>
-
   );
 };
 

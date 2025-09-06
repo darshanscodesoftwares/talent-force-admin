@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import "./JobPostFilter.css";
 import { jobPostSearchPages, jobPostFilterRoutes } from "../data/contentData.js";
+import { JobPostLoader } from "../Loader/Loader.jsx"
 
 export default function JobPostFilter() {
   const navigate = useNavigate();
   const [filterList, setFilterList] = useState(jobPostSearchPages);
-  const [hiddenRows, setHiddenRows] = useState([]); // track hidden rows
+  const [hiddenRows, setHiddenRows] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   const handleEdit = (filter) => {
     const path = jobPostFilterRoutes[filter.specifications];
@@ -27,6 +29,14 @@ export default function JobPostFilter() {
       setHiddenRows([...hiddenRows, id]);
     }
   };
+
+  // remove this before production
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <JobPostLoader />
 
   return (
     <div className="jobpostfilter-container">
@@ -70,13 +80,13 @@ export default function JobPostFilter() {
                       {!["Job Role", "Location", "Pincode", "Number Of Opening"].includes(
                         filter.specifications
                       ) && (
-                        <button
-                          className="jobpostfilter-btn edit-btn"
-                          onClick={() => handleEdit(filter)}
-                        >
-                          <BiSolidEdit />
-                        </button>
-                      )}
+                          <button
+                            className="jobpostfilter-btn edit-btn"
+                            onClick={() => handleEdit(filter)}
+                          >
+                            <BiSolidEdit />
+                          </button>
+                        )}
                     </td>
                   </tr>
                 ))}

@@ -11,23 +11,23 @@ const HomeBannerProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 🔹 Fetch banners on mount
-  useEffect(() => {
-    fetchBanners();
-  }, []);
-
-  // ✅ GET banners
+  // ✅ Define fetchBanners once, outside useEffect
   const fetchBanners = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(API_URL);
-      setBanners(response.data.data || []);
+      const res = await axios.get(API_URL); // ✅ use correct API
+      setBanners(res.data?.data || []);
     } catch (err) {
       setError(err.message || "Failed to fetch banners");
     } finally {
       setLoading(false);
     }
   };
+
+  // 🔹 Call it on mount
+  useEffect(() => {
+    fetchBanners();
+  }, []);
 
   // ✅ POST add banner
   const addBanner = async (formData) => {
@@ -55,14 +55,23 @@ const HomeBannerProvider = ({ children }) => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      const updatedBanner = response.data?.data;
+      let updatedBanner = response.data?.data;
+
       if (updatedBanner) {
+        // Force image reload by appending timestamp
+        if (updatedBanner.banner_image) {
+          updatedBanner = {
+            ...updatedBanner,
+            banner_image: `${updatedBanner.banner_image}?t=${Date.now()}`,
+          };
+        }
+
         setBanners((prev) =>
-          prev
-            .filter(Boolean)
-            .map((b) =>
-              b?.id?.toString() === updatedBanner?.id?.toString() ? updatedBanner : b
-            )
+          prev.map((b) =>
+            b?.id?.toString() === updatedBanner?.id?.toString()
+              ? updatedBanner
+              : b
+          )
         );
       }
 
@@ -81,7 +90,7 @@ const HomeBannerProvider = ({ children }) => {
         error,
         fetchBanners,
         addBanner,
-        updateBanner, // 🔹 export update
+        updateBanner,
       }}
     >
       {children}

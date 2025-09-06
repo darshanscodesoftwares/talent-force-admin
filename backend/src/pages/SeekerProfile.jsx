@@ -2,10 +2,12 @@ import { IoIosPeople } from "react-icons/io";
 import { FaUserClock, FaUserCheck, FaAngleDown } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 import "./SeekerProfile.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { seekerData } from "../data/contentData.js";
 import { useNavigate } from "react-router-dom";
 import SeekerFilterModal from "../editpages/SeekerFilterModal.jsx"; // Import modal
+
+import { SeekerProfileLoader } from "../Loader/Loader.jsx";
 
 // ✅ Import for Excel Export
 import * as XLSX from "xlsx";
@@ -17,6 +19,7 @@ export default function SeekerProfile() {
   const seekersPerPage = 10;
   const [selectedSeekers, setSelectedSeekers] = useState([]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   // ✅ Columns
   const allColumns = [
@@ -81,6 +84,13 @@ export default function SeekerProfile() {
   const handleSelectOne = (id) => {
     setSelectedSeekers(prev => prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]);
   };
+ // remove this before production
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <SeekerProfileLoader />
 
   return (
     <div className="seekerprofile-container">
@@ -120,39 +130,39 @@ export default function SeekerProfile() {
         </div>
       </div>
 
-{/* Table Section */}
-<div className="seekerprofile-rec-seek">
-  <div className="seekerprofile-section">
-    <div className="seekerprofile-section-header">
-      <h2>
-        Seeker Profiles List{" "}
-        <span className="seeker-count">({filteredSeekers.length})</span>
-      </h2>
-      <div className="seekerprofile-header-buttons">
+      {/* Table Section */}
+      <div className="seekerprofile-rec-seek">
+        <div className="seekerprofile-section">
+          <div className="seekerprofile-section-header">
+            <h2>
+              Seeker Profiles List{" "}
+              <span className="seeker-count">({filteredSeekers.length})</span>
+            </h2>
+            <div className="seekerprofile-header-buttons">
 
-        {/* Reset Table */}
-        {/* <button className="seekerprofile-reset-btn" onClick={() => {
+              {/* Reset Table */}
+              {/* <button className="seekerprofile-reset-btn" onClick={() => {
           setFilters({ specialization: "", pincode: "", status: "" });
           setVisibleColumns(allColumns.map(c => c.key));
           setTempColumns(allColumns.map(c => c.key));
           setCurrentPage(1);
         }}>Reset Table</button> */}
 
-        {/* Download */}
-        <button className="seekerprofile-add-btn" onClick={handleDownload}>Download</button>
+              {/* Download */}
+              <button className="seekerprofile-add-btn" onClick={handleDownload}>Download</button>
 
-        {/* Filter Columns */}
-        {/* <button className="seekerprofile-filter-btn" onClick={() => setFilterOpen(prev => !prev)}>
+              {/* Filter Columns */}
+              {/* <button className="seekerprofile-filter-btn" onClick={() => setFilterOpen(prev => !prev)}>
           <div className="title-icon2">Filter Columns <FaAngleDown /></div>
         </button> */}
 
-        {/* 🔹 Advanced Search Modal */}
-        <button className="seekerprofile-search-btn" onClick={() => setSearchModalOpen(true)}>
-          <div className="title-icon2">Advanced Search <FaAngleDown /></div>
-        </button>
+              {/* 🔹 Advanced Search Modal */}
+              <button className="seekerprofile-search-btn" onClick={() => setSearchModalOpen(true)}>
+                <div className="title-icon2">Advanced Search <FaAngleDown /></div>
+              </button>
 
-      </div>
-    </div>
+            </div>
+          </div>
 
           {/* Column Filter Panel */}
           {filterOpen && (
@@ -163,7 +173,7 @@ export default function SeekerProfile() {
                 <label key={col.key} className="column-checkbox">
                   <input type="checkbox" checked={tempColumns.includes(col.key)} onChange={() =>
                     setTempColumns(prev => prev.includes(col.key) ? prev.filter(c => c !== col.key) : [...prev, col.key])
-                  }/>
+                  } />
                   {col.label}
                 </label>
               ))}
@@ -179,7 +189,7 @@ export default function SeekerProfile() {
             <table className="seekerprofile-table">
               <thead>
                 <tr>
-                  <th><input type="checkbox" checked={allSelected} onChange={handleSelectAll}/></th>
+                  <th><input type="checkbox" checked={allSelected} onChange={handleSelectAll} /></th>
                   {allColumns.filter(c => visibleColumns.includes(c.key)).map(col => <th key={col.key}>{col.label}</th>)}
                 </tr>
               </thead>
@@ -191,7 +201,7 @@ export default function SeekerProfile() {
                     </td>
                     {allColumns.filter(c => visibleColumns.includes(c.key)).map(col => (
                       <td key={col.key}>
-                        {col.key === "user" ? <><FaUserCircle className="school-logo"/> {seeker[col.key]}</> : seeker[col.key]}
+                        {col.key === "user" ? <><FaUserCircle className="school-logo" /> {seeker[col.key]}</> : seeker[col.key]}
                       </td>
                     ))}
                   </tr>
@@ -201,11 +211,11 @@ export default function SeekerProfile() {
 
             {/* Pagination */}
             <div className="seekerprofile-pagination">
-              <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage-1)}>Prev</button>
+              <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Prev</button>
               {[...Array(totalPages)].map((_, i) => (
-                <button key={i} className={currentPage === i+1 ? "active" : ""} onClick={() => setCurrentPage(i+1)}>{i+1}</button>
+                <button key={i} className={currentPage === i + 1 ? "active" : ""} onClick={() => setCurrentPage(i + 1)}>{i + 1}</button>
               ))}
-              <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage+1)}>Next</button>
+              <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
             </div>
           </div>
         </div>

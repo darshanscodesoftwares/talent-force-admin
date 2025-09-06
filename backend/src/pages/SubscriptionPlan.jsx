@@ -3,18 +3,20 @@ import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { TbCoinRupeeFilled } from "react-icons/tb";
 import "./SubscriptionPlan.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { subscribers as initialSubscribers } from "../data/contentData.js";
 
 import SubscriptionModal from "../editpages/SubscriptionModal.jsx";
 import SubscriptionAddModal from "../editpages/SubscriptionAddModal.jsx";
 
+import SubscriptionPlanLoader from "../Loader/Loader.jsx"
+
 export default function SubscriptionPlan() {
   const [subscribers, setSubscribers] = useState(initialSubscribers);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSub, setSelectedSub] = useState(null);
-
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Edit subscription
   const handleEdit = (sub) => {
@@ -44,6 +46,14 @@ export default function SubscriptionPlan() {
   const handleDelete = (id) => {
     setSubscribers((prev) => prev.filter((s) => s.id !== id));
   };
+
+  // remove this before production
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500); // 1.5s fake loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <SubscriptionPlanLoader />;
 
   return (
     <div className="subscription-container">
