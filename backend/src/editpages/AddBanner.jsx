@@ -7,7 +7,9 @@ import { HomeBannerContext } from "../UseContexts/SeekerUseContext/HomeBannerCon
 export default function AddBanner() {
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
-  const { addBanner } = useContext(HomeBannerContext); // ✅ use context function
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const { addBanner } = useContext(HomeBannerContext);
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
@@ -15,18 +17,42 @@ export default function AddBanner() {
     if (selectedFile) {
       setFile(selectedFile);
       setPreview(URL.createObjectURL(selectedFile));
+      setErrorMsg(""); // clear error if user selects a new file
     }
   };
 
   const handleSave = async () => {
-    if (!file) return;
+    if (!file) {
+      setErrorMsg("Please select an image before saving.");
+      return;
+    }
+
+    if (loading) return; // prevent duplicate uploads
+
+    setLoading(true);
+    setErrorMsg("");
 
     const formData = new FormData();
-    formData.append("image", file);
-    formData.append("createdBy", "Admin"); // or from user auth
+    formData.append("banner_image", file); // must match backend key
 
-    await addBanner(formData); // ✅ call context function
-    navigate("/dashboard/home-banner"); // go back after saving
+    try {
+      await addBanner(formData);
+
+      // reset form
+      setFile(null);
+      setPreview(null);
+
+      // go back to list
+      navigate("/dashboard/home-banner");
+    } catch (err) {
+      console.error("Add banner failed:", err.response?.data || err.message);
+      setErrorMsg(
+        err.response?.data?.message ||
+          "Failed to upload banner. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -34,16 +60,21 @@ export default function AddBanner() {
       <div className="addbanner-card">
         <h2 className="addbanner-title">Add Thumbnail Photo</h2>
 
+        {/* Upload Section */}
         <div className="addbanner-upload">
           {preview ? (
             <img src={preview} alt="Preview" className="addbanner-preview" />
           ) : (
             <label htmlFor="banner-upload" className="addbanner-dropzone">
-              <AiOutlineCloudUpload className="upload-icon"/>
-              <span>Drop your images here or <span className="browse-text">click to browse</span></span>
+              <AiOutlineCloudUpload className="upload-icon" />
+              <span>
+                Drop your image here or{" "}
+                <span className="browse-text">click to browse</span>
+              </span>
               <p>1600 x 1200 (4:3) recommended. PNG, JPG, GIF allowed</p>
             </label>
           )}
+
           <input
             id="banner-upload"
             type="file"
@@ -53,12 +84,26 @@ export default function AddBanner() {
           />
         </div>
 
+        {/* Error Message */}
+        {errorMsg && <p className="error-text">{errorMsg}</p>}
+
+        {/* Actions */}
         <div className="addbanner-actions">
-          <button type="button" className="addbanner-cancel" onClick={() => navigate("/dashboard/home-banner")}>
+          <button
+            type="button"
+            className="addbanner-cancel"
+            onClick={() => navigate("/dashboard/home-banner")}
+            disabled={loading}
+          >
             Cancel
           </button>
-          <button type="button" className="addbanner-save" onClick={handleSave}>
-            Save
+          <button
+            type="button"
+            className="addbanner-save"
+            onClick={handleSave}
+            disabled={loading}
+          >
+            {loading ? "Uploading..." : "Save"}
           </button>
         </div>
       </div>

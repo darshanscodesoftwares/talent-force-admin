@@ -6,15 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { HomeBannerContext } from "../UseContexts/SeekerUseContext/HomeBannerContext";
 
 export default function HomeBanner() {
-  const { banners, loading, error } = useContext(HomeBannerContext); // ✅ use context
+  const { banners, loading, error, deleteBanner } = useContext(HomeBannerContext);
   const [viewedRows, setViewedRows] = useState([]);
   const navigate = useNavigate();
 
-  const handleDelete = (id) => {
-    setBannerList(bannerList.filter((b) => b.id !== id));
-    setViewedRows(viewedRows.filter((rowId) => rowId !== id)); // remove if deleted
-  };
+  // 🔹 Ensure banners is always an array
+  const bannerList = Array.isArray(banners) ? banners : banners?.data || [];
 
+  // ✅ toggle row highlight
   const handleView = (id) => {
     setViewedRows((prev) =>
       prev.includes(id)
@@ -23,21 +22,32 @@ export default function HomeBanner() {
     );
   };
 
+  // ✅ delete using context
+  // const handleDelete = (id) => {
+  //   deleteBanner(id);
+  //   setViewedRows((prev) => prev.filter((rowId) => rowId !== id));
+  // };
+
   if (loading) return <p>Loading banners...</p>;
   if (error) return <p>Error: {error}</p>;
-  if (!banners.length) return <p>No banners available.</p>;
 
   return (
     <div className="homebanner-container">
+      {/* --- Top Preview Section --- */}
       <div className="homebanner-top-row">
-        {banners.slice(0, 2).map((banner, index) => (
-          <div className="homebanner-card" key={banner.id}>
-            <img src={banner.image_url} alt="Banner" /> {/* ✅ API field */}
-            <p>Banner {index + 1}</p>
-          </div>
-        ))}
+        {bannerList.length > 0 ? (
+          bannerList.slice(0, 2).map((banner, index) => (
+            <div className="homebanner-card" key={banner.id}>
+              <img src={banner.banner_image} alt="Banner" />
+              <p>Banner {index + 1}</p>
+            </div>
+          ))
+        ) : (
+          <p className="no-banner-msg">No banners yet</p>
+        )}
       </div>
 
+      {/* --- Banner Table Section --- */}
       <div className="homebanner-rec-seek">
         <div className="homebanner-section">
           <div className="banner-button">
@@ -49,6 +59,7 @@ export default function HomeBanner() {
               Add Banner
             </button>
           </div>
+
           <div className="homebanner-table-container">
             <table className="homebanner-table">
               <thead>
@@ -60,44 +71,58 @@ export default function HomeBanner() {
                 </tr>
               </thead>
               <tbody>
-                {banners.map((banner) => (
-                  <tr
-                    key={banner.id}
-                    className={viewedRows.includes(banner.id) ? "viewed-row" : ""}
-                  >
-                    <td>
-                      <img
-                        src={banner.image_url} // ✅ API field
-                        alt="banner"
-                        className="homebanner-img"
-                      />
-                    </td>
-                    <td>{banner.postedOn || "N/A"}</td>
-                    <td>{banner.createdBy || "Admin"}</td>
-                    <td className="homebanner-actions">
-                      <button
-                        className="homebanner-btn view-btn"
-                        onClick={() => handleView(banner.id)}
-                      >
-                        {viewedRows.includes(banner.id) ? <FaRegEyeSlash /> : <FaRegEye />}
-                      </button>
-                      <button
-                        className="homebanner-btn edit-btn"
-                        onClick={() =>
-                          navigate(`/dashboard/home-banner/edit/${banner.id}`)
-                        }
-                      >
-                        <BiSolidEdit />
-                      </button>
-                      {/* <button
-                        className="homebanner-btn delete-btn"
-                        onClick={() => handleDelete(banner.id)}
-                      >
-                        <AiOutlineDelete />
-                      </button> */}
+                {bannerList.length > 0 ? (
+                  bannerList.map((banner) => (
+                    <tr
+                      key={banner.id}
+                      className={
+                        viewedRows.includes(banner.id) ? "viewed-row" : ""
+                      }
+                    >
+                      <td>
+                        <img
+                          src={banner.banner_image}
+                          alt="banner"
+                          className="homebanner-img"
+                        />
+                      </td>
+                      <td>{banner.postedOn || "—"}</td>
+                      <td>{banner.createdBy || "—"}</td>
+                      <td className="homebanner-actions">
+                        <button
+                          className="homebanner-btn view-btn"
+                          onClick={() => handleView(banner.id)}
+                        >
+                          {viewedRows.includes(banner.id) ? (
+                            <FaRegEyeSlash />
+                          ) : (
+                            <FaRegEye />
+                          )}
+                        </button>
+                        <button
+                          className="homebanner-btn edit-btn"
+                          onClick={() =>
+                            navigate(`/dashboard/home-banner/edit/${banner.id}`)
+                          }
+                        >
+                          <BiSolidEdit />
+                        </button>
+                        {/* <button
+                          className="homebanner-btn delete-btn"
+                          onClick={() => handleDelete(banner.id)}
+                        >
+                          🗑️
+                        </button> */}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" style={{ textAlign: "center" }}>
+                      No banners available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

@@ -18,7 +18,7 @@ const HomeBannerProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await axios.get("http://192.168.29.163:8000/api/banners");
-      setBanners(response.data);
+      setBanners(response.data.data);
     } catch (err) {
       setError(err.message || "Failed to fetch banners");
     } finally {
@@ -30,7 +30,7 @@ const HomeBannerProvider = ({ children }) => {
   const addBanner = async (newBannerData) => {
     try {
       const response = await axios.post("http://192.168.29.163:8000/api/banners", newBannerData);
-      setBanners((prev) => [...prev, response.data]); // update list
+      setBanners((prev) => [...prev, response.data.data]); // update list
     } catch (err) {
       console.error("Failed to add banner:", err);
     }
