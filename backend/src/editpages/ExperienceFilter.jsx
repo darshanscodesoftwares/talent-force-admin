@@ -70,7 +70,7 @@ export default function ExperienceFilter() {
                 className="experiencefilter-title"
                 onClick={() => navigate("/dashboard/seeker-search-filter")}
               >
-                <IoChevronBackOutline /> Experience Filters
+                <IoChevronBackOutline /> Experience List
               </h2>
             </div>
             <button className="experiencefilter-add-btn" onClick={handleAdd}>

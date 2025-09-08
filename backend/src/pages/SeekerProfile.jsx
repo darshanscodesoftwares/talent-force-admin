@@ -86,7 +86,7 @@ export default function SeekerProfile() {
   };
  // remove this before production
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
+    const timer = setTimeout(() => setLoading(false), 400);
     return () => clearTimeout(timer);
   }, []);
 

@@ -52,7 +52,7 @@ export default function JobPostEducationQualification() {
               className="jobposteducation-title"
               onClick={() => navigate("/dashboard/seeker-search-filter")}
             >
-              <IoChevronBackOutline /> Job Post Education Qualification
+              <IoChevronBackOutline /> Education Qualification List
             </h2>
 
             <button className="jobposteducation-add-btn" onClick={handleAdd}>

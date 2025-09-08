@@ -10,7 +10,7 @@ export default function AddSalaryModal({ onClose, onCreate, newRange, setNewRang
           <label>Salary</label>
           <input
             type="text"
-            placeholder="₹40,000 – ₹50,000"
+            placeholder="₹40,000 - ₹50,000"
             value={newRange}
             onChange={(e) => setNewRange(e.target.value)}
           />

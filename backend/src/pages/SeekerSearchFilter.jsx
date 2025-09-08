@@ -16,7 +16,7 @@ export default function SeekerSearchFilter() {
 
    // remove this before production
     useEffect(() => {
-      const timer = setTimeout(() => setLoading(false), 1000);
+      const timer = setTimeout(() => setLoading(false), 400);
       return () => clearTimeout(timer);
     }, []);
 

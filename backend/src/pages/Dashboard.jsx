@@ -29,7 +29,7 @@ const Dashboard = () => {
 
  // remove this before production
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500); // 1.5s fake loading
+    const timer = setTimeout(() => setLoading(false), 400);
     return () => clearTimeout(timer);
   }, []);
 
