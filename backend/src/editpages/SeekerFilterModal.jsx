@@ -43,9 +43,9 @@ export default function SeekerFilterModal({ filters, setFilters, onClose }) {
           <input
             type="text"
             value={filters.pincode}
-            maxLength={6} // remove extra space
+            maxLength={6} 
             onChange={(e) => {
-              // Only digits
+    
               const val = e.target.value.replace(/\D/g, "");
               setFilters({ ...filters, pincode: val });
             }}

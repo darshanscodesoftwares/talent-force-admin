@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./workTypeAddModal.css";
+import { WorkTypeContext } from "../UseContexts/RecruiterUseContext/JobPostContext/WorkTypeContext.jsx";
 
-export default function WorkTypeAddModal({ isOpen, onClose, onSave }) {
+export default function WorkTypeAddModal({ isOpen, onClose }) {
   const [type, setType] = useState("");
+  const { addWorkType } = useContext(WorkTypeContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!type) return;
-    onSave({
-      type,
-      postedOn: new Date().toLocaleDateString(),
-      createdBy: "Admin",
-    });
-    setType("");
+    if (!type.trim()) return;
+
+    try {
+      await addWorkType({
+        job_type: type, // ✅ match API field
+      });
+      setType(""); // reset input
+      onClose();   // close modal after success
+    } catch (error) {
+      console.error("Failed to add work type:", error);
+    }
   };
 
   if (!isOpen) return null;

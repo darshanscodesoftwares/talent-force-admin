@@ -37,7 +37,7 @@ export default function JobPostExperienceFilter() {
                 className="jobpostexperiencefilter-title"
                 onClick={() => navigate("/dashboard/job-post-filter")}
               >
-                <IoChevronBackOutline /> Job Post Experience Filters
+                <IoChevronBackOutline /> Experience List
               </h2>
             </div>
           </div>

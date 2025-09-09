@@ -36,7 +36,7 @@ export default function JobPostExpectedSalary() {
                 className="jobpostexpectedsalary-title"
                 onClick={() => navigate("/dashboard/job-post-filter")}
               >
-                <IoChevronBackOutline /> Job Post Expected Salary
+                <IoChevronBackOutline /> Expected Salary List
               </h2>
             </div>
           </div>

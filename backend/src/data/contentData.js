@@ -331,20 +331,20 @@ export const jobPostFilter = [
     postedOn: "13 April 2025",
     createdBy: "Admin",
   },
+  // {
+  //   id: 8,
+  //   specifications: "Pincode",
+  //   postedOn: "13 April 2025",
+  //   createdBy: "Admin",
+  // },
+  // {
+  //   id: 9,
+  //   specifications: "Number Of Opening",
+  //   postedOn: "13 April 2025",
+  //   createdBy: "Admin",
+  // },
   {
     id: 8,
-    specifications: "Pincode",
-    postedOn: "13 April 2025",
-    createdBy: "Admin",
-  },
-  {
-    id: 9,
-    specifications: "Number Of Opening",
-    postedOn: "13 April 2025",
-    createdBy: "Admin",
-  },
-  {
-    id: 10,
     specifications: "End-Date",
     postedOn: "13 April 2025",
     createdBy: "Admin",
@@ -622,8 +622,8 @@ export const jobPostFilterRoutes = {
   "Compartment Level": "/dashboard/jobpost-filters/compartment",
   "Education Qualification": "/dashboard/jobpost-filters/education",
   "Expected Salary": "/dashboard/jobpost-filters/salary",
-  "Pincode": "/dashboard/jobpost-filters/pincode",
-  "Number Of Opening": "/dashboard/jobpost-filters/openings",
+  // "Pincode": "/dashboard/jobpost-filters/pincode",
+  // "Number Of Opening": "/dashboard/jobpost-filters/openings",
   "End-Date": "/dashboard/jobpost-filters/enddate",
 };
 
@@ -671,20 +671,20 @@ export const jobPostSearchPages = [
     postedOn: "13 April 2025",
     createdBy: "Admin",
   },
+  // {
+  //   id: 8,
+  //   specifications: "Pincode",
+  //   postedOn: "13 April 2025",
+  //   createdBy: "Admin",
+  // },
+  // {
+  //   id: 9,
+  //   specifications: "Number Of Opening",
+  //   postedOn: "13 April 2025",
+  //   createdBy: "Admin",
+  // },
   {
     id: 8,
-    specifications: "Pincode",
-    postedOn: "13 April 2025",
-    createdBy: "Admin",
-  },
-  {
-    id: 9,
-    specifications: "Number Of Opening",
-    postedOn: "13 April 2025",
-    createdBy: "Admin",
-  },
-  {
-    id: 10,
     specifications: "End-Date",
     postedOn: "13 April 2025",
     createdBy: "Admin",
@@ -747,9 +747,9 @@ export const jobPostExpectedSalary = [
 // End Date schema
 export const endDateFilter = [
   { id: 1, endDate: "15 Days", postedOn: "13 April 2025", createdBy: "Admin" },
-  { id: 2, endDate: "30 Days", postedOn: "13 April 2025", createdBy: "Admin" },
-  { id: 3, endDate: "45 Days", postedOn: "13 April 2025", createdBy: "Admin" },
-  { id: 4, endDate: "60 Days", postedOn: "13 April 2025", createdBy: "Admin" },
+  // { id: 2, endDate: "30 Days", postedOn: "13 April 2025", createdBy: "Admin" },
+  // { id: 3, endDate: "45 Days", postedOn: "13 April 2025", createdBy: "Admin" },
+  // { id: 4, endDate: "60 Days", postedOn: "13 April 2025", createdBy: "Admin" },
 ];
 
 // Work Type schema

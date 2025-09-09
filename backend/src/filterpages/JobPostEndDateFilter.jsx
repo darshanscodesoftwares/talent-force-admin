@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
+import { BiSolidEdit } from "react-icons/bi";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./jobPostEndDateFilter.css";
 import { endDateFilter as initialEndDateFilter } from "../data/contentData.js";
 import JobPostEndDateAddModal from "./JobPostEndDateAddModal.jsx";
+import EndDateEditModal from "../filterpages/EndDateEditModal.jsx";
 
 export default function JobPostEndDateFilter() {
   const navigate = useNavigate();
@@ -14,10 +16,13 @@ export default function JobPostEndDateFilter() {
   // Add Modal
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  // Track hidden rows
-  const [hiddenRows, setHiddenRows] = useState([]);
+  // Edit Modal
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [newDate, setNewDate] = useState("");
 
-  const handleAdd = () => setIsAddModalOpen(true);
+  // Hidden Rows
+  const [hiddenRows, setHiddenRows] = useState([]);
 
   const handleSaveAdd = (newItem) => {
     setFilters([...filters, { id: Date.now(), ...newItem }]);
@@ -27,6 +32,23 @@ export default function JobPostEndDateFilter() {
   const handleDelete = (id) => {
     setFilters(filters.filter((f) => f.id !== id));
     setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+  };
+
+  const handleEdit = (filter) => {
+    setEditId(filter.id);
+    setNewDate(filter.endDate); // prefill with current value
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveEdit = () => {
+    setFilters((prev) =>
+      prev.map((f) =>
+        f.id === editId ? { ...f, endDate: newDate } : f
+      )
+    );
+    setIsEditModalOpen(false);
+    setEditId(null);
+    setNewDate("");
   };
 
   const toggleHideRow = (id) => {
@@ -54,14 +76,8 @@ export default function JobPostEndDateFilter() {
               className="jobpostenddatefilter-title"
               onClick={() => navigate("/dashboard/job-post-filter")}
             >
-              <IoChevronBackOutline /> Job Post End Date Filters
+              <IoChevronBackOutline /> End-Date List
             </h2>
-            <button
-              className="jobpostenddatefilter-add-btn"
-              onClick={handleAdd}
-            >
-              Add End Date
-            </button>
           </div>
 
           {/* Table */}
@@ -86,17 +102,23 @@ export default function JobPostEndDateFilter() {
                     <td>{filter.createdBy}</td>
                     <td className="jobpostenddatefilter-actions">
                       <button
+                        className="jobpostenddatefilter-btn edit-btn"
+                        onClick={() => handleEdit(filter)}
+                      >
+                        <BiSolidEdit />
+                      </button>
+                      <button
                         className="jobpostenddatefilter-btn view-btn"
                         onClick={() => toggleHideRow(filter.id)}
                       >
                         {hiddenRows.includes(filter.id) ? <FaRegEyeSlash /> : <FaRegEye />}
                       </button>
-                      <button
+                      {/* <button
                         className="jobpostenddatefilter-btn delete-btn"
                         onClick={() => handleDelete(filter.id)}
                       >
                         <AiOutlineDelete />
-                      </button>
+                      </button> */}
                     </td>
                   </tr>
                 ))}
@@ -137,6 +159,16 @@ export default function JobPostEndDateFilter() {
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSave={handleSaveAdd}
+        />
+      )}
+
+      {/* Edit Modal */}
+      {isEditModalOpen && (
+        <EndDateEditModal
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={handleSaveEdit}
+          newDate={newDate}
+          setNewDate={setNewDate}
         />
       )}
     </div>

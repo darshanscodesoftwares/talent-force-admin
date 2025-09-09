@@ -1,5 +1,6 @@
 import { BiSolidEdit } from "react-icons/bi";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { AiOutlineDelete } from "react-icons/ai";
 import "./HomeBanner.css";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,11 +8,21 @@ import { HomeBannerContext } from "../UseContexts/SeekerUseContext/HomeBannerCon
 import { BannerLoader } from "../Loader/Loader"; // ✅ shimmer effect
 
 export default function HomeBanner() {
-  const { banners, loading, error } = useContext(HomeBannerContext);
+  const { banners, loading, error, deleteBanner } = useContext(HomeBannerContext);
   const [viewedRows, setViewedRows] = useState([]);
   const navigate = useNavigate();
 
   const bannerList = Array.isArray(banners) ? banners : banners?.data || [];
+
+  // ✅ Delete banner with hiddenRows cleanup
+  const handleDelete = async (id) => {
+    try {
+      await deleteBanner(id);
+      setViewedRows((prev) => prev.filter((hid) => hid !== id)); // remove if hidden
+    } catch (err) {
+      console.error("Error deleting banner:", err);
+    }
+  };
 
   const handleView = (id) => {
     setViewedRows((prev) =>
@@ -100,6 +111,12 @@ export default function HomeBanner() {
                           }
                         >
                           <BiSolidEdit />
+                        </button>
+                        <button
+                          className="homebanner-btn delete-btn"
+                          onClick={() => handleDelete(banner.id)}
+                        >
+                          <AiOutlineDelete />
                         </button>
                       </td>
                     </tr>

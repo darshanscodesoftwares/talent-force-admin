@@ -1,45 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./jobPostSubject.css";
-import { jobPostSubjectFilter as initialJobPostSubjectFilter } from "../data/contentData.js";
 import JobPostSubjectAddModal from "./JobPostSubjectAddModal.jsx";
+import { SubjectContext } from "../UseContexts/RecruiterUseContext/JobPostContext/SubjectContext.jsx";
 
 export default function JobPostSubjectFilter() {
   const navigate = useNavigate();
-  const [filters, setFilters] = useState(initialJobPostSubjectFilter);
-  const [hiddenRows, setHiddenRows] = useState([]); // track hidden rows
+  const { subjects, loading, error, addSubject, deleteSubject } =
+    useContext(SubjectContext);
 
-  // Add Modal
+  const [hiddenRows, setHiddenRows] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const handleAdd = () => setIsAddModalOpen(true);
-
-  const handleSaveAdd = (newItem) => {
-    setFilters([...filters, { id: Date.now(), ...newItem }]);
+  // Save from Add Modal
+  const handleSaveAdd = async (newItem) => {
+    await addSubject(newItem);
     setIsAddModalOpen(false);
+  };
+
+  // ✅ Handle Delete
+  const handleDelete = async (id) => {
+    try {
+      await deleteSubject(id);
+      setHiddenRows((prev) => prev.filter((hid) => hid !== id)); // remove if hidden
+    } catch (err) {
+      console.error("Error deleting subject:", err);
+    }
   };
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = Math.ceil(filters.length / itemsPerPage);
+  const totalPages = Math.ceil(subjects.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filters.slice(startIndex, startIndex + itemsPerPage);
-
-  const handleDelete = (id) => {
-    setFilters(filters.filter((f) => f.id !== id));
-    setHiddenRows(hiddenRows.filter((hid) => hid !== id));
-  };
+  const paginatedData = subjects.slice(startIndex, startIndex + itemsPerPage);
 
   const toggleHideRow = (id) => {
-    if (hiddenRows.includes(id)) {
-      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
-    } else {
-      setHiddenRows([...hiddenRows, id]);
-    }
+    setHiddenRows((prev) =>
+      prev.includes(id) ? prev.filter((hid) => hid !== id) : [...prev, id]
+    );
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
@@ -52,15 +63,19 @@ export default function JobPostSubjectFilter() {
               className="jobpostsubjectfilter-title"
               onClick={() => navigate("/dashboard/job-post-filter")}
             >
-              <IoChevronBackOutline /> Job Post Subject Filters
+              <IoChevronBackOutline /> Subject List
             </h2>
             <button
               className="jobpostsubjectfilter-add-btn"
-              onClick={handleAdd}
+              onClick={() => setIsAddModalOpen(true)}
             >
               Add Subject
             </button>
           </div>
+
+          {/* Loader / Error */}
+          {loading && <p>Loading subjects...</p>}
+          {error && <p className="error">{error}</p>}
 
           {/* Table */}
           <div className="jobpostsubjectfilter-table-container">
@@ -69,7 +84,7 @@ export default function JobPostSubjectFilter() {
                 <tr>
                   <th>Subject</th>
                   <th>Posted on</th>
-                  <th>Created by</th>
+                  <th>Updated on</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -77,11 +92,13 @@ export default function JobPostSubjectFilter() {
                 {paginatedData.map((subject) => (
                   <tr
                     key={subject.id}
-                    className={hiddenRows.includes(subject.id) ? "hidden-row" : ""}
+                    className={
+                      hiddenRows.includes(subject.id) ? "hidden-row" : ""
+                    }
                   >
-                    <td>{subject.name}</td>
-                    <td>{subject.postedOn}</td>
-                    <td>{subject.createdBy}</td>
+                    <td>{subject.category_name}</td>
+                    <td>{formatDate(subject.created_at)}</td>
+                    <td>{formatDate(subject.updated_at)}</td>
                     <td className="jobpostsubjectfilter-actions">
                       <button
                         className="jobpostsubjectfilter-btn view-btn"

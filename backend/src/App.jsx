@@ -48,7 +48,7 @@ const App = () => {
       {/* Toast container - top level */}
       <ToastContainer 
         position="top-right" 
-        autoClose={1000} 
+        autoClose={1200} 
         hideProgressBar={false} 
         newestOnTop={false} 
         closeOnClick 

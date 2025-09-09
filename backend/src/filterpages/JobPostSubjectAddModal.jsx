@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./jobPostSubjectAddModal.css";
+import { SubjectContext } from "../UseContexts/RecruiterUseContext/JobPostContext/SubjectContext.jsx";
 
-export default function JobPostSubjectAddModal({ isOpen, onClose, onSave }) {
+export default function JobPostSubjectAddModal({ isOpen, onClose }) {
   const [subject, setSubject] = useState("");
+  const { addSubject } = useContext(SubjectContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!subject) return;
-    onSave({
-      name: subject,
-      postedOn: new Date().toLocaleDateString(),
-      createdBy: "Admin",
-    });
-    setSubject("");
+    if (!subject.trim()) return;
+
+    try {
+      await addSubject({
+        category_name: subject, // ✅ matches API field
+      });
+      setSubject("");
+      onClose(); // close modal after success
+    } catch (error) {
+      console.error("Failed to add subject:", error);
+    }
   };
 
   if (!isOpen) return null;

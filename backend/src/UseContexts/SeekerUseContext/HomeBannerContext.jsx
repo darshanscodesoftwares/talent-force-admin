@@ -1,6 +1,7 @@
 // src/UseContexts/SeekerUseContext/HomeBannerContext.jsx
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const HomeBannerContext = createContext();
 
@@ -11,20 +12,29 @@ const HomeBannerProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ✅ Define fetchBanners once, outside useEffect
+  // 🔹 Fetch banners (with cache-busting)
   const fetchBanners = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(API_URL); // ✅ use correct API
-      setBanners(res.data?.data || []);
+      const res = await axios.get(API_URL);
+
+      // Always add timestamp to bust cache
+      const bannerData = (res.data?.data || []).map((b) => ({
+        ...b,
+        banner_image: b.banner_image
+          ? `${b.banner_image}?t=${Date.now()}`
+          : null,
+      }));
+
+      setBanners(bannerData);
     } catch (err) {
       setError(err.message || "Failed to fetch banners");
+      toast.error("Failed to fetch banners");
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔹 Call it on mount
   useEffect(() => {
     fetchBanners();
   }, []);
@@ -32,18 +42,14 @@ const HomeBannerProvider = ({ children }) => {
   // ✅ POST add banner
   const addBanner = async (formData) => {
     try {
-      const response = await axios.post(API_URL, formData, {
+      await axios.post(API_URL, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      const createdBanner = response.data?.data;
-      if (createdBanner) {
-        setBanners((prev) => [...prev, createdBanner]);
-      }
-
-      return createdBanner;
+      await fetchBanners();
+      toast.success("Banner added successfully!");
     } catch (err) {
       console.error("Failed to add banner:", err.response?.data || err.message);
+      toast.error("Failed to add banner");
       throw err;
     }
   };
@@ -51,33 +57,27 @@ const HomeBannerProvider = ({ children }) => {
   // ✅ PUT update banner
   const updateBanner = async (id, formData) => {
     try {
-      const response = await axios.put(`${API_URL}/${id}`, formData, {
+      await axios.put(`${API_URL}/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      let updatedBanner = response.data?.data;
-
-      if (updatedBanner) {
-        // Force image reload by appending timestamp
-        if (updatedBanner.banner_image) {
-          updatedBanner = {
-            ...updatedBanner,
-            banner_image: `${updatedBanner.banner_image}?t=${Date.now()}`,
-          };
-        }
-
-        setBanners((prev) =>
-          prev.map((b) =>
-            b?.id?.toString() === updatedBanner?.id?.toString()
-              ? updatedBanner
-              : b
-          )
-        );
-      }
-
-      return updatedBanner;
+      await fetchBanners();
+      toast.success("Banner updated successfully!");
     } catch (err) {
       console.error("Failed to update banner:", err.response?.data || err.message);
+      toast.error("Failed to update banner");
+      throw err;
+    }
+  };
+
+  // ✅ DELETE banner
+  const deleteBanner = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      setBanners((prev) => prev.filter((b) => b.id !== id));
+      toast.success("Banner deleted successfully!");
+    } catch (err) {
+      console.error("Failed to delete banner:", err.response?.data || err.message);
+      toast.error("Failed to delete banner");
       throw err;
     }
   };
@@ -91,6 +91,7 @@ const HomeBannerProvider = ({ children }) => {
         fetchBanners,
         addBanner,
         updateBanner,
+        deleteBanner,
       }}
     >
       {children}

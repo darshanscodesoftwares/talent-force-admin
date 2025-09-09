@@ -216,3 +216,14 @@
   opacity: 0.3;
   transition: opacity 0.3s ease;
 }
+
+.jobpostenddatefilter-btn.edit-btn {
+  background-color: #ffeee6;
+  border-radius: 7px;
+  /* font-size: large; */
+  color: #e89e2f;
+}
+
+.jobpostenddatefilter-btn.edit-btn:hover {
+  background-color: #ffe0d1;
+}

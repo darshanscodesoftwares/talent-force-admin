@@ -54,7 +54,7 @@ export default function JobPostEducationQualification() {
               className="jobposteducation-title"
               onClick={() => navigate("/dashboard/job-post-filter")}
             >
-              <IoChevronBackOutline /> Job Post Education Qualification
+              <IoChevronBackOutline /> Education Qualification List
             </h2>
 
             <button

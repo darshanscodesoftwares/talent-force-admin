@@ -44,7 +44,7 @@ export default function JobPostFilter() {
         <div className="jobpostfilter-section">
           <h2>All Job Post Filters List</h2>
           <div className="jobpostfilter-table-container">
-            <button className="jobpostfilter-add-btn">+ Add Filter</button>
+            {/* <button className="jobpostfilter-add-btn">Add Filter</button> */}
 
             <table className="jobpostfilter-table">
               <thead>
