@@ -19,7 +19,11 @@ export default function EndDateEditModal({ onClose, onSave, newDate, setNewDate 
           <button className="enddateeditmodal-cancel-btn" onClick={onClose}>
             Cancel
           </button>
-          <button className="enddateeditmodal-primary-btn" onClick={onSave}>
+          <button
+            className="enddateeditmodal-primary-btn"
+            onClick={onSave}
+            disabled={!newDate.trim()}
+          >
             Save
           </button>
         </div>

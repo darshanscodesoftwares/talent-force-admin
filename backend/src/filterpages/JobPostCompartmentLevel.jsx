@@ -94,31 +94,31 @@ const JobPostCompartmentLevel = () => {
             </table>
 
             {/* Pagination controls */}
-            <div className="pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Prev
-              </button>
-
-              {[...Array(totalPages)].map((_, index) => (
+              {/* <div className="pagination">
                 <button
-                  key={index + 1}
-                  className={currentPage === index + 1 ? "active" : ""}
-                  onClick={() => setCurrentPage(index + 1)}
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                 >
-                  {index + 1}
+                  Prev
                 </button>
-              ))}
 
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
-            </div>
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index + 1}
+                    className={currentPage === index + 1 ? "active" : ""}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Next
+                </button>
+              </div> */}
           </div>
         </div>
       </div>

@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BiSolidEdit } from "react-icons/bi";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./jobPostEndDateFilter.css";
-import { endDateFilter as initialEndDateFilter } from "../data/contentData.js";
-import JobPostEndDateAddModal from "./JobPostEndDateAddModal.jsx";
+
+import { EndDateContext } from "../UseContexts/RecruiterUseContext/JobPostContext/EndDateContext.jsx";
 import EndDateEditModal from "../filterpages/EndDateEditModal.jsx";
 
 export default function JobPostEndDateFilter() {
   const navigate = useNavigate();
-  const [filters, setFilters] = useState(initialEndDateFilter);
+  const { endDates, addEndDate, updateEndDate, deleteEndDate } =
+    useContext(EndDateContext);
 
   // Add Modal
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -24,47 +25,34 @@ export default function JobPostEndDateFilter() {
   // Hidden Rows
   const [hiddenRows, setHiddenRows] = useState([]);
 
-  const handleSaveAdd = (newItem) => {
-    setFilters([...filters, { id: Date.now(), ...newItem }]);
+  const handleSaveAdd = async (newItem) => {
+    await addEndDate({ expired_date: newItem.endDate });
     setIsAddModalOpen(false);
   };
 
-  const handleDelete = (id) => {
-    setFilters(filters.filter((f) => f.id !== id));
+  const handleDelete = async (id) => {
+    await deleteEndDate(id);
     setHiddenRows(hiddenRows.filter((hid) => hid !== id));
   };
 
   const handleEdit = (filter) => {
     setEditId(filter.id);
-    setNewDate(filter.endDate); // prefill with current value
+    setNewDate(filter.expired_date); // prefill with API field
     setIsEditModalOpen(true);
   };
 
-  const handleSaveEdit = () => {
-    setFilters((prev) =>
-      prev.map((f) =>
-        f.id === editId ? { ...f, endDate: newDate } : f
-      )
-    );
+  const handleSaveEdit = async () => {
+    await updateEndDate(editId, { expired_date: newDate });
     setIsEditModalOpen(false);
     setEditId(null);
     setNewDate("");
   };
 
   const toggleHideRow = (id) => {
-    if (hiddenRows.includes(id)) {
-      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
-    } else {
-      setHiddenRows([...hiddenRows, id]);
-    }
+    setHiddenRows((prev) =>
+      prev.includes(id) ? prev.filter((hid) => hid !== id) : [...prev, id]
+    );
   };
-
-  // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9;
-  const totalPages = Math.ceil(filters.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filters.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="jobpostenddatefilter-container">
@@ -86,20 +74,20 @@ export default function JobPostEndDateFilter() {
               <thead>
                 <tr>
                   <th>End Date</th>
-                  <th>Posted on</th>
-                  <th>Created by</th>
+                  <th>Created on</th>
+                  <th>Updated on</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {paginatedData.map((filter) => (
+                {endDates.map((filter) => (
                   <tr
                     key={filter.id}
                     className={hiddenRows.includes(filter.id) ? "hidden-row" : ""}
                   >
-                    <td>{filter.endDate}</td>
-                    <td>{filter.postedOn}</td>
-                    <td>{filter.createdBy}</td>
+                    <td>{filter.expired_date}</td>
+                    <td>-</td>
+                    <td>-</td>
                     <td className="jobpostenddatefilter-actions">
                       <button
                         className="jobpostenddatefilter-btn edit-btn"
@@ -111,7 +99,11 @@ export default function JobPostEndDateFilter() {
                         className="jobpostenddatefilter-btn view-btn"
                         onClick={() => toggleHideRow(filter.id)}
                       >
-                        {hiddenRows.includes(filter.id) ? <FaRegEyeSlash /> : <FaRegEye />}
+                        {hiddenRows.includes(filter.id) ? (
+                          <FaRegEyeSlash />
+                        ) : (
+                          <FaRegEye />
+                        )}
                       </button>
                       {/* <button
                         className="jobpostenddatefilter-btn delete-btn"
@@ -124,43 +116,9 @@ export default function JobPostEndDateFilter() {
                 ))}
               </tbody>
             </table>
-
-            {/* Pagination */}
-            <div className="pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Prev
-              </button>
-              {[...Array(totalPages)].map((_, index) => (
-                <button
-                  key={index + 1}
-                  className={currentPage === index + 1 ? "active" : ""}
-                  onClick={() => setCurrentPage(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
-            </div>
           </div>
         </div>
       </div>
-
-      {/* Add Modal */}
-      {isAddModalOpen && (
-        <JobPostEndDateAddModal
-          isOpen={isAddModalOpen}
-          onClose={() => setIsAddModalOpen(false)}
-          onSave={handleSaveAdd}
-        />
-      )}
 
       {/* Edit Modal */}
       {isEditModalOpen && (

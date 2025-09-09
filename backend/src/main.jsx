@@ -6,9 +6,11 @@ import "./index.css";
 import HomeBannerProvider from "./UseContexts/SeekerUseContext/HomeBannerContext"
 import SubjectProvider from "./UseContexts/RecruiterUseContext/JobPostContext/SubjectContext"
 import WorkTypeProvider from "./UseContexts/RecruiterUseContext/JobPostContext/WorkTypeContext"
+import EndDateProvider from "./UseContexts/RecruiterUseContext/JobPostContext/EndDateContext"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   
+  <EndDateProvider>
   <WorkTypeProvider>
   <SubjectProvider>
   <HomeBannerProvider>
@@ -16,5 +18,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </HomeBannerProvider>
   </SubjectProvider>
   </WorkTypeProvider>
+  </EndDateProvider>
 
 );
