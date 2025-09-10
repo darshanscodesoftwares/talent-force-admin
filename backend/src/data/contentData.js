@@ -437,12 +437,12 @@ export const recruiterProfile = [
 
 // seeker filters route map
 export const seekerFilterRoutes = {
-  "Experience": "/dashboard/seeker-filters/experience",
-  "Education Qualification": "/dashboard/seeker-filters/education",
-  "Compartment / Level": "/dashboard/seeker-filters/compartment",
-  "Location": "/dashboard/seeker-filters/location",
-  "Subject": "/dashboard/seeker-filters/subject",
-  "Expected Salary": "/dashboard/seeker-filters/salary",
+  "Experience": "/dashboard/seeker-search-filter/experience",
+  "Education Qualification": "/dashboard/seeker-search-filter/education",
+  "Compartment / Level": "/dashboard/seeker-search-filter/compartment",
+  "Location": "/dashboard/seeker-search-filter/location",
+  "Subject": "/dashboard/seeker-search-filter/subject",
+  "Expected Salary": "/dashboard/seeker-search-filter/salary",
 };
 
 // main search list
@@ -615,16 +615,16 @@ export const recruiterJobsData = [
 
 // job post filters route map
 export const jobPostFilterRoutes = {
-  "Job Role": "/dashboard/jobpost-filters/jobrole",
-  "Subject": "/dashboard/jobpost-filters/subject",
-  "Work Type": "/dashboard/jobpost-filters/worktype",
-  "Experience": "/dashboard/jobpost-filters/experience",
-  "Compartment Level": "/dashboard/jobpost-filters/compartment",
-  "Education Qualification": "/dashboard/jobpost-filters/education",
-  "Expected Salary": "/dashboard/jobpost-filters/salary",
-  // "Pincode": "/dashboard/jobpost-filters/pincode",
-  // "Number Of Opening": "/dashboard/jobpost-filters/openings",
-  "End-Date": "/dashboard/jobpost-filters/enddate",
+  "Job Role": "/dashboard/job-post-filter/jobrole",
+  "Subject": "/dashboard/job-post-filter/subject",
+  "Work Type": "/dashboard/job-post-filter/worktype",
+  "Experience": "/dashboard/job-post-filter/experience",
+  "Compartment Level": "/dashboard/job-post-filter/compartment",
+  "Education Qualification": "/dashboard/job-post-filter/education",
+  "Expected Salary": "/dashboard/job-post-filter/salary",
+  // "Pincode": "/dashboard/job-post-filter/pincode",
+  // "Number Of Opening": "/dashboard/job-post-filter/openings",
+  "End-Date": "/dashboard/job-post-filter/enddate",
 };
 
 // main job post search list
@@ -759,4 +759,34 @@ export const workTypeFilter = [
   { id: 3, type: "Guest Lecturer", postedOn: "13 April 2025", createdBy: "Admin" },
   { id: 4, type: "Contract Basis", postedOn: "13 April 2025", createdBy: "Admin" },
   { id: 5, type: "Internship", postedOn: "13 April 2025", createdBy: "Admin" },
+];
+
+export const educationFilter = [
+  {
+    id: 1,
+    filter: "Highest Education",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 2,
+    filter: "Teaching Qualification",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+];
+
+
+export const highestEducationDegrees = [
+  { id: 1, degree: "B.Sc", postedOn: "13 April 2025", updatedOn: "-" },
+  { id: 2, degree: "M.Sc", postedOn: "13 April 2025", updatedOn: "-" },
+  { id: 3, degree: "B.A", postedOn: "14 April 2025", updatedOn: "-" },
+  { id: 4, degree: "M.A", postedOn: "14 April 2025", updatedOn: "-" },
+];
+
+export const teachingQualificationDegrees = [
+  { id: 1, degree: "D.Ed / D.T.Ed", postedOn: "13 April 2025", updatedOn: "-" },
+  { id: 2, degree: "B.Ed + Any Bachelor's Degree", postedOn: "13 April 2025", updatedOn: "-" },
+  { id: 3, degree: "B.A / B.Sc + B.Ed", postedOn: "14 April 2025", updatedOn: "-" },
+  { id: 4, degree: "M.A / M.Sc + B.Ed", postedOn: "14 April 2025", updatedOn: "-" },
 ];

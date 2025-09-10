@@ -5,24 +5,18 @@ import "./Header.css";
 function Header() {
   const location = useLocation();
 
-  // Map exact route paths
-  const titles = {
-    "/dashboard": "Dashboard",
-    "/dashboard/subscription-plan": "Subscription Plans",
-    "/dashboard/home-banner": "Home Banner",
-    "/dashboard/seeker-search-filter": "Seeker Search Filter",
-    "/dashboard/seeker-profile": "Seeker Profile",
-    "/dashboard/job-post-filter": "Job Post Filter",
-    "/dashboard/recruiter-profile": "Recruiter Profile",
-  };
+  // Get pathname and split into parts
+  const pathParts = location.pathname.split("/").filter(Boolean);
 
+  // Default title
   let currentTitle = "Talent Force Admin";
 
-  // Check if pathname starts with "/dashboard/home-banner"
-  if (location.pathname.startsWith("/dashboard/add-banner")) {
-    currentTitle = "Home Banner";
-  } else {
-    currentTitle = titles[location.pathname] || "Talent Force Admin";
+  if (pathParts.length > 0) {
+    // Take the last segment and make it readable
+    const lastSegment = pathParts[pathParts.length - 1];
+    currentTitle = lastSegment
+      .replace(/-/g, " ") // replace dashes with spaces
+      .replace(/\b\w/g, (char) => char.toUpperCase()); // capitalize
   }
 
   return (

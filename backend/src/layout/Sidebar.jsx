@@ -9,6 +9,7 @@ import { SiHomeassistantcommunitystore } from "react-icons/si";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { RiEqualizer2Fill } from "react-icons/ri";
 import { HiMiniBriefcase } from "react-icons/hi2";
+import { FaUserGraduate } from "react-icons/fa6";
 import { SlLogout } from "react-icons/sl";
 import "./Sidebar.css";
 import logo from "../assets/talentforce.png";
@@ -56,6 +57,11 @@ function Sidebar() {
             <li>
               <NavLink to="/dashboard/home-banner" className="nav-link">
                 <SiHomeassistantcommunitystore className="icon" /> Home Banner
+              </NavLink>
+            </li>
+             <li>
+              <NavLink to="/dashboard/education-filter" className="nav-link">
+                <FaUserGraduate className="icon" /> Education
               </NavLink>
             </li>
             <li>

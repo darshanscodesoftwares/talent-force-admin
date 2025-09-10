@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, BrowserRouter} from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,6 +17,10 @@ import RecruiterProfile from "/src/pages/RecruiterProfile";
 import SeekerProfile from "/src/pages/SeekerProfile";
 import SeekerSearchFilter from "/src/pages/SeekerSearchFilter";
 import SubscriptionPlan from "/src/pages/SubscriptionPlan";
+import Education from "./pages/Education.jsx"
+
+import HighestEducation from "./education/HighestEducation.jsx"
+import TeachingQualification from "./education/TeachingQualification.jsx"
 
 // editpages
 import AddBanner from "/src/editpages/AddBanner";
@@ -46,62 +50,68 @@ const App = () => {
   return (
     <>
       {/* Toast container - top level */}
-      <ToastContainer 
-        position="top-right" 
-        autoClose={1200} 
-        hideProgressBar={false} 
-        newestOnTop={false} 
-        closeOnClick 
-        rtl={false} 
-        pauseOnFocusLoss 
-        draggable 
-        pauseOnHover 
+      <ToastContainer
+        position="top-right"
+        autoClose={1200}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
       />
-   <BrowserRouter>
-      <Routes>
-        {/* Public route */}
-        <Route path="/" element={<Login />} />
+      <BrowserRouter>
+        <Routes>
+          {/* Public route */}
+          <Route path="/" element={<Login />} />
 
-        {/* Protected routes */}
-        <Route path="/dashboard" element={<MainLayout />}>
-          <Route index element={<Dashboard />} />
+          {/* Protected routes */}
+          <Route path="/dashboard" element={<MainLayout />}>
+            <Route index element={<Dashboard />} />
 
-          {/* main pages */}
-          <Route path="home-banner" element={<HomeBanner />} />
-          <Route path="job-post-filter" element={<JobPostFilter />} />
-          <Route path="recruiter-profile" element={<RecruiterProfile />} />
-          <Route path="seeker-profile" element={<SeekerProfile />} />
-          <Route path="seeker-search-filter" element={<SeekerSearchFilter />} />
-          <Route path="subscription-plan" element={<SubscriptionPlan />} />
+            {/* main pages */}
+            <Route path="home-banner" element={<HomeBanner />} />
+            <Route path="job-post-filter" element={<JobPostFilter />} />
+            <Route path="recruiter-profile" element={<RecruiterProfile />} />
+            <Route path="seeker-profile" element={<SeekerProfile />} />
+            <Route path="seeker-search-filter" element={<SeekerSearchFilter />} />
+            <Route path="subscription-plan" element={<SubscriptionPlan />} />
+            <Route path="education-filter" element={<Education />} />
 
-          {/* edit pages */}
-          <Route path="home-banner/add" element={<AddBanner />} />
-          <Route path="home-banner/edit/:id" element={<EditBanner />} />
+            {/* edit pages */}
+            <Route path="home-banner/add" element={<AddBanner />} />
+            <Route path="home-banner/edit/:id" element={<EditBanner />} />
 
-          {/* seeker filters */}
-          <Route path="seeker-filters/experience" element={<ExperienceFilter />} />
-          <Route path="seeker-filters/education" element={<EducationQualification />} />
-          <Route path="seeker-filters/compartment" element={<CompartmentLevel />} />
-          <Route path="seeker-filters/subject" element={<Subject />} />
-          <Route path="seeker-filters/salary" element={<ExpectedSalary />} />
+            <Route path="education" element={<Education />} />
+            <Route path="highest-education" element={<HighestEducation />} />
+            <Route path="teaching-qualification" element={<TeachingQualification />} />
 
-          {/* recruiter filters */}
-          <Route path="recruiter-filters/education" element={<EducationQualification />} />
 
-          {/* nested profiles */}
-          <Route path="seeker-profile/:id" element={<GeneralInformation />} />
-          <Route path="recruiter-profile/:id" element={<RecruiterGeneralInfo />} />
+            {/* seeker filters */}
+            <Route path="seeker-search-filter/experience" element={<ExperienceFilter />} />
+            <Route path="seeker-search-filter/education" element={<EducationQualification />} />
+            <Route path="seeker-search-filter/compartment" element={<CompartmentLevel />} />
+            <Route path="seeker-search-filter/subject" element={<Subject />} />
+            <Route path="seeker-search-filter/salary" element={<ExpectedSalary />} />
 
-          {/* job post filters */}
-          <Route path="jobpost-filters/experience" element={<JobPostExperienceFilter />} />
-          <Route path="jobpost-filters/subject" element={<JobPostSubjectFilter />} />
-          <Route path="jobpost-filters/salary" element={<JobPostExpectedSalary />} />
-          <Route path="jobpost-filters/compartment" element={<JobPostCompartmentLevel />} />
-          <Route path="jobpost-filters/education" element={<JobPostEducationQualification />} />
-          <Route path="jobpost-filters/worktype" element={<WorkTypeFilter />} />
-          <Route path="jobpost-filters/enddate" element={<JobPostEndDateFilter />} />
-        </Route>
-      </Routes>
+            {/* recruiter filters */}
+            <Route path="recruiter-filters/education" element={<EducationQualification />} />
+
+            {/* nested profiles */}
+            <Route path="seeker-profile/:id" element={<GeneralInformation />} />
+            <Route path="recruiter-profile/:id" element={<RecruiterGeneralInfo />} />
+
+            {/* job post filters */}
+            <Route path="job-post-filter/experience" element={<JobPostExperienceFilter />} />
+            <Route path="job-post-filter/subject" element={<JobPostSubjectFilter />} />
+            <Route path="job-post-filter/salary" element={<JobPostExpectedSalary />} />
+            <Route path="job-post-filter/compartment" element={<JobPostCompartmentLevel />} />
+            <Route path="job-post-filter/education" element={<JobPostEducationQualification />} />
+            <Route path="job-post-filter/worktype" element={<WorkTypeFilter />} />
+            <Route path="job-post-filter/enddate" element={<JobPostEndDateFilter />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </>
   );
