@@ -15,7 +15,7 @@ export default function JobPostSubjectFilter() {
   const [hiddenRows, setHiddenRows] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  // Save from Add Modal
+  // ✅ Save from Add Modal
   const handleSaveAdd = async (newItem) => {
     await addSubject(newItem);
     setIsAddModalOpen(false);
@@ -31,20 +31,23 @@ export default function JobPostSubjectFilter() {
     }
   };
 
-  // Pagination
+  // ✅ Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = Math.ceil(subjects.length / itemsPerPage);
+  const totalPages = Math.ceil((subjects?.length || 0) / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = subjects.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = subjects?.slice(startIndex, startIndex + itemsPerPage) || [];
 
+  // ✅ Toggle Hide Row
   const toggleHideRow = (id) => {
     setHiddenRows((prev) =>
       prev.includes(id) ? prev.filter((hid) => hid !== id) : [...prev, id]
     );
   };
 
+  // ✅ Format Dates
   const formatDate = (dateString) => {
+    if (!dateString) return "-";
     const date = new Date(dateString);
     return date.toLocaleDateString("en-IN", {
       year: "numeric",
@@ -57,7 +60,7 @@ export default function JobPostSubjectFilter() {
     <div className="jobpostsubjectfilter-container">
       <div className="jobpostsubjectfilter-rec">
         <div className="jobpostsubjectfilter-section">
-          {/* Header */}
+          {/* 🔹 Header */}
           <div className="jobpostsubjectfilter-title-button">
             <h2
               className="jobpostsubjectfilter-title"
@@ -73,11 +76,11 @@ export default function JobPostSubjectFilter() {
             </button>
           </div>
 
-          {/* Loader / Error */}
-          {loading && <p>Loading subjects...</p>}
-          {error && <p className="error">{error}</p>}
+          {/* 🔹 Loader / Error */}
+          {loading && <p className="loading">Loading subjects...</p>}
+          {error && <p className="error">⚠️ {error}</p>}
 
-          {/* Table */}
+          {/* 🔹 Table */}
           <div className="jobpostsubjectfilter-table-container">
             <table className="jobpostsubjectfilter-table">
               <thead>
@@ -122,35 +125,42 @@ export default function JobPostSubjectFilter() {
               </tbody>
             </table>
 
-            {/* Pagination */}
-            <div className="pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Prev
-              </button>
-              {[...Array(totalPages)].map((_, index) => (
+            {/* 🔹 Empty State */}
+            {!loading && subjects?.length === 0 && (
+              <p className="empty">No subjects found.</p>
+            )}
+
+            {/* 🔹 Pagination */}
+            {subjects?.length > itemsPerPage && (
+              <div className="pagination">
                 <button
-                  key={index + 1}
-                  className={currentPage === index + 1 ? "active" : ""}
-                  onClick={() => setCurrentPage(index + 1)}
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                 >
-                  {index + 1}
+                  Prev
                 </button>
-              ))}
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
-            </div>
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index + 1}
+                    className={currentPage === index + 1 ? "active" : ""}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Add Modal */}
+      {/* 🔹 Add Modal */}
       {isAddModalOpen && (
         <JobPostSubjectAddModal
           isOpen={isAddModalOpen}

@@ -1,22 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./JobPostExpectedSalary.css";
-import { jobPostExpectedSalary as initialJobPostExpectedSalary } from "../data/contentData.js";
+import { ExpectedSalaryContext } from "../UseContexts/SeekerUseContext/ExpectedSalaryContext";
 
 export default function JobPostExpectedSalary() {
   const navigate = useNavigate();
-  const [salaryList, setSalaryList] = useState(initialJobPostExpectedSalary);
+  const { salaries, deleteSalary, loading } = useContext(ExpectedSalaryContext);
 
   // Track hidden rows
   const [hiddenRows, setHiddenRows] = useState([]);
-
-  const handleDelete = (id) => {
-    setSalaryList(salaryList.filter((f) => f.id !== id));
-    setHiddenRows(hiddenRows.filter((hid) => hid !== id));
-  };
 
   const toggleHideRow = (id) => {
     if (hiddenRows.includes(id)) {
@@ -25,6 +20,10 @@ export default function JobPostExpectedSalary() {
       setHiddenRows([...hiddenRows, id]);
     }
   };
+
+  if (loading) {
+    return <div className="jobpostexpectedsalary-loading">Loading...</div>;
+  }
 
   return (
     <div className="jobpostexpectedsalary-container">
@@ -45,31 +44,39 @@ export default function JobPostExpectedSalary() {
             <table className="jobpostexpectedsalary-table">
               <thead>
                 <tr>
-                  <th>Expected Salary</th>
-                  <th>Posted on</th>
-                  <th>Created by</th>
+                  <th>Salary Range</th>
+                  <th>Min Value</th>
+                  <th>Max Value</th>
+                  <th>Posted On</th>
+                  <th>Created By</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {salaryList.map((item) => (
+                {salaries.map((item) => (
                   <tr
                     key={item.id}
                     className={hiddenRows.includes(item.id) ? "hidden-row" : ""}
                   >
-                    <td>{item.expectedSalary}</td>
-                    <td>{item.postedOn}</td>
+                    <td>{item.salary}</td>
+                    <td>{item.min_value}</td>
+                    <td>{item.max_value}</td>
+                    <td>{new Date(item.created_at).toLocaleDateString()}</td>
                     <td>{item.createdBy}</td>
                     <td className="jobpostexpectedsalary-actions">
                       <button
                         className="jobpostexpectedsalary-btn view-btn"
                         onClick={() => toggleHideRow(item.id)}
                       >
-                        {hiddenRows.includes(item.id) ? <FaRegEyeSlash /> : <FaRegEye />}
+                        {hiddenRows.includes(item.id) ? (
+                          <FaRegEyeSlash />
+                        ) : (
+                          <FaRegEye />
+                        )}
                       </button>
                       <button
                         className="jobpostexpectedsalary-btn delete-btn"
-                        onClick={() => handleDelete(item.id)}
+                        onClick={() => deleteSalary(item.id)}
                       >
                         <AiOutlineDelete />
                       </button>
@@ -78,6 +85,9 @@ export default function JobPostExpectedSalary() {
                 ))}
               </tbody>
             </table>
+            {salaries.length === 0 && (
+              <p className="jobpostexpectedsalary-empty">No expected salaries found.</p>
+            )}
           </div>
         </div>
       </div>

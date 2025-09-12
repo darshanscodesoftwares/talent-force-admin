@@ -12,29 +12,32 @@ import CompartmentLevelProvider from "./UseContexts/RecruiterUseContext/JobPostC
 import EducationQualificationProvider from "./UseContexts/RecruiterUseContext/JobPostContext/EducationQualificationContext";
 import SeekerEduQualificationProvider from "./UseContexts/SeekerUseContext/SeekerEduQualificationContext"
 import ExperienceProvider from "./UseContexts/SeekerUseContext/ExperienceContext"
+import ExpectedSalaryProvider from "./UseContexts/SeekerUseContext/ExpectedSalaryContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 
-  <ExperienceProvider>
-    <SeekerEduQualificationProvider>
-      <EducationQualificationProvider>
-        <CompartmentLevelProvider>
-          <TeachingQualificationProvider>
-            <HighestEducationProvider>
-              <EndDateProvider>
-                <WorkTypeProvider>
-                  <SubjectProvider>
-                    <HomeBannerProvider>
-                      <App />
-                    </HomeBannerProvider>
-                  </SubjectProvider>
-                </WorkTypeProvider>
-              </EndDateProvider>
-            </HighestEducationProvider>
-          </TeachingQualificationProvider>
-        </CompartmentLevelProvider>
-      </EducationQualificationProvider>
-    </SeekerEduQualificationProvider>
-  </ExperienceProvider>
+  <ExpectedSalaryProvider>
+    <ExperienceProvider>
+      <SeekerEduQualificationProvider>
+        <EducationQualificationProvider>
+          <CompartmentLevelProvider>
+            <TeachingQualificationProvider>
+              <HighestEducationProvider>
+                <EndDateProvider>
+                  <WorkTypeProvider>
+                    <SubjectProvider>
+                      <HomeBannerProvider>
+                        <App />
+                      </HomeBannerProvider>
+                    </SubjectProvider>
+                  </WorkTypeProvider>
+                </EndDateProvider>
+              </HighestEducationProvider>
+            </TeachingQualificationProvider>
+          </CompartmentLevelProvider>
+        </EducationQualificationProvider>
+      </SeekerEduQualificationProvider>
+    </ExperienceProvider>
+  </ExpectedSalaryProvider>
 
 );

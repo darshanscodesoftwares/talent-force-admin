@@ -134,3 +134,12 @@
   opacity: 0.3;
   transition: opacity 0.3s ease;
 }
+
+.expectedSalary-btn.delete-btn {
+  color: #dc3545;
+  margin-left: 8px;
+}
+
+.expectedSalary-btn.delete-btn:hover {
+  color: #a71d2a;
+}

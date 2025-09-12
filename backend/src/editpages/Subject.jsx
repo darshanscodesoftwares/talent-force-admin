@@ -1,44 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./subject.css";
-import { subjectFilter as initialSubjectFilter } from "../data/contentData.js";
 import SubjectAddModal from "./SubjectAddModal.jsx";
+import { SubjectContext } from "../UseContexts/RecruiterUseContext/JobPostContext/SubjectContext.jsx";
 
 export default function SubjectFilter() {
   const navigate = useNavigate();
-  const [filters, setFilters] = useState(initialSubjectFilter);
-  const [hiddenRows, setHiddenRows] = useState([]); // track hidden rows
+  const { subjects, loading, error, addSubject, deleteSubject } =
+    useContext(SubjectContext);
 
-  // Add Modal
+  const [hiddenRows, setHiddenRows] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const handleAdd = () => setIsAddModalOpen(true);
 
-  const handleSaveAdd = (newItem) => {
-    setFilters([...filters, { id: Date.now(), ...newItem }]);
+  // ✅ Save from Add Modal
+  const handleSaveAdd = async (newItem) => {
+    await addSubject(newItem); // calls API
     setIsAddModalOpen(false);
   };
 
-  // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9;
-  const totalPages = Math.ceil(filters.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filters.slice(startIndex, startIndex + itemsPerPage);
-
-  const handleDelete = (id) => {
-    setFilters(filters.filter((f) => f.id !== id));
-    setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+  // ✅ Handle Delete
+  const handleDelete = async (id) => {
+    try {
+      await deleteSubject(id); // calls API
+      setHiddenRows((prev) => prev.filter((hid) => hid !== id));
+    } catch (err) {
+      console.error("Error deleting subject:", err);
+    }
   };
 
+  // ✅ Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+  const totalPages = Math.ceil((subjects?.length || 0) / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = subjects?.slice(startIndex, startIndex + itemsPerPage) || [];
+
+  // ✅ Toggle Hide Row
   const toggleHideRow = (id) => {
-    if (hiddenRows.includes(id)) {
-      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
-    } else {
-      setHiddenRows([...hiddenRows, id]);
-    }
+    setHiddenRows((prev) =>
+      prev.includes(id) ? prev.filter((hid) => hid !== id) : [...prev, id]
+    );
+  };
+
+  // ✅ Format Dates
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
@@ -53,10 +68,17 @@ export default function SubjectFilter() {
             >
               <IoChevronBackOutline /> Subject List
             </h2>
-            <button className="subjectfilter-add-btn" onClick={handleAdd}>
+            <button
+              className="subjectfilter-add-btn"
+              onClick={() => setIsAddModalOpen(true)}
+            >
               Add Subject
             </button>
           </div>
+
+          {/* Loader / Error */}
+          {loading && <p>Loading subjects...</p>}
+          {error && <p className="error">⚠️ {error}</p>}
 
           {/* Table */}
           <div className="subjectfilter-table-container">
@@ -65,7 +87,7 @@ export default function SubjectFilter() {
                 <tr>
                   <th>Subject</th>
                   <th>Posted on</th>
-                  <th>Created by</th>
+                  <th>Updated on</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -75,9 +97,9 @@ export default function SubjectFilter() {
                     key={subject.id}
                     className={hiddenRows.includes(subject.id) ? "hidden-row" : ""}
                   >
-                    <td>{subject.name}</td>
-                    <td>{subject.postedOn}</td>
-                    <td>{subject.createdBy}</td>
+                    <td>{subject.category_name}</td>
+                    <td>{formatDate(subject.created_at)}</td>
+                    <td>{formatDate(subject.updated_at)}</td>
                     <td className="subjectfilter-actions">
                       <button
                         className="subjectfilter-btn view-btn"
@@ -101,30 +123,37 @@ export default function SubjectFilter() {
               </tbody>
             </table>
 
+            {/* Empty State */}
+            {!loading && subjects?.length === 0 && (
+              <p className="empty">No subjects found.</p>
+            )}
+
             {/* Pagination */}
-            <div className="pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Prev
-              </button>
-              {[...Array(totalPages)].map((_, index) => (
+            {subjects?.length > itemsPerPage && (
+              <div className="pagination">
                 <button
-                  key={index + 1}
-                  className={currentPage === index + 1 ? "active" : ""}
-                  onClick={() => setCurrentPage(index + 1)}
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                 >
-                  {index + 1}
+                  Prev
                 </button>
-              ))}
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
-            </div>
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index + 1}
+                    className={currentPage === index + 1 ? "active" : ""}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

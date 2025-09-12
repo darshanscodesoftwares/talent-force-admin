@@ -17,7 +17,9 @@ const SubjectProvider = ({ children }) => {
     try {
       setLoading(true);
       const res = await axios.get(API_URL);
-      setSubjects(res.data || []);
+
+      // Since API returns an array directly, just set it
+      setSubjects(res.data?.result || []);
     } catch (err) {
       setError(err.message || "Failed to fetch subjects");
       toast.error("Failed to fetch subjects");

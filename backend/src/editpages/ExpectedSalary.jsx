@@ -1,41 +1,35 @@
-import React, { useState } from "react";
+// src/pages/ExpectedSalary.jsx
+import React, { useState, useContext } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { BiSolidEdit } from "react-icons/bi";
+import { AiOutlineDelete } from "react-icons/ai"; // 👈 NEW
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./expectedSalary.css";
-import { expectedSalaryFilter } from "../data/contentData";
 import AddSalaryModal from "./AddSalaryModal";
 import EditSalaryModal from "./EditSalaryModal";
+import { ExpectedSalaryContext } from "../UseContexts/SeekerUseContext/ExpectedSalaryContext";
 
 export default function ExpectedSalary() {
   const navigate = useNavigate();
-  const [filters, setFilters] = useState(expectedSalaryFilter);
-  const [hiddenRows, setHiddenRows] = useState([]); // track hidden rows
+  const { salaries, loading, addSalary, updateSalary, deleteSalary } =
+    useContext(ExpectedSalaryContext); // 👈 include deleteSalary
 
-  // Pagination
+  const [hiddenRows, setHiddenRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = Math.ceil(filters.length / itemsPerPage);
+  const totalPages = Math.ceil(salaries.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filters.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = salaries.slice(startIndex, startIndex + itemsPerPage);
 
-  // Modals
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [newRange, setNewRange] = useState("");
   const [editId, setEditId] = useState(null);
 
-  // Handlers
-  const handleAddSalary = () => {
+  const handleAddSalary = async () => {
     if (!newRange.trim()) return;
-    const newSalary = {
-      id: filters.length + 1,
-      range: newRange,
-      postedOn: new Date().toLocaleDateString(),
-      createdBy: "Admin",
-    };
-    setFilters([...filters, newSalary]);
+    await addSalary({ salary: newRange });
     setNewRange("");
     setShowAddModal(false);
   };
@@ -46,33 +40,29 @@ export default function ExpectedSalary() {
     setShowEditModal(true);
   };
 
-  const handleUpdateSalary = () => {
-    setFilters(
-      filters.map((f) => (f.id === editId ? { ...f, range: newRange } : f))
-    );
+  const handleUpdateSalary = async () => {
+    await updateSalary(editId, newRange);
     setShowEditModal(false);
     setNewRange("");
     setEditId(null);
   };
 
-  const handleDelete = (id) => {
-    setFilters(filters.filter((f) => f.id !== id));
-    setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+  const handleDeleteSalary = async (id) => {
+    if (window.confirm("Are you sure you want to delete this salary range?")) {
+      await deleteSalary(id);
+    }
   };
 
   const toggleHideRow = (id) => {
-    if (hiddenRows.includes(id)) {
-      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
-    } else {
-      setHiddenRows([...hiddenRows, id]);
-    }
+    setHiddenRows((prev) =>
+      prev.includes(id) ? prev.filter((hid) => hid !== id) : [...prev, id]
+    );
   };
 
   return (
     <div className="expectedSalary-container">
       <div className="expectedSalary-rec">
         <div className="expectedSalary-section">
-          {/* Header */}
           <div className="title-button">
             <h2
               className="expectedSalary-title"
@@ -88,84 +78,95 @@ export default function ExpectedSalary() {
             </button>
           </div>
 
-          {/* Table */}
           <div className="expectedSalary-table-container">
-            <table className="expectedSalary-table">
-              <thead>
-                <tr>
-                  <th>Salary Range</th>
-                  <th>Posted on</th>
-                  <th>Created by</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedData.map((salary) => (
-                  <tr
-                    key={salary.id}
-                    className={hiddenRows.includes(salary.id) ? "hidden-row" : ""}
-                  >
-                    <td>{salary.range}</td>
-                    <td>{salary.postedOn}</td>
-                    <td>{salary.createdBy}</td>
-                    <td className="expectedSalary-actions">
-                      <button
-                        className="expectedSalary-btn view-btn"
-                        onClick={() => toggleHideRow(salary.id)}
-                      >
-                        {hiddenRows.includes(salary.id) ? (
-                          <FaRegEyeSlash />
-                        ) : (
-                          <FaRegEye />
-                        )}
-                      </button>
-                      <button
-                        className="expectedSalary-btn edit-btn"
-                        onClick={() => handleEditSalary(salary.id, salary.range)}
-                      >
-                        <BiSolidEdit />
-                      </button>
-                      {/* <button
-                        className="expectedSalary-btn delete-btn"
-                        onClick={() => handleDelete(salary.id)}
-                      >
-                        <AiOutlineDelete />
-                      </button> */}
-                    </td>
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              <table className="expectedSalary-table">
+                <thead>
+                  <tr>
+                    <th>Salary Range</th>
+                    <th>Min Value</th>
+                    <th>Max Value</th>
+                    <th>Posted on</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {paginatedData.map((salary) => (
+                    <tr
+                      key={salary.id}
+                      className={
+                        hiddenRows.includes(salary.id) ? "hidden-row" : ""
+                      }
+                    >
+                      <td>{salary.salary}</td>
+                      <td>{salary.min_value}</td>
+                      <td>{salary.max_value}</td>
+                      <td>
+                        {new Date(salary.created_at).toLocaleDateString()}
+                      </td>
+                      <td className="expectedSalary-actions">
+                        <button
+                          className="expectedSalary-btn view-btn"
+                          onClick={() => toggleHideRow(salary.id)}
+                        >
+                          {hiddenRows.includes(salary.id) ? (
+                            <FaRegEyeSlash />
+                          ) : (
+                            <FaRegEye />
+                          )}
+                        </button>
+                        <button
+                          className="expectedSalary-btn edit-btn"
+                          onClick={() =>
+                            handleEditSalary(salary.id, salary.salary)
+                          }
+                        >
+                          <BiSolidEdit />
+                        </button>
+                        <button
+                          className="expectedSalary-btn delete-btn"
+                          onClick={() => handleDeleteSalary(salary.id)}
+                        >
+                          <AiOutlineDelete />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
 
-            {/* Pagination */}
-            <div className="pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Prev
-              </button>
-              {[...Array(totalPages)].map((_, index) => (
+            {!loading && salaries.length > 0 && (
+              <div className="pagination">
                 <button
-                  key={index + 1}
-                  className={currentPage === index + 1 ? "active" : ""}
-                  onClick={() => setCurrentPage(index + 1)}
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                 >
-                  {index + 1}
+                  Prev
                 </button>
-              ))}
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
-            </div>
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index + 1}
+                    className={currentPage === index + 1 ? "active" : ""}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Modals */}
       {showAddModal && (
         <AddSalaryModal
           onClose={() => setShowAddModal(false)}
