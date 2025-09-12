@@ -1,68 +1,85 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./EducationQualification.css";
-import { jobPostEducationQualificationFilter as initialFilters } from "../data/contentData.js";
 import EducationAddModal from "./EducationAddModal.jsx";
+import { SeekerEduQualification as SeekerEduQualificationContext } from "../UseContexts/SeekerUseContext/SeekerEduQualificationContext.jsx";
+import { EducationLoader } from "../Loader/Loader.jsx";
 
-export default function JobPostEducationQualification() {
+export default function EducationQualification() {
   const navigate = useNavigate();
-  const [filters, setFilters] = useState(initialFilters);
-  const [hiddenRows, setHiddenRows] = useState([]); // track hidden rows
 
-  // Add Modal
+  const {
+    qualifications,
+    loading,
+    addQualification,
+    deleteQualification,
+  } = useContext(SeekerEduQualificationContext);
+
+  const [hiddenRows, setHiddenRows] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const handleAdd = () => setIsAddModalOpen(true);
-
-  const handleSaveAdd = (newItem) => {
-    setFilters([...filters, { id: Date.now(), ...newItem }]);
+  // Add qualification
+  const handleSaveAdd = async (newItem) => {
+    await addQualification(newItem);
     setIsAddModalOpen(false);
   };
 
-  const handleDelete = (id) => {
-    setFilters(filters.filter((f) => f.id !== id));
-    setHiddenRows(hiddenRows.filter((hid) => hid !== id)); // remove from hidden if deleted
+  // Delete qualification
+  const handleDelete = async (id) => {
+    try {
+      await deleteQualification(id);
+      setHiddenRows((prev) => prev.filter((hid) => hid !== id));
+    } catch {
+      // already handled in context
+    }
   };
 
+  // Hide/unhide
   const toggleHideRow = (id) => {
-    if (hiddenRows.includes(id)) {
-      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
-    } else {
-      setHiddenRows([...hiddenRows, id]);
-    }
+    setHiddenRows((prev) =>
+      prev.includes(id) ? prev.filter((hid) => hid !== id) : [...prev, id]
+    );
   };
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = Math.ceil(filters.length / itemsPerPage);
+  const totalPages = Math.ceil(qualifications.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filters.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = qualifications.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  if (loading) return <EducationLoader />;
 
   return (
-    <div className="jobposteducation-container">
-      <div className="jobposteducation-rec">
-        <div className="jobposteducation-section">
+    <div className="education-container">
+      <div className="education-rec">
+        <div className="education-section">
           {/* Header */}
-          <div className="jobposteducation-title-button">
+          <div className="title-button">
             <h2
-              className="jobposteducation-title"
+              className="education-title"
               onClick={() => navigate("/dashboard/seeker-search-filter")}
             >
               <IoChevronBackOutline /> Education Qualification List
             </h2>
 
-            <button className="jobposteducation-add-btn" onClick={handleAdd}>
+            <button
+              className="education-add-btn"
+              onClick={() => setIsAddModalOpen(true)}
+            >
               Add Qualification
             </button>
           </div>
 
           {/* Table */}
-          <div className="jobposteducation-table-container">
-            <table className="jobposteducation-table">
+          <div className="education-table-container">
+            <table className="education-table">
               <thead>
                 <tr>
                   <th>Qualification</th>
@@ -80,15 +97,19 @@ export default function JobPostEducationQualification() {
                     <td>{item.qualification}</td>
                     <td>{item.postedOn}</td>
                     <td>{item.createdBy}</td>
-                    <td className="jobposteducation-actions">
+                    <td className="education-actions">
                       <button
-                        className="jobposteducation-btn view-btn"
+                        className="education-btn view-btn"
                         onClick={() => toggleHideRow(item.id)}
                       >
-                        {hiddenRows.includes(item.id) ? <FaRegEyeSlash /> : <FaRegEye />}
+                        {hiddenRows.includes(item.id) ? (
+                          <FaRegEyeSlash />
+                        ) : (
+                          <FaRegEye />
+                        )}
                       </button>
                       <button
-                        className="jobposteducation-btn delete-btn"
+                        className="education-btn delete-btn"
                         onClick={() => handleDelete(item.id)}
                       >
                         <AiOutlineDelete />
@@ -100,29 +121,31 @@ export default function JobPostEducationQualification() {
             </table>
 
             {/* Pagination */}
-            <div className="pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Prev
-              </button>
-              {[...Array(totalPages)].map((_, index) => (
+            {totalPages > 1 && (
+              <div className="pagination">
                 <button
-                  key={index + 1}
-                  className={currentPage === index + 1 ? "active" : ""}
-                  onClick={() => setCurrentPage(index + 1)}
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                 >
-                  {index + 1}
+                  Prev
                 </button>
-              ))}
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
-            </div>
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index + 1}
+                    className={currentPage === index + 1 ? "active" : ""}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

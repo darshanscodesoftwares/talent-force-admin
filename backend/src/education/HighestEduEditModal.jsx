@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./HighestEduEditModal.css";
 
 export default function HighestEduEditModal({ isOpen, onClose, onSave, degree }) {
-  const [newDegree, setNewDegree] = useState(degree.degree);
+  const [newDegree, setNewDegree] = useState("");
 
-  const handleSubmit = (e) => {
+  // ✅ Set initial value when modal opens
+  useEffect(() => {
+    if (degree) {
+      setNewDegree(degree.highest_qualification || "");
+    }
+  }, [degree]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newDegree.trim()) return;
 
-    onSave({
+    await onSave({
       ...degree,
-      degree: newDegree,
+      highest_qualification: newDegree, // ✅ match API field
     });
+
+    onClose();
   };
 
   if (!isOpen) return null;

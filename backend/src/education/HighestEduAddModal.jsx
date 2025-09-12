@@ -3,22 +3,22 @@ import "./HighestEduAddModal.css";
 
 export default function HighestEduAddModal({ isOpen, onClose, onSave }) {
   const [degree, setDegree] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!degree.trim()) return;
 
     const newItem = {
-      degree,
-      postedOn: new Date().toLocaleDateString("en-IN", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }),
+      highest_qualification: degree, // ✅ match API field
     };
 
-    onSave(newItem);
+    setLoading(true);
+    await onSave(newItem); // this calls context -> API
+    setLoading(false);
+
     setDegree("");
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -34,13 +34,19 @@ export default function HighestEduAddModal({ isOpen, onClose, onSave }) {
             placeholder="Enter Degree Name"
             value={degree}
             onChange={(e) => setDegree(e.target.value)}
+            disabled={loading}
           />
 
           <div className="highestedu-modal-actions">
-            <button type="submit" className="save-btn">
-              Save
+            <button type="submit" className="save-btn" disabled={loading}>
+              {loading ? "Saving..." : "Save"}
             </button>
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={onClose}
+              disabled={loading}
+            >
               Cancel
             </button>
           </div>

@@ -324,7 +324,7 @@ export const JobPostLoader = () => {
   );
 };
 
-const RecruiterProfileLoader = () => {
+export const RecruiterProfileLoader = () => {
   return (
     <div className="p-6 animate-pulse space-y-8">
       {/* 🔹 Top Row Small Cards */}
@@ -395,6 +395,50 @@ const RecruiterProfileLoader = () => {
             <div key={i} className="h-8 w-8 bg-gray-300 rounded"></div>
           ))}
           <div className="h-8 w-16 bg-gray-300 rounded"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const EducationLoader = () => {
+  return (
+    <div className="p-6 space-y-6 animate-pulse">
+      {/* 🔹 Title */}
+      <div className="flex items-center space-x-3">
+        <div className="h-6 w-6 bg-gray-300 rounded" />
+        <div className="h-6 w-40 bg-gray-300 rounded" />
+      </div>
+
+      {/* 🔹 Table */}
+      <div className="bg-white rounded-2xl shadow-md p-6">
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                {[1, 2, 3, 4].map((i) => (
+                  <th key={i} className="px-4 py-2">
+                    <div className="h-4 w-24 bg-gray-300 rounded mx-auto" />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(5)].map((_, i) => (
+                <tr key={i} className="border-t">
+                  {[...Array(4)].map((_, j) => (
+                    <td key={j} className="px-4 py-3">
+                      <div
+                        className={`h-4 rounded ${
+                          j === 3 ? "w-10 bg-gray-300" : "w-28 bg-gray-200"
+                        }`}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

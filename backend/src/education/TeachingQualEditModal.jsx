@@ -1,22 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./TeachingQualEditModal.css";
 
-export default function TeachingQualificationEditModal({ isOpen, onClose, onSave, value }) {
-  const [degree, setDegree] = useState(value?.degree || "");
+export default function TeachingQualEditModal({ isOpen, onClose, onSave, value }) {
+  const [qualificationName, setQualificationName] = useState("");
+
+  // ✅ Populate input when modal opens
+  useEffect(() => {
+    if (value) {
+      setQualificationName(value.qualification_name || "");
+    }
+  }, [value]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!degree.trim()) return;
+    if (!qualificationName.trim()) return;
 
+    // ✅ Always preserve the ID when saving
     onSave({
-      ...value,
-      degree,
-      updatedOn: new Date().toLocaleDateString("en-IN", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }),
+      id: value.id, // explicitly keep ID
+      qualification_name: qualificationName,
     });
+
+    onClose(); // close modal after save
   };
 
   if (!isOpen) return null;
@@ -30,8 +35,8 @@ export default function TeachingQualificationEditModal({ isOpen, onClose, onSave
           <input
             type="text"
             placeholder="Enter Qualification"
-            value={degree}
-            onChange={(e) => setDegree(e.target.value)}
+            value={qualificationName}
+            onChange={(e) => setQualificationName(e.target.value)}
           />
 
           <div className="teachingqualif-modal-actions">

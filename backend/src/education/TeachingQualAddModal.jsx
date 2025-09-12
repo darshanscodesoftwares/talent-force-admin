@@ -1,25 +1,21 @@
 import React, { useState } from "react";
 import "./TeachingQualAddModal.css";
 
-export default function TeachingQualificationAddModal({ isOpen, onClose, onSave }) {
-  const [degree, setDegree] = useState("");
+export default function TeachingQualAddModal({ isOpen, onClose, onSave }) {
+  const [qualificationName, setQualificationName] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!degree.trim()) return;
+    if (!qualificationName.trim()) return;
 
+    // 👇 match API schema
     const newItem = {
-      degree,
-      postedOn: new Date().toLocaleDateString("en-IN", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }),
-      updatedOn: "-",
+      qualification_name: qualificationName,
     };
 
-    onSave(newItem);
-    setDegree("");
+    onSave(newItem); // calls addTeachingQual from context
+    setQualificationName(""); // reset
+    onClose(); // close modal
   };
 
   if (!isOpen) return null;
@@ -33,8 +29,8 @@ export default function TeachingQualificationAddModal({ isOpen, onClose, onSave 
           <input
             type="text"
             placeholder="Enter Qualification"
-            value={degree}
-            onChange={(e) => setDegree(e.target.value)}
+            value={qualificationName}
+            onChange={(e) => setQualificationName(e.target.value)}
           />
 
           <div className="teachingqualif-modal-actions">

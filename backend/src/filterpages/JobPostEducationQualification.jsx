@@ -1,48 +1,70 @@
-import React, { useState } from "react";
+// src/pages/JobPostEducationQualification.jsx
+import React, { useState, useContext } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
+import { BiSolidEdit } from "react-icons/bi";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./jobPostEducationQualification.css";
-import { jobPostEducationQualificationFilter as initialJobPostEducationFilter } from "../data/contentData.js";
+
 import JobPostEducationAddModal from "./JobPostEducationAddModal.jsx";
+// import JobPostEducationEditModal from "./JobPostEducationEditModal.jsx";
+
+import { EducationQualificationContext } from "../UseContexts/RecruiterUseContext/JobPostContext/EducationQualificationContext.jsx";
 
 export default function JobPostEducationQualification() {
   const navigate = useNavigate();
-  const [filters, setFilters] = useState(initialJobPostEducationFilter);
 
-  // Track hidden rows
+  const {
+    qualifications,
+    loading,
+    addQualification,
+    updateQualification,
+    deleteQualification,
+  } = useContext(EducationQualificationContext);
+
   const [hiddenRows, setHiddenRows] = useState([]);
-
-  // Add Modal
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editItem, setEditItem] = useState(null);
 
-  const handleAdd = () => setIsAddModalOpen(true);
-
-  const handleSaveAdd = (newItem) => {
-    setFilters([...filters, { id: Date.now(), ...newItem }]);
+  // ✅ Add
+  const handleSaveAdd = async (newItem) => {
+    await addQualification(newItem);
     setIsAddModalOpen(false);
   };
 
-  const handleDelete = (id) => {
-    setFilters(filters.filter((f) => f.id !== id));
-    setHiddenRows(hiddenRows.filter((hid) => hid !== id));
+  // ✅ Edit
+  // const handleSaveEdit = async (updatedItem) => {
+  //   await updateQualification(updatedItem.id, updatedItem);
+  //   setIsEditModalOpen(false);
+  //   setEditItem(null);
+  // };
+
+  // ✅ Delete
+  const handleDelete = async (id) => {
+    await deleteQualification(id);
+    setHiddenRows((prev) => prev.filter((hid) => hid !== id));
   };
 
+  // ✅ Toggle hide
   const toggleHideRow = (id) => {
-    if (hiddenRows.includes(id)) {
-      setHiddenRows(hiddenRows.filter((hid) => hid !== id));
-    } else {
-      setHiddenRows([...hiddenRows, id]);
-    }
+    setHiddenRows((prev) =>
+      prev.includes(id) ? prev.filter((hid) => hid !== id) : [...prev, id]
+    );
   };
 
-  // Pagination
+  // ✅ Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = Math.ceil(filters.length / itemsPerPage);
+  const totalPages = Math.ceil(qualifications.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filters.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = qualifications.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="jobposteducation-container">
@@ -56,10 +78,9 @@ export default function JobPostEducationQualification() {
             >
               <IoChevronBackOutline /> Education Qualification List
             </h2>
-
             <button
               className="jobposteducation-add-btn"
-              onClick={handleAdd}
+              onClick={() => setIsAddModalOpen(true)}
             >
               Add Qualification
             </button>
@@ -72,7 +93,7 @@ export default function JobPostEducationQualification() {
                 <tr>
                   <th>Qualification</th>
                   <th>Posted on</th>
-                  <th>Created by</th>
+                  <th>Updated on</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -83,15 +104,30 @@ export default function JobPostEducationQualification() {
                     className={hiddenRows.includes(item.id) ? "hidden-row" : ""}
                   >
                     <td>{item.qualification}</td>
-                    <td>{item.postedOn}</td>
-                    <td>{item.createdBy}</td>
+                    <td>{item.postedOn || "-"}</td>
+                    <td>{item.updatedOn || "-"}</td>
                     <td className="jobposteducation-actions">
                       <button
                         className="jobposteducation-btn view-btn"
                         onClick={() => toggleHideRow(item.id)}
                       >
-                        {hiddenRows.includes(item.id) ? <FaRegEyeSlash /> : <FaRegEye />}
+                        {hiddenRows.includes(item.id) ? (
+                          <FaRegEyeSlash />
+                        ) : (
+                          <FaRegEye />
+                        )}
                       </button>
+
+                      {/* <button
+                        className="jobposteducation-btn edit-btn"
+                        onClick={() => {
+                          setEditItem(item);
+                          setIsEditModalOpen(true);
+                        }}
+                      >
+                        <BiSolidEdit />
+                      </button> */}
+
                       <button
                         className="jobposteducation-btn delete-btn"
                         onClick={() => handleDelete(item.id)}
@@ -140,6 +176,19 @@ export default function JobPostEducationQualification() {
           onSave={handleSaveAdd}
         />
       )}
+
+      {/* Edit Modal */}
+      {/* {isEditModalOpen && editItem && (
+        <JobPostEducationEditModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setEditItem(null);
+          }}
+          onSave={handleSaveEdit}
+          value={editItem}
+        />
+      )} */}
     </div>
   );
 }

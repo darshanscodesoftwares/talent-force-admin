@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./education.css";
 import { educationFilter } from "../data/contentData.js";
+import { EducationLoader } from "../Loader/Loader.jsx"
 
 export default function Education() {
   const navigate = useNavigate();
+    const [loading, setLoading] = useState(true)
 
   // Handle Edit Navigation
   const handleEdit = (filterName) => {
@@ -16,6 +18,14 @@ export default function Education() {
       navigate("/dashboard/teaching-qualification");
     }
   };
+
+    // remove this before production
+    useEffect(() => {
+      const timer = setTimeout(() => setLoading(false), 400);
+      return () => clearTimeout(timer);
+    }, []);
+
+  if (loading) return <EducationLoader />
 
   return (
     <div className="education-container">

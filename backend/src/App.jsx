@@ -19,6 +19,7 @@ import SeekerSearchFilter from "/src/pages/SeekerSearchFilter";
 import SubscriptionPlan from "/src/pages/SubscriptionPlan";
 import Education from "./pages/Education.jsx"
 
+// education
 import HighestEducation from "./education/HighestEducation.jsx"
 import TeachingQualification from "./education/TeachingQualification.jsx"
 
@@ -98,7 +99,7 @@ const App = () => {
             {/* recruiter filters */}
             <Route path="recruiter-filters/education" element={<EducationQualification />} />
 
-            {/* nested profiles */}
+            {/* profiles */}
             <Route path="seeker-profile/:id" element={<GeneralInformation />} />
             <Route path="recruiter-profile/:id" element={<RecruiterGeneralInfo />} />
 
@@ -110,6 +111,7 @@ const App = () => {
             <Route path="job-post-filter/education" element={<JobPostEducationQualification />} />
             <Route path="job-post-filter/worktype" element={<WorkTypeFilter />} />
             <Route path="job-post-filter/enddate" element={<JobPostEndDateFilter />} />
+
           </Route>
         </Routes>
       </BrowserRouter>

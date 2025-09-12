@@ -1,72 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BiSolidEdit } from "react-icons/bi";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import "./HighestEducation.css";
+
 import HighestEduAddModal from "./HighestEduAddModal.jsx";
 import HighestEduEditModal from "./HighestEduEditModal.jsx";
-import { highestEducationDegrees as initialDegrees } from "../data/contentData.js";
+
+import { HighestEducationContext } from "../UseContexts/SeekerUseContext/HighestEducationContext.jsx";
 
 export default function HighestEducation() {
   const navigate = useNavigate();
 
-  const [degrees, setDegrees] = useState(initialDegrees);
+  const {
+    highestEdu,
+    loading,
+    addHighestEdu,
+    updateHighestEdu,
+    deleteHighestEdu,
+  } = useContext(HighestEducationContext);
 
   // Hidden Rows
   const [hiddenRows, setHiddenRows] = useState([]);
 
-  // Add Modal
+  // Add/Edit modals
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  
-  // Edit Modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editItem, setEditItem] = useState(null);
 
-  // ✅ Handle Add Save
-  const handleSaveAdd = (newItem) => {
-    setDegrees([
-      ...degrees,
-      { id: Date.now(), updatedOn: "-", ...newItem },
-    ]);
+  // Add
+  const handleSaveAdd = async (newItem) => {
+    await addHighestEdu(newItem);
     setIsAddModalOpen(false);
   };
 
-  // ✅ Handle Edit Save
-  const handleSaveEdit = (updatedItem) => {
-    setDegrees(
-      degrees.map((deg) =>
-        deg.id === updatedItem.id
-          ? {
-            ...updatedItem, updatedOn: new Date().toLocaleDateString
-              ("en-IN", { year: "numeric", month: "short", day: "numeric" })
-          } : deg
-      )
-    );
+  // Edit
+  const handleSaveEdit = async (updatedItem) => {
+    await updateHighestEdu(updatedItem.id, updatedItem);
     setIsEditModalOpen(false);
     setEditItem(null);
   };
 
-  // ✅ Handle Delete
-  const handleDelete = (id) => {
-    setDegrees(degrees.filter((deg) => deg.id !== id));
+  // Delete
+  const handleDelete = async (id) => {
+    await deleteHighestEdu(id);
     setHiddenRows((prev) => prev.filter((hid) => hid !== id));
   };
 
-  // ✅ Toggle Hide Row
+  // Toggle hide
   const toggleHideRow = (id) => {
     setHiddenRows((prev) =>
       prev.includes(id) ? prev.filter((hid) => hid !== id) : [...prev, id]
     );
   };
 
-  // ✅ Pagination
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = Math.ceil(degrees.length / itemsPerPage);
+  const totalPages = Math.ceil(highestEdu.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = degrees.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = highestEdu.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="highestedu-container">
@@ -88,88 +83,95 @@ export default function HighestEducation() {
             </button>
           </div>
 
-          {/* Table */}
-          <div className="highestedu-table-container">
-            <table className="highestedu-table">
-              <thead>
-                <tr>
-                  <th>Degree</th>
-                  <th>Posted on</th>
-                  <th>Updated on</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedData.map((deg) => (
-                  <tr
-                    key={deg.id}
-                    className={hiddenRows.includes(deg.id) ? "hidden-row" : ""}
-                  >
-                    <td>{deg.degree}</td>
-                    <td>{deg.postedOn}</td>
-                    <td>{deg.updatedOn}</td>
-                    <td className="highestedu-actions">
-                      {/* 👁️ Toggle Visibility */}
-                      <button
-                        className="highestedu-btn view-btn"
-                        onClick={() => toggleHideRow(deg.id)}
-                      >
-                        {hiddenRows.includes(deg.id) ? (
-                          <FaRegEyeSlash />
-                        ) : (
-                          <FaRegEye />
-                        )}
-                      </button>
-
-                      {/* ✏️ Edit */}
-                      <button
-                        className="highestedu-btn edit-btn"
-                        onClick={() => {
-                          setEditItem(deg);
-                          setIsEditModalOpen(true);
-                        }}
-                      >
-                        <BiSolidEdit />
-                      </button>
-
-                      {/* 🗑️ Delete */}
-                      <button
-                        className="highestedu-btn delete-btn"
-                        onClick={() => handleDelete(deg.id)}
-                      >
-                        <AiOutlineDelete />
-                      </button>
-                    </td>
+          {/* Loading */}
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <div className="highestedu-table-container">
+              <table className="highestedu-table">
+                <thead>
+                  <tr>
+                    <th>Degree</th>
+                    <th>Posted on</th>
+                    <th>Updated on</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {paginatedData.map((deg) => (
+                    <tr
+                      key={deg.id}
+                      className={
+                        hiddenRows.includes(deg.id) ? "hidden-row" : ""
+                      }
+                    >
+                      {/* Match API schema */}
+                      <td>{deg.highest_qualification}</td>
+                      <td>{deg.postedOn || "-"}</td>
+                      <td>{deg.updatedOn || "-"}</td>
+                      <td className="highestedu-actions">
+                        {/* Toggle Visibility */}
+                        <button
+                          className="highestedu-btn view-btn"
+                          onClick={() => toggleHideRow(deg.id)}
+                        >
+                          {hiddenRows.includes(deg.id) ? (
+                            <FaRegEyeSlash />
+                          ) : (
+                            <FaRegEye />
+                          )}
+                        </button>
 
-            {/* Pagination */}
-            <div className="pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Prev
-              </button>
-              {[...Array(totalPages)].map((_, index) => (
+                        {/* Edit */}
+                        <button
+                          className="highestedu-btn edit-btn"
+                          onClick={() => {
+                            setEditItem(deg);
+                            setIsEditModalOpen(true);
+                          }}
+                        >
+                          <BiSolidEdit />
+                        </button>
+
+                        {/* Delete */}
+                        <button
+                          className="highestedu-btn delete-btn"
+                          onClick={() => handleDelete(deg.id)}
+                        >
+                          <AiOutlineDelete />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {/* Pagination */}
+              <div className="pagination">
                 <button
-                  key={index + 1}
-                  className={currentPage === index + 1 ? "active" : ""}
-                  onClick={() => setCurrentPage(index + 1)}
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                 >
-                  {index + 1}
+                  Prev
                 </button>
-              ))}
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index + 1}
+                    className={currentPage === index + 1 ? "active" : ""}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Next
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

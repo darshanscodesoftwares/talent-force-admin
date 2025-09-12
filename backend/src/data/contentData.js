@@ -647,30 +647,30 @@ export const jobPostSearchPages = [
     postedOn: "13 April 2025",
     createdBy: "Admin",
   },
+  // {
+  //   id: 4,
+  //   specifications: "Experience",
+  //   postedOn: "13 April 2025",
+  //   createdBy: "Admin",
+  // },
   {
     id: 4,
-    specifications: "Experience",
-    postedOn: "13 April 2025",
-    createdBy: "Admin",
-  },
-  {
-    id: 5,
     specifications: "Compartment Level",
     postedOn: "13 April 2025",
     createdBy: "Admin",
   },
   {
-    id: 6,
+    id: 5,
     specifications: "Education Qualification",
     postedOn: "13 April 2025",
     createdBy: "Admin",
   },
-  {
-    id: 7,
-    specifications: "Expected Salary",
-    postedOn: "13 April 2025",
-    createdBy: "Admin",
-  },
+  // {
+  //   id: 7,
+  //   specifications: "Expected Salary",
+  //   postedOn: "13 April 2025",
+  //   createdBy: "Admin",
+  // },
   // {
   //   id: 8,
   //   specifications: "Pincode",

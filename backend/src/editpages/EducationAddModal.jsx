@@ -1,18 +1,33 @@
-import React, { useState } from "react";
+// src/pages/EducationAddModal.jsx
+import React, { useState, useContext } from "react";
 import "./EducationAddModal.css";
+import { SeekerEduQualification as SeekerEduQualificationContext } from "../UseContexts/SeekerUseContext/SeekerEduQualificationContext";
 
-export default function EducationAddModal({ isOpen, onClose, onSave }) {
-  const [qualification, setQualification] = useState("");
+export default function EducationAddModal({ isOpen, onClose }) {
+  const [qualificationName, setQualificationName] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  // ✅ Correct context name
+  const { addQualification } = useContext(SeekerEduQualificationContext);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!qualification) return;
-    onSave({
-      qualification,
-      postedOn: new Date().toLocaleDateString(),
-      createdBy: "Admin",
-    });
-    setQualification("");
+    if (!qualificationName.trim()) return;
+
+    setLoading(true);
+    const newItem = {
+      education_qualification_list: qualificationName,
+    };
+
+    try {
+      await addQualification(newItem); // API handled in context
+      setQualificationName(""); // reset input
+      onClose(); // close modal
+    } catch (err) {
+      console.error("Error adding qualification:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -25,17 +40,23 @@ export default function EducationAddModal({ isOpen, onClose, onSave }) {
           <input
             type="text"
             placeholder="Enter qualification"
-            value={qualification}
-            onChange={(e) => setQualification(e.target.value)}
+            value={qualificationName}
+            onChange={(e) => setQualificationName(e.target.value)}
+            disabled={loading}
           />
           <div className="education-modal-actions">
-            <button type="submit" className="education-save-btn">
-              Save
+            <button
+              type="submit"
+              className="education-save-btn"
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Save"}
             </button>
             <button
               type="button"
               className="education-cancel-btn"
               onClick={onClose}
+              disabled={loading}
             >
               Cancel
             </button>
