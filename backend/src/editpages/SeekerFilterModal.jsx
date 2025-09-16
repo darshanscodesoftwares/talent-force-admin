@@ -1,14 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./SeekerFilterModal.css";
-import { seekerData } from "../data/contentData.js";
+import axios from "axios";
 
-export default function SeekerFilterModal({ filters, setFilters, onClose }) {
-  // 🔹 Extract unique specialization values
-  const specializations = [...new Set(seekerData.map((s) => s.Specialization))];
+export default function SeekerFilterModal({ filters = {}, setFilters, onClose }) {
+  const [specializations, setSpecializations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Handle Apply
+  // 🔹 Ensure filters always has defaults (avoids undefined errors)
+  const safeFilters = {
+    specialization: filters.specialization || "",
+    pincode: filters.pincode || "",
+    status: filters.status || "",
+  };
+
+  // 🔹 Fetch specializations from API
+  useEffect(() => {
+    const fetchSpecializations = async () => {
+      try {
+        setLoading(true);
+        const token =
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s"; // replace with dynamic storage later
+
+        const response = await axios.get(
+          "http://192.168.29.163:8000/api/job-categories",
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+
+        if (response.data?.result?.length) {
+          const uniqueSpecs = response.data.result.map(
+            (cat) => cat.category_name
+          );
+          setSpecializations(uniqueSpecs);
+        } else {
+          setSpecializations([]);
+        }
+      } catch (err) {
+        console.error("Error fetching specializations:", err);
+        setSpecializations([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSpecializations();
+  }, []);
+
+  // 🔹 Handle Apply
   const handleApply = () => {
-    onClose(); // close modal after applying filters
+    // Later: you can call API with safeFilters here before closing
+    onClose();
+  };
+
+  // 🔹 Handle Clear
+  const handleClear = () => {
+    setFilters({ specialization: "", pincode: "", status: "" });
   };
 
   return (
@@ -16,24 +65,30 @@ export default function SeekerFilterModal({ filters, setFilters, onClose }) {
       <div className="seeker-filter-modal-content">
         <div className="seeker-filter-modal-header">
           <h2>Advanced Search Filters</h2>
-          <button className="seeker-filter-close-btn" onClick={onClose}>✖</button>
+          <button className="seeker-filter-close-btn" onClick={onClose}>
+            ✖
+          </button>
         </div>
 
         {/* Specialization */}
         <label>
           Specialization:
           <select
-            value={filters.specialization}
+            value={safeFilters.specialization}
             onChange={(e) =>
-              setFilters({ ...filters, specialization: e.target.value })
+              setFilters({ ...safeFilters, specialization: e.target.value })
             }
           >
             <option value="">All</option>
-            {specializations.map((spec, i) => (
-              <option key={i} value={spec}>
-                {spec}
-              </option>
-            ))}
+            {loading ? (
+              <option disabled>Loading...</option>
+            ) : (
+              specializations.map((spec, i) => (
+                <option key={i} value={spec}>
+                  {spec}
+                </option>
+              ))
+            )}
           </select>
         </label>
 
@@ -42,12 +97,11 @@ export default function SeekerFilterModal({ filters, setFilters, onClose }) {
           Pincode:
           <input
             type="text"
-            value={filters.pincode}
-            maxLength={6} 
+            value={safeFilters.pincode}
+            maxLength={6}
             onChange={(e) => {
-    
               const val = e.target.value.replace(/\D/g, "");
-              setFilters({ ...filters, pincode: val });
+              setFilters({ ...safeFilters, pincode: val });
             }}
             placeholder="e.g., 608502"
           />
@@ -57,8 +111,10 @@ export default function SeekerFilterModal({ filters, setFilters, onClose }) {
         <label>
           Status:
           <select
-            value={filters.status}
-            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+            value={safeFilters.status}
+            onChange={(e) =>
+              setFilters({ ...safeFilters, status: e.target.value })
+            }
           >
             <option value="">All</option>
             <option value="Seeking">Seeking</option>
@@ -68,10 +124,7 @@ export default function SeekerFilterModal({ filters, setFilters, onClose }) {
 
         {/* Actions */}
         <div className="seeker-filter-modal-actions">
-          <button
-            className="seeker-filter-clear-btn"
-            onClick={() => setFilters({ specialization: "", pincode: "", status: "" })}
-          >
+          <button className="seeker-filter-clear-btn" onClick={handleClear}>
             Clear
           </button>
           <button className="seeker-filter-apply-btn" onClick={handleApply}>
@@ -82,3 +135,6 @@ export default function SeekerFilterModal({ filters, setFilters, onClose }) {
     </div>
   );
 }
+
+// specialization dropdown can list all specialization data from 
+// users list after new alterations to SeekerProfile API (Users-list of registers API)

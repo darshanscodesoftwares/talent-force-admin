@@ -1,55 +1,72 @@
 .generalinfo-container {
   background: white;
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  max-width: 900px;
+  margin: 30px auto;
 }
 
 .generalinfo-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .generalinfo-header h2 {
-  font-size: 18px;
-  color: #1e293bd2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
   font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+}
+
+.generalinfo-back:hover {
+  color: #ef6a37;
+}
+
+.back-icon {
+  font-size: 22px;
 }
 
 .block-btn {
   background: #ef4444;
   border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 8px 18px;
+  border-radius: 8px;
   color: white;
+  font-weight: 500;
   cursor: pointer;
   transition: background 0.3s ease;
 }
+
 .block-btn:hover {
   background: #dc2626;
 }
 
 .generalinfo-icon {
   display: flex;
-  /* justify-content: center; */
-  margin-bottom: 20px;
+  justify-content: center;
+  margin-bottom: 25px;
 }
+
 .profile-icon {
-  font-size: 80px;
+  font-size: 90px;
   color: #94a3b8;
 }
 
 .generalinfo-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
 }
 
 .generalinfo-row {
   display: flex;
-  gap: 20px;
+  gap: 25px;
   flex-wrap: wrap;
 }
 
@@ -62,68 +79,30 @@
 
 .generalinfo-field label {
   font-size: 14px;
-  color: #334155ad;
   font-weight: 500;
+  color: #334155;
 }
 
 .generalinfo-field input {
-  padding: 10px 12px;
+  padding: 10px 14px;
   border-radius: 8px;
   border: 1px solid #cbd5e1;
   font-size: 14px;
+  color: #1f2937;
   outline: none;
   transition: border 0.2s ease;
-  color: #adadad;
 }
 
 .generalinfo-field input:focus {
   border-color: #ef6a37;
 }
 
-.generalinfo-back {
-  display: flex;           /* Align icon and text horizontally */
-  align-items: center;     /* Vertical centering */
-  gap: 8px;                /* Space between icon and text */
-  font-size: 18px;
-  color: #1e293b;
-  font-weight: 500;
-  cursor: pointer;         /* Hover cursor */
-  transition: color 0.2s ease;
-}
-
-.generalinfo-back:hover {
-  color: #ef6a37;          /* Optional hover color change */
-}
-
-.back-icon {
-  font-size: 20px;         /* Adjust icon size if needed */
-}
-
-.resume-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  background-color: #ef6a37;
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background 0.3s ease;
-}
-
-.resume-link:hover {
-  background-color: #dc2626;
-}
-
-/* Resume Row */
+/* Resume */
 .generalinfo-row-resume {
   display: flex;
-  justify-content: flex-start; /* keep aligned left */
   margin-top: 10px;
 }
 
-/* Resume Field */
 .generalinfo-field-resume {
   flex: none;
 }
@@ -131,25 +110,15 @@
 .resume-link {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 12px;
-
-  /* Box look */
-  width: 200px;
-  height: 70px;
-  padding: 0 12px;
+  padding: 10px 14px;
+  width: 240px;
   background-color: #fdf2f2;
   border-radius: 10px;
   text-decoration: none;
-
-  /* Font */
-  color: rgb(102, 102, 102);
+  color: #1f2937;
   font-weight: 500;
-  font-size: 14px;
-  letter-spacing: 0.3px;
-
-  /* Interaction */
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: background 0.3s ease;
 }
 
 .resume-link:hover {
@@ -161,45 +130,6 @@
   color: #fb0101;
 }
 
-/* Column layout for text */
-.resume-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  line-height: 1.7;
-}
-
-.resume-text {
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.resume-size {
-  font-size: 10px;
-  opacity: 0.9;
-}
-
-.resume-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background 0.2s ease;
-  color: #1f2937;
-}
-
-.resume-link:hover {
-  background: #f3f4f6;
-}
-
-.pdf-icon {
-  font-size: 1.5rem;
-  color: #ef4444;
-}
-
 .resume-info {
   display: flex;
   flex-direction: column;
@@ -207,14 +137,22 @@
 
 .resume-text {
   font-weight: 600;
+  font-size: 14px;
 }
 
 .resume-size {
-  font-size: 0.8rem;
+  font-size: 12px;
   color: #6b7280;
 }
 
 .resume-missing {
   color: #9ca3af;
   font-style: italic;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 16px;
+  color: #334155;
+  margin-top: 50px;
 }

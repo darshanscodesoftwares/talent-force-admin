@@ -1,8 +1,14 @@
+/* =======================================
+   Container
+======================================= */
 .seekerprofile-container {
   padding: 20px;
   background-color: #f9f9f9;
 }
 
+/* =======================================
+   Top Cards
+======================================= */
 .seekerprofile-top-row {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -75,7 +81,9 @@
   padding-left: 2px;
 }
 
-/* Sections */
+/* =======================================
+   Sections
+======================================= */
 .seekerprofile-rec-seek {
   display: flex;
   flex-direction: column;
@@ -96,8 +104,71 @@
   color: #444;
 }
 
+/* =======================================
+   Section Header
+======================================= */
+.seekerprofile-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.seekerprofile-section-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #444;
+}
+
+.seeker-count {
+  font-size: 16px;
+  font-weight: 500;
+  color: #d6691c;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+/* Header Buttons */
+.seekerprofile-header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.seekerprofile-add-btn {
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  background: #ef6a37;
+  color: #fff;
+  cursor: pointer;
+}
+
+.seekerprofile-add-btn:hover {
+  background: #d95a2d;
+}
+
+.seekerprofile-search-btn {
+  background-color: #ffffff;
+  color: #131313;
+  font-size: 15px ;
+  padding: 8px 7px;
+  border: none;
+  border-radius: 5px; 
+  cursor: pointer;
+}
+
+/* =======================================
+   Table
+======================================= */
 .seekerprofile-table-container {
   overflow-x: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .seekerprofile-table {
@@ -124,8 +195,18 @@
   font-weight: 500;
 }
 
-.seekerprofile-table tr:hover {
-  background: #f9f9f9;
+.seekerprofile-row {
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.seekerprofile-row:hover {
+  background: #f1f5f9;
+}
+
+.school-logo {
+  margin-right: 6px;
+  color: #ef6a37;
 }
 
 /* Status styles */
@@ -139,6 +220,9 @@
   font-weight: 500;
 }
 
+/* =======================================
+   Pagination
+======================================= */
 .seekerprofile-pagination {
   display: flex;
   justify-content: center;
@@ -170,75 +254,16 @@
   cursor: not-allowed;
 }
 
-.seekerprofile-row {
-  cursor: pointer;
-  transition: background 0.25s ease;
-}
-
-.seekerprofile-row:hover {
-  background: #f1f5f9;
-}
-
-/* Section Header */
-.seekerprofile-section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  padding: 12px 16px;
-  border-radius: 8px;
-}
-
-.seekerprofile-section-header h2 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  color: #444;
-}
-
-/* Download Button */
-.seekerprofile-add-btn {
-  padding: 8px 18px;
-  font-size: 14px;
-  font-weight: 500;
-  border: none;
-  border-radius: 6px;
-  background: #ef6a37;
-  color: #fff;
-  cursor: pointer;
-  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12); */
-}
-
-.seekerprofile-add-btn:hover {
-  background: #d95a2d;
-}
-
-.seekerprofile-add-btn:active {
-  background: #b94821;
-}
-
-.seekerprofile-header-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.seekerprofile-filter-btn {
-  background-color: #ffffff;
-  color: #131313;
-  font-size: 15px ;
-  padding: 8px 8px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
+/* =======================================
+   Column Filter Panel
+======================================= */
 .column-filter-panel {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f9f9f9;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .column-checkbox {
@@ -247,15 +272,52 @@
   font-size: 14px;
 }
 
-.title-icon2{
+.filter-actions1 {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
 }
 
-/* Search Modal */
+.column-apply-btn,
+.column-reset-btn {
+  font-size: 12px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.column-apply-btn {
+  background-color: #f07e21;
+  color: #fff;
+}
+
+.column-apply-btn:hover {
+  background-color: #d6691c;
+}
+
+.column-reset-btn {
+  background-color: #95a5a6;
+  color: #fff;
+}
+
+.column-reset-btn:hover {
+  background-color: #7f8c8d;
+}
+
+.column-filter-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  float: right;
+}
+
+/* =======================================
+   Search Modal
+======================================= */
 .search-modal {
   position: fixed;
   top: 0;
@@ -320,78 +382,9 @@
   margin-bottom: 10px;
 }
 
-.seekerprofile-search-btn {
-  background-color: #ffffff;
-  color: #131313;
-  font-size: 15px ;
-  padding: 8px 7px;
-  border: none;
-  border-radius: 5px; 
-  cursor: pointer;
-}
-
-
-/* Column Filter Panel */
-.column-filter-panel {
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 8px;
-  margin-top: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.column-checkbox {
-  display: inline-block;
-  margin-right: 15px;
-  font-size: 14px;
-}
-
-/* Filter Action Buttons */
-.filter-actions1 {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.column-apply-btn,
-.column-reset-btn {
-  font-size: 12px;
-  padding: 4px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.column-apply-btn {
-  background-color: #f07e21;
-  color: #fff;
-}
-
-.column-apply-btn:hover {
-  background-color: #d6691c;
-}
-
-.column-reset-btn {
-  background-color: #95a5a6;
-  color: #fff;
-}
-
-.column-reset-btn:hover {
-  background-color: #7f8c8d;
-}
-
-.column-filter-close-btn {
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  float: right;
-}
-
-
+/* =======================================
+   Reset Button (Commented code kept)
+======================================= */
 .seekerprofile-reset-btn {
   background-color: #95a5a6;
   color: white;
@@ -406,23 +399,6 @@
   background-color: #7f8c8d;
 }
 
-.seekerprofile-section-header h2 {
-  /* display: flex;
-  align-items: center;
-  gap: 8px; */
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.seeker-count {
-  font-size: 16px;
-  font-weight: 500;
-  color: #d6691c;       /* Indigo-like highlight */
-  /* background: #eef2ff; */
-  padding: 2px 8px;
-  border-radius: 8px;
-}
-
 
 /* .seekerprofile-actions {
   white-space: nowrap;
@@ -433,33 +409,4 @@
   margin: 0 4px;
   border-radius: 6px;
   font-size: 13px;
-  cursor: pointer;
-  border: none;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.seekerprofile-btn:hover {
-  transform: translateY(-2px);
-}
-
-.edit-btn {
-  background-color: #ffeee6;
-  border-radius: 7px;
-  font-size: large;
-  color: #e89e2f;
-}
-
-.edit-btn:hover {
-  background-color: #ffe0d1;
-}
-
-.delete-btn {
-  background-color: #ffeee6;
-  border-radius: 7px;
-  font-size: large;
-  color: #df4646;
-}
-
-.delete-btn:hover {
-  background-color: #ffd9c8;
 } */

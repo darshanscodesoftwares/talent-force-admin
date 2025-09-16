@@ -4,14 +4,13 @@ import "./SubjectAddModal.css";
 export default function SubjectAddModal({ isOpen, onClose, onSave }) {
   const [subject, setSubject] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!subject.trim()) return;
 
-    onSave({
-      name: subject,
-      postedOn: new Date().toLocaleDateString(),
-      createdBy: "Admin",
+    // Pass API-compatible data
+    await onSave({
+      category_name: subject,   // ✅ matches your backend field
     });
 
     setSubject("");
