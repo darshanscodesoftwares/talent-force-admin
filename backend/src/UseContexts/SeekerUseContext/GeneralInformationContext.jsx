@@ -11,18 +11,16 @@ export const GeneralInformationProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Get token from localStorage (or your auth storage)
-      const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s";
-       // recommended
-      if (!token) {
-        console.error("No token found. User may not be logged in.");
-        setProfile(null);
-        setLoading(false);
-        return;
-      }
+      // const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s";
+      // if (!token) {
+      //   console.error("No token found. User may not be logged in.");
+      //   setProfile(null);
+      //   setLoading(false);
+      //   return;
+      // }
 
       const response = await axios.get(
-        "http://192.168.29.163:8000/api/user/setting-full-profile",
+        "http://192.168.29.163:8000/api/admin-user-details",
         {
           headers: {
             Authorization: token,

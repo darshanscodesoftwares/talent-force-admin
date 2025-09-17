@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
 import { SeekerProfileContext } from "../UseContexts/SeekerUseContext/SeekerProfileContent.jsx";
 import { useNavigate } from "react-router-dom";
+import { IoIosPeople } from "react-icons/io";
+import { FaUserClock, FaUserCheck } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
-import { FaAngleDown } from "react-icons/fa6";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import SeekerFilterModal from "../editpages/SeekerFilterModal.jsx";
 import { SeekerProfileLoader } from "../Loader/Loader.jsx";
 import * as XLSX from "xlsx";
@@ -17,6 +19,7 @@ export default function SeekerProfile() {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  // ✅ Columns
   const allColumns = [
     { key: "name", label: "User" },
     { key: "specialization", label: "Specialization" },
@@ -28,21 +31,28 @@ export default function SeekerProfile() {
   const [visibleColumns, setVisibleColumns] = useState(allColumns.map(c => c.key));
   const [tempColumns, setTempColumns] = useState(allColumns.map(c => c.key));
 
-  // Pagination
+  // ✅ Pagination
   const indexOfLast = currentPage * seekersPerPage;
   const indexOfFirst = indexOfLast - seekersPerPage;
   const currentSeekers = seekers.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(seekers.length / seekersPerPage);
 
+  // ✅ Selection
   const allSelected = currentSeekers.length > 0 && currentSeekers.every(s => selectedSeekers.includes(s.id));
   const handleSelectAll = () => {
-    if (allSelected) setSelectedSeekers(prev => prev.filter(id => !currentSeekers.some(s => s.id === id)));
-    else setSelectedSeekers(prev => [...new Set([...prev, ...currentSeekers.map(s => s.id)])]);
+    if (allSelected) {
+      setSelectedSeekers(prev => prev.filter(id => !currentSeekers.some(s => s.id === id)));
+    } else {
+      setSelectedSeekers(prev => [...new Set([...prev, ...currentSeekers.map(s => s.id)])]);
+    }
   };
   const handleSelectOne = (id) => {
-    setSelectedSeekers(prev => prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]);
+    setSelectedSeekers(prev =>
+      prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]
+    );
   };
 
+  // ✅ Excel Export
   const handleDownload = () => {
     if (selectedSeekers.length === 0) return alert("Select at least one seeker.");
     const exportData = seekers
@@ -66,18 +76,69 @@ export default function SeekerProfile() {
   return (
     <div className="seekerprofile-container">
 
-      {/* Section Header */}
+      {/* Top Cards */}
+      <div className="seekerprofile-top-row">
+        <div className="seekerprofile-small-cards">
+          <div className="seekerprofile-cards-container">
+
+            {/* Card 1 */}
+            <div className="seekerprofile-card">
+              <div className="seekerprofile-card-body">
+                <div className="seekerprofile-card-left">
+                  <div className="seekerprofile-card-icon"><IoIosPeople /></div>
+                  <h4>Total Users</h4>
+                </div>
+                <p className="seekerprofile-amount">{seekers.length}</p>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="seekerprofile-card">
+              <div className="seekerprofile-card-body">
+                <div className="seekerprofile-card-left">
+                  <div className="seekerprofile-card-icon"><FaUserCheck /></div>
+                  <h4>Active Users</h4>
+                </div>
+                <p className="seekerprofile-amount">
+                  {seekers.filter(s => s.status === "Seeking").length}
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="seekerprofile-card">
+              <div className="seekerprofile-card-body">
+                <div className="seekerprofile-card-left">
+                  <div className="seekerprofile-card-icon"><FaUserClock /></div>
+                  <h4>Inactive Users</h4>
+                </div>
+                <p className="seekerprofile-amount">
+                  {seekers.filter(s => s.status === "Not Seeking").length}
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      {/* 🔹 Section Header */}
       <div className="seekerprofile-section-header">
         <h2>Seeker Profiles List ({seekers.length})</h2>
         <div className="seekerprofile-header-buttons">
           <button onClick={handleDownload} className="seekerprofile-add-btn">Download</button>
-          <button onClick={() => setSearchModalOpen(true)} className="seekerprofile-search-btn">
-            Advanced Search <FaAngleDown />
+          <button
+            onClick={() => setSearchModalOpen((prev) => !prev)}
+            className="seekerprofile-search-btn"
+          >
+            Advanced Search{" "}
+            {searchModalOpen ? <FaAngleUp /> : <FaAngleDown />}
           </button>
         </div>
       </div>
 
-      {/* Table */}
+      {/* 🔹 Table */}
       <div className="seekerprofile-table-container">
         <table className="seekerprofile-table">
           <thead>
@@ -92,13 +153,21 @@ export default function SeekerProfile() {
           </thead>
           <tbody>
             {currentSeekers.map(seeker => (
-              <tr key={seeker.id} className="seekerprofile-row" onClick={() => navigate(`/dashboard/seeker-profile/${seeker.id}`)}>
+              <tr
+                key={seeker.id}
+                className="seekerprofile-row"
+                onClick={() => navigate(`/dashboard/seeker-profile/${seeker.id}`)}
+              >
                 <td onClick={e => { e.stopPropagation(); handleSelectOne(seeker.id); }}>
                   <input type="checkbox" checked={selectedSeekers.includes(seeker.id)} readOnly />
                 </td>
                 {allColumns.filter(c => visibleColumns.includes(c.key)).map(col => (
                   <td key={col.key}>
-                    {col.key === "name" ? <><FaUserCircle className="school-logo" /> {seeker[col.key]}</> : seeker[col.key] || ""}
+                    {col.key === "name" ? (
+                      <>
+                        <FaUserCircle className="school-logo" /> {seeker[col.key]}
+                      </>
+                    ) : seeker[col.key] || ""}
                   </td>
                 ))}
               </tr>
@@ -107,7 +176,7 @@ export default function SeekerProfile() {
         </table>
       </div>
 
-      {/* Pagination */}
+      {/* 🔹 Pagination */}
       <div className="seekerprofile-pagination">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
@@ -120,21 +189,11 @@ export default function SeekerProfile() {
         ))}
       </div>
 
-      {/* Search Modal */}
-      {searchModalOpen && <SeekerFilterModal onClose={() => setSearchModalOpen(false)} />}
+      {/* 🔹 Search Modal */}
+      {searchModalOpen && (
+        <SeekerFilterModal onClose={() => setSearchModalOpen(false)} />
+      )}
 
-      {/* Reset Table */}
-      {/* <button className="seekerprofile-reset-btn" onClick={() => {
-          setFilters({ specialization: "", pincode: "", status: "" });
-          setVisibleColumns(allColumns.map(c => c.key));
-          setTempColumns(allColumns.map(c => c.key));
-          setCurrentPage(1);
-        }}>Reset Table</button> */}
-
-      {/* Filter Columns */}
-      {/* <button className="seekerprofile-filter-btn" onClick={() => setFilterOpen(prev => !prev)}>
-          <div className="title-icon2">Filter Columns <FaAngleDown /></div>
-        </button> */}
     </div>
   );
 }

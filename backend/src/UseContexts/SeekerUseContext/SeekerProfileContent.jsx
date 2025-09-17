@@ -10,11 +10,11 @@ export const SeekerProfileProvider = ({ children }) => {
   // Fetch all seekers (for table)
   const fetchSeekers = async () => {
     try {
-      const res = await fetch("http://192.168.29.163:8000/api/user/setting-full-profile", {
-        headers: {
-          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s", 
-          // Replace with actual token
-        },
+      const res = await fetch("http://192.168.29.163:8000/api/admin-user-details", {
+        // headers: {
+        //   Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s", 
+        
+        // },
       });
       const data = await res.json();
       if (data.status === "success") {

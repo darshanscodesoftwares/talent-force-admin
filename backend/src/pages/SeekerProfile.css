@@ -7,7 +7,7 @@
 }
 
 /* =======================================
-   Top Cards
+   Top Cards (Same as subscription style)
 ======================================= */
 .seekerprofile-top-row {
   display: grid;
@@ -18,8 +18,8 @@
 
 .seekerprofile-small-cards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px; 
 }
 
 .seekerprofile-cards-container {
@@ -37,7 +37,7 @@
   width: 240px;
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   transition: transform 0.2s ease;
 }
 
@@ -48,7 +48,9 @@
 .seekerprofile-card-body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: flex-start; 
+  justify-content: flex-start;
+  gap: 14px;
 }
 
 .seekerprofile-card-left {
@@ -71,25 +73,53 @@
 .seekerprofile-card-body h4 {
   font-size: large;
   font-weight: 400;
+  color: #1e293b;
+  margin: 0;
+}
+
+.seekerprofile-card-body p {
+  color: #1e2a38b0;
 }
 
 .seekerprofile-amount {
   font-size: 20px;
   font-weight: 600;
-  color: #1e2a38b0;
+  color: #1e2a38;
   margin: 0;
   padding-left: 2px;
+}
+
+/* 🔹 Individual card icon themes */
+.seekerprofile-card-icon.total {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+.seekerprofile-card-icon.active {
+  background: #dcfce7;
+  color: #16a34a;
+}
+.seekerprofile-card-icon.inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.seekerprofile-card-body h4 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e293b;
+  margin: 0;
+}
+
+.seekerprofile-amount {
+  font-size: 22px;
+  font-weight: 600;
+  color: #334155;
+  margin: 0;
 }
 
 /* =======================================
    Sections
 ======================================= */
-.seekerprofile-rec-seek {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
 .seekerprofile-section {
   background: white;
   border-radius: 12px;
@@ -97,16 +127,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.seekerprofile-section h2 {
-  margin-bottom: 15px;
-  font-size: 16px;
-  font-weight: 300;
-  color: #444;
-}
-
-/* =======================================
-   Section Header
-======================================= */
 .seekerprofile-section-header {
   display: flex;
   justify-content: space-between;
@@ -122,15 +142,6 @@
   color: #444;
 }
 
-.seeker-count {
-  font-size: 16px;
-  font-weight: 500;
-  color: #d6691c;
-  padding: 2px 8px;
-  border-radius: 8px;
-}
-
-/* Header Buttons */
 .seekerprofile-header-buttons {
   display: flex;
   gap: 10px;
@@ -145,6 +156,7 @@
   background: #ef6a37;
   color: #fff;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .seekerprofile-add-btn:hover {
@@ -152,13 +164,21 @@
 }
 
 .seekerprofile-search-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   background-color: #ffffff;
   color: #131313;
-  font-size: 15px ;
-  padding: 8px 7px;
+  font-size: 15px;
+  padding: 8px 12px;
   border: none;
-  border-radius: 5px; 
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.seekerprofile-search-btn:hover {
+  background: #f3f4f6;
 }
 
 /* =======================================
@@ -190,7 +210,7 @@
 }
 
 .seekerprofile-table th {
-  background: #becbdb19;
+  background: #f9fafb;
   color: #444;
   font-weight: 500;
 }
@@ -211,12 +231,12 @@
 
 /* Status styles */
 .seekerprofile-status.seeking {
-  color: rgba(36, 89, 36, 0.823);
+  color: rgba(36, 89, 36, 0.85);
   font-weight: 500;
 }
 
 .seekerprofile-status.not-seeking {
-  color: rgba(203, 27, 27, 0.771);
+  color: rgba(203, 27, 27, 0.85);
   font-weight: 500;
 }
 
@@ -398,15 +418,3 @@
 .seekerprofile-reset-btn:hover {
   background-color: #7f8c8d;
 }
-
-
-/* .seekerprofile-actions {
-  white-space: nowrap;
-}
-
-.seekerprofile-btn {
-  padding: 6px 14px;
-  margin: 0 4px;
-  border-radius: 6px;
-  font-size: 13px;
-} */
