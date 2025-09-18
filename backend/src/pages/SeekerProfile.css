@@ -418,3 +418,12 @@
 .seekerprofile-reset-btn:hover {
   background-color: #7f8c8d;
 }
+
+.seekerprofile-avatar {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 6px;
+  vertical-align: middle;
+}

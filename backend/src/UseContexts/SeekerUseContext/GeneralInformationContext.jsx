@@ -4,64 +4,50 @@ import axios from "axios";
 export const GeneralInformationContext = createContext();
 
 export const GeneralInformationProvider = ({ children }) => {
-  const [profile, setProfile] = useState(null);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchProfile = async () => {
+  const fetchProfiles = async () => {
     try {
       setLoading(true);
 
-      // const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s";
-      // if (!token) {
-      //   console.error("No token found. User may not be logged in.");
-      //   setProfile(null);
-      //   setLoading(false);
-      //   return;
-      // }
-
       const response = await axios.get(
-        "http://192.168.29.163:8000/api/admin-user-details",
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
+        "http://192.168.29.163:8000/api/admin-user-details"
       );
 
-      if (response.data.status === "success") {
-        const data = response.data.profile;
+      if (response.data.status === "success" && response.data.users.length > 0) {
+        const simplifiedUsers = response.data.users.map((user) => ({
+          id: user.user_id,
+          user: user.profile?.name || "",
+          phoneNo: user.profile?.phone || "",
+          mail: user.profile?.email || "",
+          specialization: user.course?.specialization || "",
+          highestQualification: user.course?.highest_qualification_level || "",
+          teachingQualification: user.course?.teaching_qualification || "",
+          profile_img: user.profile?.profile_img || null,
+          resume: user.profile?.resume_path || null,
+        }));
 
-        // Map API data to simplified structure for GeneralInformation
-        const simplifiedProfile = {
-          user: data.profile?.name || "",
-          phoneNo: data.profile?.phone || "",
-          mail: data.profile?.email || "",
-          Specialization: data.education?.[0]?.specialization || "",
-          highestQualification: data.education?.[0]?.degree || "",
-          teachingQualification: data.teaching_experience?.[0]?.degree || "",
-          resume: data.profile?.resume_path || null,
-        };
-
-        setProfile(simplifiedProfile);
+        setUsers(simplifiedUsers);
       } else {
-        console.error("Failed to fetch profile:", response.data.message);
-        setProfile(null);
+        console.error("Failed to fetch users:", response.data.message);
+        setUsers([]);
       }
     } catch (err) {
-      console.error("Error fetching profile:", err);
-      setProfile(null);
+      console.error("Error fetching users:", err);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProfile();
+    fetchProfiles();
   }, []);
 
   return (
     <GeneralInformationContext.Provider
-      value={{ profile, loading, fetchProfile }}
+      value={{ users, loading, fetchProfiles }}
     >
       {children}
     </GeneralInformationContext.Provider>

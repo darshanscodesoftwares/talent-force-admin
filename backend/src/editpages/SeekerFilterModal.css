@@ -8,6 +8,9 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+  position: relative;   /* ✅ create stacking context */
+  z-index: 1000;        /* ✅ ensure it's above overlay */
 }
 
 .seeker-filter-modal-header h2 {
@@ -28,6 +31,8 @@ input, select {
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 0.9rem;
+  background: #fff;   /* ✅ ensures dropdown not transparent */
+  cursor: pointer;    /* ✅ clear affordance */
 }
 
 .seeker-filter-modal-actions {
@@ -86,4 +91,5 @@ input, select {
   position: absolute;
   top: 10px;
   right: 15px;
+  z-index: 1100; /* ✅ ensure button stays clickable */
 }

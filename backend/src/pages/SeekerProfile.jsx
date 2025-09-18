@@ -17,9 +17,13 @@ export default function SeekerProfile() {
   const seekersPerPage = 10;
   const [selectedSeekers, setSelectedSeekers] = useState([]);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    specialization: "",
+    pincode: "",
+    status: "",
+  });
   const navigate = useNavigate();
 
-  // ✅ Columns
   const allColumns = [
     { key: "name", label: "User" },
     { key: "specialization", label: "Specialization" },
@@ -29,15 +33,23 @@ export default function SeekerProfile() {
     { key: "status", label: "Status" },
   ];
   const [visibleColumns, setVisibleColumns] = useState(allColumns.map(c => c.key));
-  const [tempColumns, setTempColumns] = useState(allColumns.map(c => c.key));
 
-  // ✅ Pagination
+  // 🔹 Apply filters
+  const filteredSeekers = seekers.filter((s) => {
+    return (
+      (!filters.specialization || s.specialization === filters.specialization) &&
+      (!filters.pincode || s.pincode === filters.pincode) &&
+      (!filters.status || s.status === filters.status)
+    );
+  });
+
+  // 🔹 Pagination
   const indexOfLast = currentPage * seekersPerPage;
   const indexOfFirst = indexOfLast - seekersPerPage;
-  const currentSeekers = seekers.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(seekers.length / seekersPerPage);
+  const currentSeekers = filteredSeekers.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filteredSeekers.length / seekersPerPage);
 
-  // ✅ Selection
+  // 🔹 Selection
   const allSelected = currentSeekers.length > 0 && currentSeekers.every(s => selectedSeekers.includes(s.id));
   const handleSelectAll = () => {
     if (allSelected) {
@@ -52,7 +64,7 @@ export default function SeekerProfile() {
     );
   };
 
-  // ✅ Excel Export
+  // 🔹 Excel Export
   const handleDownload = () => {
     if (selectedSeekers.length === 0) return alert("Select at least one seeker.");
     const exportData = seekers
@@ -122,10 +134,9 @@ export default function SeekerProfile() {
         </div>
       </div>
 
-
-      {/* 🔹 Section Header */}
+      {/* Section Header */}
       <div className="seekerprofile-section-header">
-        <h2>Seeker Profiles List ({seekers.length})</h2>
+        <h2>Seeker Profiles List ({filteredSeekers.length})</h2>
         <div className="seekerprofile-header-buttons">
           <button onClick={handleDownload} className="seekerprofile-add-btn">Download</button>
           <button
@@ -138,7 +149,7 @@ export default function SeekerProfile() {
         </div>
       </div>
 
-      {/* 🔹 Table */}
+      {/* Table */}
       <div className="seekerprofile-table-container">
         <table className="seekerprofile-table">
           <thead>
@@ -165,7 +176,16 @@ export default function SeekerProfile() {
                   <td key={col.key}>
                     {col.key === "name" ? (
                       <>
-                        <FaUserCircle className="school-logo" /> {seeker[col.key]}
+                        {seeker.profile_img ? (
+                          <img
+                            src={seeker.profile_img}
+                            alt={seeker.name}
+                            className="seekerprofile-avatar"
+                          />
+                        ) : (
+                          <FaUserCircle className="school-logo" />
+                        )}
+                        {seeker[col.key]}
                       </>
                     ) : seeker[col.key] || ""}
                   </td>
@@ -176,7 +196,7 @@ export default function SeekerProfile() {
         </table>
       </div>
 
-      {/* 🔹 Pagination */}
+      {/* Pagination */}
       <div className="seekerprofile-pagination">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
@@ -189,11 +209,14 @@ export default function SeekerProfile() {
         ))}
       </div>
 
-      {/* 🔹 Search Modal */}
+      {/* Search Modal */}
       {searchModalOpen && (
-        <SeekerFilterModal onClose={() => setSearchModalOpen(false)} />
+        <SeekerFilterModal
+          filters={filters}
+          setFilters={setFilters}
+          onClose={() => setSearchModalOpen(false)}
+        />
       )}
-
     </div>
   );
 }

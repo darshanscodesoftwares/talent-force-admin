@@ -7,29 +7,31 @@ export const SeekerProfileProvider = ({ children }) => {
   const [seekers, setSeekers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch all seekers (for table)
-  const fetchSeekers = async () => {
-    try {
-      const res = await fetch("http://192.168.29.163:8000/api/admin-user-details", {
-        // headers: {
-        //   Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s", 
-        
-        // },
-      });
-      const data = await res.json();
-      if (data.status === "success") {
-        const seekerItem = {
-          id: data.profile.profile.id,
-          name: data.profile.profile.name,
-          phone: data.profile.profile.phone,
-          email: data.profile.profile.email,
-          pincode: data.profile.address.pincode,
-          specialization: data.profile.education?.[0]?.specialization || "",
-          status: "",
-          fullProfile: data.profile, // keep full profile for later use
-        };
-        setSeekers([seekerItem]);
-      }
+const fetchSeekers = async () => {
+  try {
+    setLoading(true);
+    const res = await fetch("http://192.168.29.163:8000/api/admin-user-details", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`, // 🔹 if token required
+      },
+    });
+    
+const data = await res.json();
+if (data.status === "success") {
+  const seekerItems = data.users.map((user) => ({
+    id: user.user_id,
+    name: user.profile?.name || "",
+    phone: user.profile?.phone || "",
+    email: user.profile?.email || "",
+    pincode: user.address?.pincode || "",
+    specialization: user.course?.specialization || "",
+    status: user.status?.[0] || "",
+    profile_img: user.profile?.profile_img || "",
+    fullProfile: user, // keep full profile for later use
+  }));
+
+  setSeekers(seekerItems);
+}
     } catch (err) {
       console.error("Error fetching seekers:", err);
     } finally {

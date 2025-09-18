@@ -156,3 +156,10 @@
   color: #334155;
   margin-top: 50px;
 }
+
+.profile-img {
+  width: 100px;  /* adjust as needed */
+  height: 100px;
+  border-radius: 50%; /* circular */
+  object-fit: cover;  /* keeps aspect ratio */
+}

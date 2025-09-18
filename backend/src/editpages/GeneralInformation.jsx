@@ -2,22 +2,30 @@ import "./GeneralInformation.css";
 import { FaUserCircle } from "react-icons/fa";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { FaFilePdf } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useContext } from "react";
 import { GeneralInformationContext } from "../UseContexts/SeekerUseContext/GeneralInformationContext";
 
 export default function GeneralInformation() {
   const navigate = useNavigate();
-  const { profile, loading } = useContext(GeneralInformationContext);
+  const { id } = useParams(); // ✅ dynamic user id from URL
+  const { users, loading } = useContext(GeneralInformationContext);
 
   if (loading) return <p className="loading-text">Loading...</p>;
+
+  // 🔑 find the right profile based on dynamic id
+  const profile = users.find((u) => u.id === parseInt(id));
+
   if (!profile) return <p className="loading-text">Profile not found!</p>;
 
   return (
     <div className="generalinfo-container">
       {/* Header */}
       <div className="generalinfo-header">
-        <h2 onClick={() => navigate("/dashboard/seeker-profile")} className="generalinfo-back">
+        <h2
+          onClick={() => navigate("/dashboard/seeker-profile")}
+          className="generalinfo-back"
+        >
           <IoChevronBackOutline className="back-icon" />
           <span>General Information</span>
         </h2>
@@ -26,7 +34,15 @@ export default function GeneralInformation() {
 
       {/* Profile Icon */}
       <div className="generalinfo-icon">
-        <FaUserCircle className="profile-icon" />
+        {profile.profile_img ? (
+          <img
+            src={profile.profile_img}
+            alt={`${profile.user}'s profile`}
+            className="profile-img"
+          />
+        ) : (
+          <FaUserCircle className="profile-icon" />
+        )}
       </div>
 
       {/* Form */}
@@ -38,7 +54,7 @@ export default function GeneralInformation() {
           </div>
           <div className="generalinfo-field">
             <label>Specialization</label>
-            <input type="text" value={profile.Specialization} readOnly />
+            <input type="text" value={profile.specialization} readOnly />
           </div>
         </div>
 
