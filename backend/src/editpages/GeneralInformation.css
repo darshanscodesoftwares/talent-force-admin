@@ -158,8 +158,8 @@
 }
 
 .profile-img {
-  width: 100px;  /* adjust as needed */
-  height: 100px;
+  width: 180px;  /* adjust as needed */
+  height: 180px;
   border-radius: 50%; /* circular */
   object-fit: cover;  /* keeps aspect ratio */
 }

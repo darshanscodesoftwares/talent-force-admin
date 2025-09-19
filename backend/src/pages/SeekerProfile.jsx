@@ -9,6 +9,7 @@ import SeekerFilterModal from "../editpages/SeekerFilterModal.jsx";
 import { SeekerProfileLoader } from "../Loader/Loader.jsx";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { toast } from "react-toastify";
 import "./SeekerProfile.css";
 
 export default function SeekerProfile() {
@@ -64,25 +65,30 @@ export default function SeekerProfile() {
     );
   };
 
-  // 🔹 Excel Export
-  const handleDownload = () => {
-    if (selectedSeekers.length === 0) return alert("Select at least one seeker.");
-    const exportData = seekers
-      .filter((s) => selectedSeekers.includes(s.id))
-      .map((s) => {
-        const row = {};
-        visibleColumns.forEach(colKey => {
-          row[allColumns.find(c => c.key === colKey).label] = s[colKey];
-        });
-        return row;
-      });
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Seekers");
-    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-    saveAs(new Blob([excelBuffer], { type: "application/octet-stream" }), "selected_seekers.xlsx");
-  };
+ const handleDownload = () => {
+  if (selectedSeekers.length === 0) {
+    toast.warning("Select at least one seeker.");  // ✅ replaces alert
+    return;
+  }
 
+  const exportData = seekers
+    .filter((s) => selectedSeekers.includes(s.id))
+    .map((s) => {
+      const row = {};
+      visibleColumns.forEach(colKey => {
+        row[allColumns.find(c => c.key === colKey).label] = s[colKey];
+      });
+      return row;
+    });
+
+  const worksheet = XLSX.utils.json_to_sheet(exportData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Seekers");
+  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  saveAs(new Blob([excelBuffer], { type: "application/octet-stream" }), "selected_seekers.xlsx");
+
+  toast.success("Excel downloaded successfully!"); // ✅ success toast
+};
   if (loading) return <SeekerProfileLoader />;
 
   return (
