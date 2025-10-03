@@ -15,35 +15,39 @@ import ExperienceProvider from "./UseContexts/SeekerUseContext/ExperienceContext
 import ExpectedSalaryProvider from "./UseContexts/SeekerUseContext/ExpectedSalaryContext";
 import SeekerProfileProvider from "./UseContexts/SeekerUseContext/SeekerProfileContent";
 import GeneralInformationProvider from "./UseContexts/SeekerUseContext/GeneralInformationContext"
+import LanguageProvider from "./UseContexts/SeekerUseContext/LanguageContext"
+import ProficiencyProvider from "./UseContexts/SeekerUseContext/ProficiencyContext"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-
-  <GeneralInformationProvider>
-    <SeekerProfileProvider>
-      <ExpectedSalaryProvider>
-        <ExperienceProvider>
-          <SeekerEduQualificationProvider>
-            <EducationQualificationProvider>
-              <CompartmentLevelProvider>
-                <TeachingQualificationProvider>
-                  <HighestEducationProvider>
-                    <EndDateProvider>
-                      <WorkTypeProvider>
-                        <SubjectProvider>
-                          <HomeBannerProvider>
-                            <App />
-                          </HomeBannerProvider>
-                        </SubjectProvider>
-                      </WorkTypeProvider>
-                    </EndDateProvider>
-                  </HighestEducationProvider>
-                </TeachingQualificationProvider>
-              </CompartmentLevelProvider>
-            </EducationQualificationProvider>
-          </SeekerEduQualificationProvider>
-        </ExperienceProvider>
-      </ExpectedSalaryProvider>
-    </SeekerProfileProvider>
-  </GeneralInformationProvider>
-
+  <ProficiencyProvider>
+    <LanguageProvider>
+      <GeneralInformationProvider>
+        <SeekerProfileProvider>
+          <ExpectedSalaryProvider>
+            <ExperienceProvider>
+              <SeekerEduQualificationProvider>
+                <EducationQualificationProvider>
+                  <CompartmentLevelProvider>
+                    <TeachingQualificationProvider>
+                      <HighestEducationProvider>
+                        <EndDateProvider>
+                          <WorkTypeProvider>
+                            <SubjectProvider>
+                              <HomeBannerProvider>
+                                <App />
+                              </HomeBannerProvider>
+                            </SubjectProvider>
+                          </WorkTypeProvider>
+                        </EndDateProvider>
+                      </HighestEducationProvider>
+                    </TeachingQualificationProvider>
+                  </CompartmentLevelProvider>
+                </EducationQualificationProvider>
+              </SeekerEduQualificationProvider>
+            </ExperienceProvider>
+          </ExpectedSalaryProvider>
+        </SeekerProfileProvider>
+      </GeneralInformationProvider>
+    </LanguageProvider>
+  </ProficiencyProvider>
 );

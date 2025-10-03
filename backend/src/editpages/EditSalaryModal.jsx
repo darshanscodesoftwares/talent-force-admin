@@ -1,5 +1,5 @@
 import React from "react";
-import "./salaryModal.css";
+import "./EditSalaryModal.css";
 
 export default function EditSalaryModal({ onClose, onSave, newRange, setNewRange }) {
   return (

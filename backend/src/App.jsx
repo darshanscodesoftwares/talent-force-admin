@@ -33,6 +33,9 @@ import EducationQualification from "./editpages/EducationQualification";
 import CompartmentLevel from "./editpages/CompartmentLevel";
 import Subject from "./editpages/Subject";
 import ExpectedSalary from "./editpages/ExpectedSalary";
+import Languages from "./editpages/Languages.jsx";
+import Proficiency from "./editpages/Languages.jsx";
+
 
 // profiles
 import GeneralInformation from "./editpages/GeneralInformation.jsx";
@@ -95,6 +98,8 @@ const App = () => {
             <Route path="seeker-search-filter/compartment" element={<CompartmentLevel />} />
             <Route path="seeker-search-filter/subject" element={<Subject />} />
             <Route path="seeker-search-filter/salary" element={<ExpectedSalary />} />
+            <Route path="seeker-search-filter/languages" element={<Languages />} />
+            <Route path="seeker-search-filter/languages" element={<Proficiency />} />
 
             {/* recruiter filters */}
             <Route path="recruiter-filters/education" element={<EducationQualification />} />
