@@ -3,40 +3,37 @@ import { FaUserCheck } from "react-icons/fa6";
 import { FaSchool } from "react-icons/fa";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import "./RecruiterProfile.css";
-import { useState, useEffect } from "react";
-import { recruiterProfile } from "../data/contentData.js";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import RecruiterProfileLoader from "../Loader/Loader.jsx"
+import RecruiterProfileLoader from "../Loader/Loader.jsx";
+import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterProfileContext.jsx";
 
 export default function RecruiterProfile() {
-  const [recruiters] = useState(recruiterProfile);
+  const { recruiters, loading } = useContext(RecruiterProfileContext);
   const [currentPage, setCurrentPage] = useState(1);
   const recruitersPerPage = 5;
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true)
 
-  // calculate indexes
+  // Calculate pagination
   const indexOfLast = currentPage * recruitersPerPage;
   const indexOfFirst = indexOfLast - recruitersPerPage;
   const currentRecruiters = recruiters.slice(indexOfFirst, indexOfLast);
-
   const totalPages = Math.ceil(recruiters.length / recruitersPerPage);
 
-  // remove this before production
+  // ✅ Loader based on context data
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 400);
-    return () => clearTimeout(timer);
+    window.scrollTo(0, 0);
   }, []);
 
-  if (loading) return <RecruiterProfileLoader />
+  if (loading) return <RecruiterProfileLoader />;
 
   return (
     <div className="recruiterprofile-container">
-      {/* Top Row with Small Cards */}
+      {/* ===== TOP ROW WITH SMALL CARDS ===== */}
       <div className="recruiterprofile-top-row">
         <div className="recruiterprofile-small-cards">
           <div className="recruiterprofile-cards-container">
-            {/* Card 1 */}
+            {/* Total Recruiters */}
             <div className="recruiterprofile-card">
               <div className="recruiterprofile-card-body">
                 <div className="recruiterprofile-card-left">
@@ -45,11 +42,11 @@ export default function RecruiterProfile() {
                   </div>
                   <h4>Total Recruiters</h4>
                 </div>
-                <p className="recruiterprofile-amount">{`10,000`}</p>
+                <p className="recruiterprofile-amount">{recruiters.length}</p>
               </div>
             </div>
 
-            {/* Card 2 */}
+            {/* Active Users (login enabled) */}
             <div className="recruiterprofile-card">
               <div className="recruiterprofile-card-body">
                 <div className="recruiterprofile-card-left">
@@ -59,12 +56,12 @@ export default function RecruiterProfile() {
                   <h4>Active Users</h4>
                 </div>
                 <p className="recruiterprofile-amount">
-                  {`5,000`}
+                  {recruiters.filter((r) => r.isLogin === "Yes").length}
                 </p>
               </div>
             </div>
 
-            {/* Card 3 */}
+            {/* Subscribed Users (placeholder for now) */}
             <div className="recruiterprofile-card">
               <div className="recruiterprofile-card-body">
                 <div className="recruiterprofile-card-left">
@@ -74,7 +71,7 @@ export default function RecruiterProfile() {
                   <h4>Subscribed Users</h4>
                 </div>
                 <p className="recruiterprofile-amount">
-                  {`3,000`}
+                  {recruiters.filter((r) => r.membership === "Advanced").length || 0}
                 </p>
               </div>
             </div>
@@ -82,7 +79,7 @@ export default function RecruiterProfile() {
         </div>
       </div>
 
-      {/* Recruiter List Table */}
+      {/* ===== RECRUITER LIST TABLE ===== */}
       <div className="recruiterprofile-rec-seek">
         <div className="recruiterprofile-section">
           <h2>Recruiter Profiles List</h2>
@@ -106,29 +103,56 @@ export default function RecruiterProfile() {
                       navigate(`/dashboard/recruiter-profile/${recruiter.id}`)
                     }
                   >
+                    {/* SCHOOL NAME + IMAGE */}
                     <td>
                       <div className="icon-school">
-                        <FaSchool className="school-logo" />
-                        {recruiter.school}
+                        {recruiter.schoolImage ? (
+                          <img
+                            src={recruiter.schoolImage}
+                            alt={recruiter.schoolName}
+                            className="school-logo"
+                            style={{
+                              width: "32px",
+                              height: "32px",
+                              borderRadius: "50%",
+                              marginRight: "8px",
+                              objectFit: "cover",
+                            }}
+                          />
+                        ) : (
+                          <FaSchool className="school-logo" />
+                        )}
+                        {recruiter.schoolName}
                       </div>
                     </td>
-                    <td>{recruiter.email}</td>
-                    <td>{recruiter.phone}</td>
-                    <td>{recruiter.pincode}</td>
+
+                    {/* EMAIL */}
+                    <td>{recruiter.schoolEmail}</td>
+
+                    {/* PHONE */}
+                    <td>{recruiter.phoneNumber}</td>
+
+                    {/* PINCODE */}
+                    <td>
+                      {recruiter.jobPosts?.[0]?.pincode?.pincode || "N/A"}
+                    </td>
+
+                    {/* MEMBERSHIP */}
                     <td>
                       {recruiter.membership === "Advanced" ? (
-                        <span className="recruiterprofile-membership advanced">👑 Advanced</span>
+                        <span className="recruiterprofile-membership advanced">
+                          👑 Advanced
+                        </span>
                       ) : (
                         <span className="recruiterprofile-membership basic">● Basic</span>
                       )}
                     </td>
-
                   </tr>
                 ))}
               </tbody>
             </table>
 
-            {/* Pagination Controls */}
+            {/* ===== PAGINATION ===== */}
             <div className="recruiterprofile-pagination">
               <button
                 disabled={currentPage === 1}

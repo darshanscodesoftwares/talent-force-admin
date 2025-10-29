@@ -28,11 +28,11 @@ import AddBanner from "/src/editpages/AddBanner";
 import EditBanner from "/src/editpages/EditBanner";
 
 // seekerSearchFilter filters
-import ExperienceFilter from "./editpages/ExperienceFilter";
-import EducationQualification from "./editpages/EducationQualification";
-import CompartmentLevel from "./editpages/CompartmentLevel";
-import Subject from "./editpages/Subject";
-import ExpectedSalary from "./editpages/ExpectedSalary";
+import ExperienceFilter from "./editpages/ExperienceFilter.jsx";
+import EducationQualification from "./editpages/EducationQualification.jsx";
+import CompartmentLevel from "./editpages/CompartmentLevel.jsx";
+import Subject from "./editpages/Subject.jsx";
+import ExpectedSalary from "./editpages/ExpectedSalary.jsx";
 import Languages from "./editpages/Languages.jsx";
 import Proficiency from "./editpages/Languages.jsx";
 

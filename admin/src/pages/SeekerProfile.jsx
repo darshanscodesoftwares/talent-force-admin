@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SeekerProfileContext } from "../UseContexts/SeekerUseContext/SeekerProfileContent.jsx";
 import { useNavigate } from "react-router-dom";
 import { IoIosPeople } from "react-icons/io";
@@ -10,6 +10,7 @@ import { SeekerProfileLoader } from "../Loader/Loader.jsx";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { toast } from "react-toastify";
+import axios from "axios";
 import "./SeekerProfile.css";
 
 export default function SeekerProfile() {
@@ -24,6 +25,37 @@ export default function SeekerProfile() {
     status: "",
   });
   const navigate = useNavigate();
+
+  const [userCounts, setUserCounts] = useState({
+    total_users: 0,
+    active_users_total: 0,
+    inactive_users_total: 0,
+  });
+
+  // ✅ Fetch live user counts from API
+  useEffect(() => {
+    const fetchUserCounts = async () => {
+      try {
+        const token =
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s";
+        const response = await axios.get(
+          "http://192.168.29.163:8000/api/admin-users-count-list",
+          { headers: { Authorization: token } }
+        );
+
+        if (response.data?.status === "Success" && response.data?.data) {
+          setUserCounts(response.data.data);
+        } else {
+          console.warn("Unexpected response:", response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user counts:", error);
+        toast.error("Failed to fetch user count data");
+      }
+    };
+
+    fetchUserCounts();
+  }, []);
 
   const allColumns = [
     { key: "name", label: "User" },
@@ -51,7 +83,9 @@ export default function SeekerProfile() {
   const totalPages = Math.ceil(filteredSeekers.length / seekersPerPage);
 
   // 🔹 Selection
-  const allSelected = currentSeekers.length > 0 && currentSeekers.every(s => selectedSeekers.includes(s.id));
+  const allSelected =
+    currentSeekers.length > 0 &&
+    currentSeekers.every(s => selectedSeekers.includes(s.id));
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedSeekers(prev => prev.filter(id => !currentSeekers.some(s => s.id === id)));
@@ -65,74 +99,71 @@ export default function SeekerProfile() {
     );
   };
 
- const handleDownload = () => {
-  if (selectedSeekers.length === 0) {
-    toast.warning("Select at least one seeker.");  // ✅ replaces alert
-    return;
-  }
+  const handleDownload = () => {
+    if (selectedSeekers.length === 0) {
+      toast.warning("Select at least one seeker.");
+      return;
+    }
 
-  const exportData = seekers
-    .filter((s) => selectedSeekers.includes(s.id))
-    .map((s) => {
-      const row = {};
-      visibleColumns.forEach(colKey => {
-        row[allColumns.find(c => c.key === colKey).label] = s[colKey];
+    const exportData = seekers
+      .filter((s) => selectedSeekers.includes(s.id))
+      .map((s) => {
+        const row = {};
+        visibleColumns.forEach(colKey => {
+          row[allColumns.find(c => c.key === colKey).label] = s[colKey];
+        });
+        return row;
       });
-      return row;
-    });
 
-  const worksheet = XLSX.utils.json_to_sheet(exportData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Seekers");
-  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-  saveAs(new Blob([excelBuffer], { type: "application/octet-stream" }), "selected_seekers.xlsx");
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Seekers");
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    saveAs(new Blob([excelBuffer], { type: "application/octet-stream" }), "selected_seekers.xlsx");
 
-  toast.success("Excel downloaded successfully!"); // ✅ success toast
-};
+    toast.success("Excel downloaded successfully!");
+  };
+
   if (loading) return <SeekerProfileLoader />;
 
   return (
     <div className="seekerprofile-container">
 
-      {/* Top Cards */}
+      {/* 🔹 Top Cards */}
       <div className="seekerprofile-top-row">
         <div className="seekerprofile-small-cards">
           <div className="seekerprofile-cards-container">
 
-            {/* Card 1 */}
+            {/* ✅ Card 1: Total Users */}
             <div className="seekerprofile-card">
               <div className="seekerprofile-card-body">
                 <div className="seekerprofile-card-left">
                   <div className="seekerprofile-card-icon"><IoIosPeople /></div>
                   <h4>Total Users</h4>
                 </div>
-                <p className="seekerprofile-amount">{seekers.length}</p>
+                <p className="seekerprofile-amount">{userCounts.total_users}</p>
               </div>
             </div>
 
-            {/* Card 2 */}
+            {/* ✅ Card 2: Active Users */}
             <div className="seekerprofile-card">
               <div className="seekerprofile-card-body">
                 <div className="seekerprofile-card-left">
                   <div className="seekerprofile-card-icon"><FaUserCheck /></div>
                   <h4>Active Users</h4>
                 </div>
-                <p className="seekerprofile-amount">
-                  {seekers.filter(s => s.status === "Seeking").length}
-                </p>
+                <p className="seekerprofile-amount">{userCounts.active_users_total}</p>
               </div>
             </div>
 
-            {/* Card 3 */}
+            {/* ✅ Card 3: Inactive Users */}
             <div className="seekerprofile-card">
               <div className="seekerprofile-card-body">
                 <div className="seekerprofile-card-left">
                   <div className="seekerprofile-card-icon"><FaUserClock /></div>
                   <h4>Inactive Users</h4>
                 </div>
-                <p className="seekerprofile-amount">
-                  {seekers.filter(s => s.status === "Not Seeking").length}
-                </p>
+                <p className="seekerprofile-amount">{userCounts.inactive_users_total}</p>
               </div>
             </div>
 

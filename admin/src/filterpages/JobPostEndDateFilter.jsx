@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import "./jobPostEndDateFilter.css";
 
 import { EndDateContext } from "../UseContexts/RecruiterUseContext/JobPostContext/EndDateContext.jsx";
-import EndDateEditModal from "../filterpages/EndDateEditModal.jsx";
+import EndDateEditModal from "./EndDateEditModal.jsx";
 
 export default function JobPostEndDateFilter() {
   const navigate = useNavigate();
