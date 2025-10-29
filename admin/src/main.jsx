@@ -19,41 +19,44 @@ import LanguageProvider from "./UseContexts/SeekerUseContext/LanguageContext"
 import ProficiencyProvider from "./UseContexts/SeekerUseContext/ProficiencyContext"
 import RecruiterProfileProvider from "./UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterProfileContext"
 import RecruiterJobPostsProvider from "./UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterJobPostsContext"
+import SubscriptionPlanProvider from "./UseContexts/GeneralUseContext/SubscriptionPlansContext/SubscriptionPlanContext"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RecruiterJobPostsProvider>
-  <RecruiterProfileProvider>
-    <ProficiencyProvider>
-      <LanguageProvider>
-        <GeneralInformationProvider>
-          <SeekerProfileProvider>
-            <ExpectedSalaryProvider>
-              <ExperienceProvider>
-                <SeekerEduQualificationProvider>
-                  <EducationQualificationProvider>
-                    <CompartmentLevelProvider>
-                      <TeachingQualificationProvider>
-                        <HighestEducationProvider>
-                          <EndDateProvider>
-                            <WorkTypeProvider>
-                              <SubjectProvider>
-                                <HomeBannerProvider>
-                                  <App />
-                                </HomeBannerProvider>
-                              </SubjectProvider>
-                            </WorkTypeProvider>
-                          </EndDateProvider>
-                        </HighestEducationProvider>
-                      </TeachingQualificationProvider>
-                    </CompartmentLevelProvider>
-                  </EducationQualificationProvider>
-                </SeekerEduQualificationProvider>
-              </ExperienceProvider>
-            </ExpectedSalaryProvider>
-          </SeekerProfileProvider>
-        </GeneralInformationProvider>
-      </LanguageProvider>
-    </ProficiencyProvider>
-  </RecruiterProfileProvider>
-  </RecruiterJobPostsProvider>
+  <SubscriptionPlanProvider>
+    <RecruiterJobPostsProvider>
+      <RecruiterProfileProvider>
+        <ProficiencyProvider>
+          <LanguageProvider>
+            <GeneralInformationProvider>
+              <SeekerProfileProvider>
+                <ExpectedSalaryProvider>
+                  <ExperienceProvider>
+                    <SeekerEduQualificationProvider>
+                      <EducationQualificationProvider>
+                        <CompartmentLevelProvider>
+                          <TeachingQualificationProvider>
+                            <HighestEducationProvider>
+                              <EndDateProvider>
+                                <WorkTypeProvider>
+                                  <SubjectProvider>
+                                    <HomeBannerProvider>
+                                      <App />
+                                    </HomeBannerProvider>
+                                  </SubjectProvider>
+                                </WorkTypeProvider>
+                              </EndDateProvider>
+                            </HighestEducationProvider>
+                          </TeachingQualificationProvider>
+                        </CompartmentLevelProvider>
+                      </EducationQualificationProvider>
+                    </SeekerEduQualificationProvider>
+                  </ExperienceProvider>
+                </ExpectedSalaryProvider>
+              </SeekerProfileProvider>
+            </GeneralInformationProvider>
+          </LanguageProvider>
+        </ProficiencyProvider>
+      </RecruiterProfileProvider>
+    </RecruiterJobPostsProvider>
+  </SubscriptionPlanProvider>
 );

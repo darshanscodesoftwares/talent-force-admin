@@ -1,59 +1,32 @@
+import { useSubscriptionPlans } from "../UseContexts/GeneralUseContext/SubscriptionPlansContext/SubscriptionPlanContext.jsx";
+import SubscriptionPlanLoader from "../Loader/Loader.jsx";
+import SubscriptionModal from "../editpages/SubscriptionModal.jsx";
+import SubscriptionAddModal from "../editpages/SubscriptionAddModal.jsx";
 import { IoIosPeople } from "react-icons/io";
 import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { TbCoinRupeeFilled } from "react-icons/tb";
 import "./SubscriptionPlan.css";
-import { useState, useEffect } from "react";
-import { subscribers as initialSubscribers } from "../data/contentData.js";
-
-import SubscriptionModal from "../editpages/SubscriptionModal.jsx";
-import SubscriptionAddModal from "../editpages/SubscriptionAddModal.jsx";
-
-import SubscriptionPlanLoader from "../Loader/Loader.jsx"
+import { useState } from "react";
 
 export default function SubscriptionPlan() {
-  const [subscribers, setSubscribers] = useState(initialSubscribers);
+  const { subscriptions, loading, error } = useSubscriptionPlans();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSub, setSelectedSub] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  // Edit subscription
+  if (loading) return <SubscriptionPlanLoader />;
+  if (error) return <p>Error loading subscriptions: {error}</p>;
+
   const handleEdit = (sub) => {
     setSelectedSub(sub);
     setIsModalOpen(true);
   };
 
-  const handleSave = (updatedSub) => {
-    setSubscribers((prev) =>
-      prev.map((s) => (s.id === updatedSub.id ? updatedSub : s))
-    );
-    setIsModalOpen(false);
-    setSelectedSub(null);
-  };
-
-  // Add subscription
-  const handleAdd = () => {
-    setIsAddModalOpen(true);
-  };
-
-  const handleSaveAdd = (newSub) => {
-    setSubscribers([...subscribers, { id: Date.now(), ...newSub }]);
-    setIsAddModalOpen(false);
-  };
-
-  // Delete subscription
   const handleDelete = (id) => {
-    setSubscribers((prev) => prev.filter((s) => s.id !== id));
+    // optional: handle delete via API later
+    console.log("Delete", id);
   };
-
-  // remove this before production
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 400);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) return <SubscriptionPlanLoader />;
 
   return (
     <div className="subscription-container">
@@ -65,12 +38,10 @@ export default function SubscriptionPlan() {
             <div className="subscription-card">
               <div className="subscription-card-body">
                 <div className="subscription-card-left">
-                  <div className="subscription-card-icon">
-                    <IoIosPeople />
-                  </div>
+                  <div className="subscription-card-icon"><IoIosPeople /></div>
                   <h4>Subscribed Users</h4>
                 </div>
-                <p className="subscription-amount">{`200`}</p>
+                <p className="subscription-amount">100</p>
               </div>
             </div>
 
@@ -78,17 +49,10 @@ export default function SubscriptionPlan() {
             <div className="subscription-card">
               <div className="subscription-card-body">
                 <div className="subscription-card-left">
-                  <div className="subscription-card-icon">
-                    <TbCoinRupeeFilled />
-                  </div>
+                  <div className="subscription-card-icon"><TbCoinRupeeFilled /></div>
                   <h4>Total Revenue</h4>
                 </div>
-                <p className="subscription-amount">
-                  {subscribers.reduce((acc, sub) => {
-                    const priceNum = Number(sub.price.replace(/[^0-9]/g, ""));
-                    return acc + (isNaN(priceNum) ? 0 : priceNum);
-                  }, 0)}
-                </p>
+                <p className="subscription-amount">45000</p>
               </div>
             </div>
           </div>
@@ -100,53 +64,33 @@ export default function SubscriptionPlan() {
         <div className="subscription-section">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <h2>Subscription List</h2>
-            <button className="subscription-add-btn" onClick={handleAdd}>
+            <button className="subscription-add-btn" onClick={() => setIsAddModalOpen(true)}>
               Add Subscription
             </button>
           </div>
+
           <div className="subscription-table-container">
             <table className="subscription-table">
               <thead>
                 <tr>
                   <th>Plan Name</th>
-                  <th>Membership</th>
                   <th>Price</th>
-                  <th>Posted On</th>
                   <th>Timespan</th>
+                  <th>Posted On</th>
                   <th>Content</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {subscribers.map((sub) => (
+                {subscriptions.map((sub) => (
                   <tr key={sub.id}>
                     <td>{sub.name}</td>
-                    <td>
-                      {sub.membership === "Free-Trial" && (
-                        <span className="subscription-membership free">🎁 Free-Trial</span>
-                      )}
-                      {sub.membership === "Basic" && (
-                        <span className="subscription-membership basic">● Basic</span>
-                      )}
-                      {sub.membership === "Advance" && (
-                        <span className="subscription-membership advanced">👑 Advance</span>
-                      )}
-                      {sub.membership === "Premium" && (
-                        <span className="subscription-membership premium">⭐ Premium</span>
-                      )}
-                      {sub.membership === "Enterprise" && (
-                        <span className="subscription-membership enterprise">🏢 Enterprise</span>
-                      )}
-                    </td>
-
                     <td>{sub.price}</td>
-                    <td>{sub.postedOn}</td>
                     <td>{sub.timespan}</td>
+                    <td>{sub.created_at}</td>
                     <td>
                       <ul className="subscription-content-list">
-                        {sub.content.map((item, idx) => (
-                          <li key={idx}>{item}</li>
-                        ))}
+                        {sub.content.map((item, i) => <li key={i}>{item}</li>)}
                       </ul>
                     </td>
                     <td className="subscription-actions">
@@ -165,22 +109,21 @@ export default function SubscriptionPlan() {
         </div>
       </div>
 
-      {/* Edit Modal */}
+      {/* Modals */}
       {isModalOpen && (
         <SubscriptionModal
           subscription={selectedSub}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSave={handleSave}
+          onSave={() => setIsModalOpen(false)}
         />
       )}
 
-      {/* Add Modal */}
       {isAddModalOpen && (
         <SubscriptionAddModal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
-          onSave={handleSaveAdd}
+          onSave={() => setIsAddModalOpen(false)}
         />
       )}
     </div>
