@@ -134,7 +134,7 @@ export default function RecruiterProfile() {
 
                     {/* PINCODE */}
                     <td>
-                      {recruiter.jobPosts?.[0]?.pincode?.pincode || "N/A"}
+                      {recruiter.job_posts?.[0]?.pincode?.pincode || "N/A"}
                     </td>
 
                     {/* MEMBERSHIP */}
