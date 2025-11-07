@@ -20,8 +20,10 @@ import ProficiencyProvider from "./UseContexts/SeekerUseContext/ProficiencyConte
 import RecruiterProfileProvider from "./UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterProfileContext"
 import RecruiterJobPostsProvider from "./UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterJobPostsContext"
 import SubscriptionPlanProvider from "./UseContexts/GeneralUseContext/SubscriptionPlansContext/SubscriptionPlanContext"
+import DashboardGraphProvider from "./UseContexts/GeneralUseContext/DashBoardContext/DashboardGraphContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
+  <DashboardGraphProvider>
   <SubscriptionPlanProvider>
     <RecruiterJobPostsProvider>
       <RecruiterProfileProvider>
@@ -59,4 +61,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       </RecruiterProfileProvider>
     </RecruiterJobPostsProvider>
   </SubscriptionPlanProvider>
+  </DashboardGraphProvider>
 );

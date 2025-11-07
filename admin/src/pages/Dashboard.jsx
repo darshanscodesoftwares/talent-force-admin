@@ -18,19 +18,30 @@ import { LuIndianRupee } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
-import { chartData } from "../data/contentData";
 import { DashboardLoader } from "../Loader/Loader";
 
-// ✅ Import both contexts
+// ✅ Import both profile contexts
 import { SeekerProfileContext } from "../UseContexts/SeekerUseContext/SeekerProfileContent.jsx";
 import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterProfileContext.jsx";
+
+// ✅ Import the graph context
+import { useDashboardGraph } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardGraphContext.jsx";
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  // ✅ Get both contexts
+  // ✅ Contexts
   const { seekers, loading: seekerLoading } = useContext(SeekerProfileContext);
   const { recruiters, loading: recruiterLoading } = useContext(RecruiterProfileContext);
+  const {
+    graphData,
+    selectedYear,
+    maxScale,
+    loading: graphLoading,
+    hasData,
+    fetchGraphData,
+    setSelectedYear,
+  } = useDashboardGraph();
 
   const [loading, setLoading] = useState(true);
 
@@ -90,7 +101,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Total Revenue (static placeholder) */}
+          {/* Total Revenue */}
           <div className="card-2">
             <div className="card-body2">
               <div className="card-icon2"><TbCoinRupeeFilled /></div>
@@ -107,45 +118,82 @@ const Dashboard = () => {
 
         {/* --- Graph Box --- */}
         <div className="graph-box">
-          <h3>User Active</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              data={chartData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 5 }}
-              barSize={8}
+          <h3>User Active - {selectedYear}</h3>
+
+          {/* ✅ Dynamic Graph Rendering */}
+          {graphLoading ? (
+            <p style={{ textAlign: "center", color: "#888" }}>Loading chart...</p>
+          ) : !hasData ? (
+            <div className="no-data-overlay">
+              <p>No data available for {selectedYear}</p>
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={graphData}
+                margin={{ top: 10, right: 10, left: 0, bottom: 5 }}
+                barSize={8}
+              >
+                <CartesianGrid stroke="#ccc" strokeDasharray="3 3" vertical={false} opacity={0.3} />
+                <XAxis
+                  dataKey="month"
+                  tick={{ fontSize: 12, fill: "#6666668b" }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fontSize: 12, fill: "#6666668b" }}
+                  domain={[0, maxScale]}
+                  tickCount={8}
+                  axisLine={false}
+                  tickLine={false}
+                  allowDecimals={false}
+                />
+                <Tooltip contentStyle={{ fontSize: "13px" }} />
+                <Legend
+                  iconType="circle"
+                  iconSize={6}
+                  wrapperStyle={{ fontSize: "12px", color: "#666" }}
+                  formatter={(value) => <span style={{ color: "#666" }}>{value}</span>}
+                />
+                <Bar dataKey="recruiter" fill="#e5671eff" radius={[20, 20, 20, 20]} />
+                <Bar dataKey="seeker" fill="#3dca5eff" radius={[20, 20, 20, 20]} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+
+          {/* --- Year Selector --- */}
+          <div className="year-selector">
+            <button
+              className={`year-nav-btn prev ${selectedYear > 2024 ? "enabled" : ""}`}
+              onClick={() => {
+                const newYear = selectedYear - 1;
+                if (newYear >= 2024) {
+                  setSelectedYear(newYear);
+                  fetchGraphData(newYear);
+                }
+              }}
+              disabled={selectedYear <= 2024}
             >
-              <CartesianGrid
-                stroke="#ccc"
-                strokeDasharray="3 3"
-                vertical={false}
-                opacity={0.3}
-              />
-              <XAxis
-                dataKey="month"
-                tick={{ fontSize: 12, fill: "#6666668b" }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 12, fill: "#6666668b" }}
-                domain={[0, 800]}
-                tickCount={9}
-                axisLine={false}
-                tickLine={false}
-              />
-              <Tooltip contentStyle={{ fontSize: "13px" }} />
-              <Legend
-                iconType="circle"
-                iconSize={6}
-                wrapperStyle={{ fontSize: "12px", color: "#666" }}
-                formatter={(value) => (
-                  <span style={{ color: "#666" }}>{value}</span>
-                )}
-              />
-              <Bar dataKey="recruiter" fill="#e5671eff" radius={[20, 20, 20, 20]} />
-              <Bar dataKey="seeker" fill="#3dca5eff" radius={[20, 20, 20, 20]} />
-            </BarChart>
-          </ResponsiveContainer>
+              ← {selectedYear - 1}
+            </button>
+
+            <span className="year-current">{selectedYear}</span>
+
+            <button
+              className={`year-nav-btn next ${selectedYear < 2025 ? "enabled" : ""}`}
+              onClick={() => {
+                const newYear = selectedYear + 1;
+                if (newYear <= 2025) {
+                  setSelectedYear(newYear);
+                  fetchGraphData(newYear);
+                }
+              }}
+              disabled={selectedYear >= 2025}
+            >
+              {selectedYear + 1} →
+            </button>
+          </div>
         </div>
       </div>
 
@@ -163,69 +211,59 @@ const Dashboard = () => {
           </div>
 
           <div className="table-container">
-          <table className="recruiter-table">
-  <thead>
-    <tr>
-      <th>School</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Pincode</th>
-      <th>Membership</th>
-    </tr>
-  </thead>
-  <tbody>
-    {recruiters.slice(0, 5).map((rec) => (
-      <tr
-        key={rec.id}
-        className="recruiterprofile-row"
-        onClick={() => navigate(`/dashboard/recruiter-profile/${rec.id}`)}
-      >
-        {/* SCHOOL NAME + IMAGE */}
-        <td>
-          <div className="icon-school">
-            {rec.schoolImage ? (
-              <img
-                src={rec.schoolImage}
-                alt={rec.schoolName}
-                className="school-logo"
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                  marginRight: "8px",
-                  objectFit: "cover",
-                }}
-                onError={(e) => (e.target.style.display = "none")}
-              />
-            ) : (
-              <FaSchool className="school-logo" />
-            )}
-            {rec.schoolName}
-          </div>
-        </td>
-
-        {/* EMAIL */}
-        <td>{rec.schoolEmail}</td>
-
-        {/* PHONE */}
-        <td>{rec.phoneNumber}</td>
-
-        {/* PINCODE */}
-        <td>{rec.jobPosts?.[0]?.pincode?.pincode || "N/A"}</td>
-
-        {/* MEMBERSHIP */}
-        <td>
-          {rec.membership === "Advanced" ? (
-            <span className="membership advanced">👑 Advanced</span>
-          ) : (
-            <span className="membership basic">● Basic</span>
-          )}
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
+            <table className="recruiter-table">
+              <thead>
+                <tr>
+                  <th>School</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Pincode</th>
+                  <th>Membership</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recruiters.slice(0, 5).map((rec) => (
+                  <tr
+                    key={rec.id}
+                    className="recruiterprofile-row"
+                    onClick={() => navigate(`/dashboard/recruiter-profile/${rec.id}`)}
+                  >
+                    <td>
+                      <div className="icon-school">
+                        {rec.schoolImage ? (
+                          <img
+                            src={rec.schoolImage}
+                            alt={rec.schoolName}
+                            className="school-logo"
+                            style={{
+                              width: "32px",
+                              height: "32px",
+                              borderRadius: "50%",
+                              marginRight: "8px",
+                              objectFit: "cover",
+                            }}
+                            onError={(e) => (e.target.style.display = "none")}
+                          />
+                        ) : (
+                          <FaSchool className="school-logo" />
+                        )}
+                        {rec.schoolName}
+                      </div>
+                    </td>
+                    <td>{rec.schoolEmail}</td>
+                    <td>{rec.phoneNumber}</td>
+                    <td>{rec.jobPosts?.[0]?.pincode?.pincode || "N/A"}</td>
+                    <td>
+                      {rec.membership === "Advanced" ? (
+                        <span className="membership advanced">👑 Advanced</span>
+                      ) : (
+                        <span className="membership basic">● Basic</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -242,72 +280,60 @@ const Dashboard = () => {
 
           <div className="table-container">
             <table className="recruiter-table">
-  <thead>
-    <tr>
-      <th>User Name</th>
-      <th>Specialization</th>
-      <th>Mail ID</th>
-      <th>Phone</th>
-      <th>Pincode</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    {seekers.slice(0, 5).map((seeker) => (
-      <tr
-        key={seeker.id}
-        className="seekerprofile-row"
-        onClick={() => navigate(`/dashboard/seeker-profile/${seeker.id}`)}
-      >
-        {/* USER NAME + IMAGE */}
-        <td>
-          <div className="icon-school">
-            {seeker.profile_img ? (
-              <img
-                src={seeker.profile_img}
-                alt={seeker.name}
-                className="seekerprofile-avatar"
-                style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                  marginRight: "8px",
-                  objectFit: "cover",
-                }}
-                onError={(e) => (e.target.style.display = "none")}
-              />
-            ) : (
-              <FaUserCircle className="school-logo" />
-            )}
-            {seeker.name}
-          </div>
-        </td>
-
-        {/* SPECIALIZATION */}
-        <td>{seeker.specialization || "N/A"}</td>
-
-        {/* EMAIL */}
-        <td>{seeker.email || "N/A"}</td>
-
-        {/* PHONE */}
-        <td>{seeker.phone || "N/A"}</td>
-
-        {/* PINCODE */}
-        <td>{seeker.pincode || "N/A"}</td>
-
-        {/* STATUS */}
-        <td>
-          {seeker.status === "Seeking" ? (
-            <span className="status seeking">Seeking</span>
-          ) : (
-            <span className="status not-seeking">Not Seeking</span>
-          )}
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
+              <thead>
+                <tr>
+                  <th>User Name</th>
+                  <th>Specialization</th>
+                  <th>Mail ID</th>
+                  <th>Phone</th>
+                  <th>Pincode</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {seekers.slice(0, 5).map((seeker) => (
+                  <tr
+                    key={seeker.id}
+                    className="seekerprofile-row"
+                    onClick={() => navigate(`/dashboard/seeker-profile/${seeker.id}`)}
+                  >
+                    <td>
+                      <div className="icon-school">
+                        {seeker.profile_img ? (
+                          <img
+                            src={seeker.profile_img}
+                            alt={seeker.name}
+                            className="seekerprofile-avatar"
+                            style={{
+                              width: "32px",
+                              height: "32px",
+                              borderRadius: "50%",
+                              marginRight: "8px",
+                              objectFit: "cover",
+                            }}
+                            onError={(e) => (e.target.style.display = "none")}
+                          />
+                        ) : (
+                          <FaUserCircle className="school-logo" />
+                        )}
+                        {seeker.name}
+                      </div>
+                    </td>
+                    <td>{seeker.specialization || "N/A"}</td>
+                    <td>{seeker.email || "N/A"}</td>
+                    <td>{seeker.phone || "N/A"}</td>
+                    <td>{seeker.pincode || "N/A"}</td>
+                    <td>
+                      {seeker.status === "Seeking" ? (
+                        <span className="status seeking">Seeking</span>
+                      ) : (
+                        <span className="status not-seeking">Not Seeking</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
