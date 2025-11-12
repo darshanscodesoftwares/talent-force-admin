@@ -86,6 +86,7 @@ export default function SeekerProfile() {
   const allSelected =
     currentSeekers.length > 0 &&
     currentSeekers.every(s => selectedSeekers.includes(s.id));
+
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedSeekers(prev => prev.filter(id => !currentSeekers.some(s => s.id === id)));
@@ -93,6 +94,7 @@ export default function SeekerProfile() {
       setSelectedSeekers(prev => [...new Set([...prev, ...currentSeekers.map(s => s.id)])]);
     }
   };
+
   const handleSelectOne = (id) => {
     setSelectedSeekers(prev =>
       prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]
@@ -233,17 +235,31 @@ export default function SeekerProfile() {
         </table>
       </div>
 
-      {/* Pagination */}
-      <div className="seekerprofile-pagination">
-        {Array.from({ length: totalPages }, (_, i) => (
+      {/* ===== PAGINATION (BOTTOM ONLY) ===== */}
+      <div className="seekerprofile-pagination bottom">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          Prev
+        </button>
+
+        {[...Array(totalPages)].map((_, i) => (
           <button
-            key={i + 1}
+            key={i}
             className={currentPage === i + 1 ? "active" : ""}
             onClick={() => setCurrentPage(i + 1)}
           >
             {i + 1}
           </button>
         ))}
+
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          Next
+        </button>
       </div>
 
       {/* Search Modal */}

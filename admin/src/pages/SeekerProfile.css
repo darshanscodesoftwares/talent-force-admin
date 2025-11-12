@@ -240,39 +240,52 @@
   font-weight: 500;
 }
 
-/* =======================================
-   Pagination
-======================================= */
+/* ===== Pagination Enhancements ===== */
 .seekerprofile-pagination {
   display: flex;
   justify-content: center;
-  margin-top: 15px;
+  align-items: center;
   gap: 8px;
+  margin: 1rem 0;
 }
 
 .seekerprofile-pagination button {
   padding: 6px 12px;
-  border-radius: 6px;
   border: 1px solid #ccc;
-  background: white;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.seekerprofile-pagination button:hover {
-  background: #f1f1f1;
+.seekerprofile-pagination button:hover:not(:disabled) {
+  background: #ef6a37;
+  color: #fff;
+  border-color: #ef6a37;
 }
 
 .seekerprofile-pagination button.active {
   background: #ef6a37;
-  color: white;
+  color: #fff;
   border-color: #ef6a37;
 }
 
 .seekerprofile-pagination button:disabled {
-  opacity: 0.5;
+  background: #f3f3f3;
+  color: #aaa;
   cursor: not-allowed;
 }
+
+.seekerprofile-pagination.top {
+  margin-bottom: 15px;
+}
+
+.seekerprofile-pagination.bottom {
+  margin-top: 20px;
+}
+
+
 
 /* =======================================
    Column Filter Panel
