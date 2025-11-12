@@ -14,18 +14,49 @@ import { SlLogout } from "react-icons/sl";
 import "./Sidebar.css";
 import logo from "../assets/talentforce.png";
 
-import LogoutModal from "../editpages/LogoutModal"; // import modal
+import LogoutModal from "../editpages/LogoutModal";
 
 function Sidebar() {
   const navigate = useNavigate();
-  const [showLogoutModal, setShowLogoutModal] = useState(false); // state to show modal
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleLogout = () => {
-    // Close modal and logout
-    setShowLogoutModal(false);
-    localStorage.removeItem("authToken"); // optional
-    navigate("/");
-    toast.success("Logged out successfully!");
+  const handleLogout = async () => {
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://192.168.29.163:8000/api/admin-logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // If your backend expects auth headers, include:
+          // "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+        },
+        body: JSON.stringify({
+          email: "talentforceapp@gmail.com",
+          password: "Talentapp@2025",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(data.message || "Logged out successfully!");
+        localStorage.removeItem("authToken");
+
+        setTimeout(() => {
+          setShowLogoutModal(false);
+          navigate("/");
+        }, 1200);
+      } else {
+        toast.error(data.message || "Logout failed!");
+      }
+    } catch (error) {
+      console.error("Logout Error:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,7 +90,7 @@ function Sidebar() {
                 <SiHomeassistantcommunitystore className="icon" /> Home Banner
               </NavLink>
             </li>
-             <li>
+            <li>
               <NavLink to="/dashboard/education-filter" className="nav-link">
                 <FaUserGraduate className="icon" /> Education
               </NavLink>
@@ -102,8 +133,9 @@ function Sidebar() {
               <button
                 onClick={() => setShowLogoutModal(true)}
                 className="logout-btn"
+                disabled={loading}
               >
-                <SlLogout className="icon" /> Logout
+                <SlLogout className="icon" /> {loading ? "Logging out..." : "Logout"}
               </button>
             </li>
           </ul>
