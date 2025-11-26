@@ -59,7 +59,6 @@ const updateHighestEdu = async (id, updatedItem) => {
 };
 
 // Delete
-// Delete
 const deleteHighestEdu = async (id) => {
   try {
     await axios.delete(`${API_URL}/${id}`);

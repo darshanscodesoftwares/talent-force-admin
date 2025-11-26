@@ -1,41 +1,86 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
+import React, { createContext, useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
-const SubscriptionPlanContext = createContext();
+export const SubscriptionPlanContext = createContext();
+
+const API_URL = "http://192.168.29.163:8000/api/admin-subscription-information";
 
 export const SubscriptionPlanProvider = ({ children }) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
+  // ============================
+  // GET (Fetch All)
+  // ============================
   const fetchSubscriptions = async () => {
     try {
-      const response = await fetch("http://192.168.29.163:8000/api/admin-subscription-information");
-      const data = await response.json();
+      setLoading(true);
 
-      if (data.status === "Success" && Array.isArray(data.data)) {
-        // Sort by order: Free → Basic → Premium → (others alphabetically)
-        const order = ["Free", "Basic", "Premium"];
-        const sorted = [...data.data].sort((a, b) => {
-          const aIndex = order.indexOf(a.name);
-          const bIndex = order.indexOf(b.name);
-          // If both found in order array → sort by order
-          if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-          // If one found, push unknowns to bottom
-          if (aIndex !== -1) return -1;
-          if (bIndex !== -1) return 1;
-          // Otherwise alphabetical
-          return a.name.localeCompare(b.name);
-        });
+      const res = await axios.get(API_URL);
 
-        setSubscriptions(sorted);
+      if (res.data?.status === "Success") {
+        setSubscriptions(res.data.data || []);
       } else {
-        throw new Error("Invalid response format");
+        throw new Error("Invalid API Response");
       }
     } catch (err) {
       console.error("Error fetching subscriptions:", err);
-      setError(err.message);
+      toast.error("Failed to fetch subscriptions");
+      setSubscriptions([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // ============================
+  // POST (Add New Subscription)
+  // ============================
+  const addSubscription = async (newItem) => {
+    try {
+      await axios.post(API_URL, newItem);
+      await fetchSubscriptions(); // refresh
+      toast.success("Subscription added successfully!");
+    } catch (err) {
+      console.error("Failed to add subscription:", err.response?.data || err.message);
+      toast.error("Failed to add subscription");
+      throw err;
+    }
+  };
+
+  // ============================
+  // PUT (Update Subscription)
+  // ============================
+  const updateSubscription = async (id, updatedItem) => {
+    try {
+      await axios.put(`${API_URL}/${id}`, updatedItem);
+
+      setSubscriptions((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, ...updatedItem } : item
+        )
+      );
+
+      toast.success("Subscription updated successfully!");
+    } catch (err) {
+      console.error("Failed to update subscription:", err);
+      toast.error("Failed to update subscription");
+    }
+  };
+
+  // ============================
+  // DELETE (Remove Subscription)
+  // ============================
+  const deleteSubscription = async (id) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+
+      setSubscriptions((prev) => prev.filter((item) => item.id !== id));
+
+      toast.success("Subscription deleted successfully!");
+    } catch (err) {
+      console.error("Error deleting subscription:", err);
+      toast.error("Failed to delete subscription");
     }
   };
 
@@ -44,11 +89,23 @@ export const SubscriptionPlanProvider = ({ children }) => {
   }, []);
 
   return (
-    <SubscriptionPlanContext.Provider value={{ subscriptions, loading, error }}>
+    <SubscriptionPlanContext.Provider
+      value={{
+        subscriptions,
+        loading,
+        fetchSubscriptions,
+        addSubscription,
+        updateSubscription,
+        deleteSubscription,
+      }}
+    >
       {children}
     </SubscriptionPlanContext.Provider>
   );
 };
 
-export const useSubscriptionPlans = () => useContext(SubscriptionPlanContext);
+// ✅ FIX: Custom hook export (required)
+export const useSubscriptionPlans = () => React.useContext(SubscriptionPlanContext);
+
+// Default export
 export default SubscriptionPlanProvider;

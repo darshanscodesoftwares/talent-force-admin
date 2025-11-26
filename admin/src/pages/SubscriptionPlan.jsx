@@ -10,7 +10,16 @@ import "./SubscriptionPlan.css";
 import { useState } from "react";
 
 export default function SubscriptionPlan() {
-  const { subscriptions, loading, error } = useSubscriptionPlans();
+  // ⬅️ FIXED: Now extracting CRUD functions also
+  const {
+    subscriptions,
+    loading,
+    error,
+    addSubscription,
+    updateSubscription,
+    deleteSubscription,
+  } = useSubscriptionPlans();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSub, setSelectedSub] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -21,11 +30,6 @@ export default function SubscriptionPlan() {
   const handleEdit = (sub) => {
     setSelectedSub(sub);
     setIsModalOpen(true);
-  };
-
-  const handleDelete = (id) => {
-    // optional: handle delete via API later
-    console.log("Delete", id);
   };
 
   return (
@@ -64,9 +68,9 @@ export default function SubscriptionPlan() {
         <div className="subscription-section">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <h2>Subscription List</h2>
-            <button className="subscription-add-btn" onClick={() => setIsAddModalOpen(true)}>
+            {/* <button className="subscription-add-btn" onClick={() => setIsAddModalOpen(true)}>
               Add Subscription
-            </button>
+            </button> */}
           </div>
 
           <div className="subscription-table-container">
@@ -97,7 +101,10 @@ export default function SubscriptionPlan() {
                       <button className="subscription-btn edit-btn" onClick={() => handleEdit(sub)}>
                         <BiSolidEdit />
                       </button>
-                      <button className="subscription-btn delete-btn" onClick={() => handleDelete(sub.id)}>
+                      <button
+                        className="subscription-btn delete-btn"
+                        onClick={() => deleteSubscription(sub.id)}
+                      >
                         <AiOutlineDelete />
                       </button>
                     </td>
@@ -109,21 +116,28 @@ export default function SubscriptionPlan() {
         </div>
       </div>
 
-      {/* Modals */}
+      {/* --- EDIT MODAL --- */}
       {isModalOpen && (
         <SubscriptionModal
           subscription={selectedSub}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSave={() => setIsModalOpen(false)}
+          onSave={(id, updatedData) => {
+            updateSubscription(id, updatedData); // ⬅️ FIXED
+            setIsModalOpen(false);
+          }}
         />
       )}
 
+      {/* --- ADD MODAL --- */}
       {isAddModalOpen && (
         <SubscriptionAddModal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
-          onSave={() => setIsAddModalOpen(false)}
+          onSave={(payload) => {
+            addSubscription(payload); // ⬅️ FIXED
+            setIsAddModalOpen(false);
+          }}
         />
       )}
     </div>

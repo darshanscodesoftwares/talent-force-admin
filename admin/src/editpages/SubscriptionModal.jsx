@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./SubscriptionModal.css";
 
-const SubscriptionModal = ({ isOpen, onClose, onSave, subscription }) => {
+export default function SubscriptionModal({ isOpen, onClose, onSave, subscription }) {
   if (!isOpen) return null;
 
-  // Local state to handle editable fields
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [timespan, setTimespan] = useState("");
@@ -14,61 +13,61 @@ const SubscriptionModal = ({ isOpen, onClose, onSave, subscription }) => {
     if (subscription) {
       setName(subscription.name || "");
       setPrice(subscription.price || "");
-      setTimespan(subscription.timespan || "");
-      // Convert array to string with line breaks
-      setContentText(subscription.content ? subscription.content.join("\n") : "");
+      setTimespan(subscription.timespan || "monthly");   // default
+      setContentText(subscription.content.join("\n"));
     }
   }, [subscription]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave({
-      ...subscription,
+
+    await onSave(subscription.id, {
       name,
       price,
-      timespan,
-      // Convert string back to array
-      content: contentText.split("\n").map(item => item.trim()).filter(Boolean),
+      timespan: timespan.toLowerCase(),   // ✅ required by backend
+      content: contentText.split("\n").map((c) => c.trim()).filter(Boolean),
     });
+
+    onClose();
   };
 
   return (
     <div className="subscriptionmodal-overlay">
       <div className="subscriptionmodal-content">
-        <h3>Subscription Information</h3>
+        <h3>Edit Subscription Price</h3>
+
         <form onSubmit={handleSubmit}>
-          <label>Name</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          {/* <label>Name</label>
+          <input value={name} onChange={(e) => setName(e.target.value)} /> */}
 
           <label>Price</label>
-          <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} />
+          <input value={price} onChange={(e) => setPrice(e.target.value)} />
 
-          <label>Timespan</label>
-          <input type="text" value={timespan} onChange={(e) => setTimespan(e.target.value)} />
+          {/* <label>Timespan</label>
+          <select value={timespan} onChange={(e) => setTimespan(e.target.value)}>
+            <option value="monthly">Monthly</option>
+            <option value="quarterly">Quarterly</option>
+            <option value="half-yearly">Half-Yearly</option>
+            <option value="annual">Annual</option>
+            <option value="lifetime">Lifetime</option>
+          </select>
 
           <label>Content</label>
           <textarea
             value={contentText}
             onChange={(e) => setContentText(e.target.value)}
-            placeholder="Enter one feature per line"
-          ></textarea>
+          ></textarea> */}
 
           <div className="subscriptionmodal-actions">
-            <button
-              type="button"
-              onClick={onClose}
-              className="subscriptionmodal-cancel-btn"
-            >
+            <button type="button" onClick={onClose} className="subscriptionmodal-cancel-btn">
               Cancel
             </button>
             <button type="submit" className="subscriptionmodal-save-btn">
-              Save
+              Update
             </button>
           </div>
         </form>
       </div>
     </div>
   );
-};
-
-export default SubscriptionModal;
+}

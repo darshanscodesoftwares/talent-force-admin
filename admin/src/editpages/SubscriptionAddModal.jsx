@@ -1,128 +1,75 @@
 import React, { useState } from "react";
 import "./SubscriptionAddModal.css";
-import { membershipSchemas } from "../data/contentData.js";
 
 export default function SubscriptionAddModal({ isOpen, onClose, onSave }) {
-  const formatDate = (date) => {
-    const options = { day: "2-digit", month: "long", year: "numeric" };
-    return new Date(date).toLocaleDateString("en-GB", options);
-  };
+  if (!isOpen) return null;
 
   const emptyForm = {
     name: "",
-    membership: "",
     price: "",
     timespan: "",
-    content: [""],
-    postedOn: formatDate(new Date()),
+    content: [""], // array of lines
   };
 
   const [form, setForm] = useState(emptyForm);
-  const [previousForm, setPreviousForm] = useState(emptyForm); // store last state
-
-  if (!isOpen) return null;
-
-  // Membership input change (handles schema + custom)
-  const handleMembershipChange = (e) => {
-    const membership = e.target.value.trim();
-
-    setPreviousForm(form); // backup current form before change
-
-    if (membershipSchemas[membership]) {
-      setForm({
-        ...membershipSchemas[membership],
-        membership,
-        postedOn: formatDate(new Date()),
-      });
-    } else if (membership === "") {
-      setForm(emptyForm);
-    } else {
-      setForm({
-        ...emptyForm,
-        name: membership,
-        membership,
-      });
-    }
-  };
-
-  const handleCancelMembership = () => {
-    setForm(previousForm); // restore previous state
-  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleContentChange = (index, value) => {
-    const newContent = [...form.content];
-    newContent[index] = value;
-    setForm({ ...form, content: newContent });
+    const updated = [...form.content];
+    updated[index] = value;
+    setForm({ ...form, content: updated });
   };
 
-  const handleAddContentLine = () => {
+  const handleAddLine = () => {
     setForm({ ...form, content: [...form.content, ""] });
   };
 
-  const handleRemoveContentLine = (index) => {
-    const newContent = form.content.filter((_, i) => i !== index);
-    setForm({ ...form, content: newContent.length ? newContent : [""] });
+  const handleRemoveLine = (index) => {
+    const updated = form.content.filter((_, i) => i !== index);
+    setForm({ ...form, content: updated.length ? updated : [""] });
   };
 
-  const handleReset = () => {
-    setForm(emptyForm);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave({ ...form, postedOn: formatDate(new Date()) });
-    setForm(emptyForm); // reset after save
+
+    const payload = {
+      name: form.name,
+      price: form.price,
+      timespan: form.timespan.toLowerCase(),
+      content: form.content.filter((c) => c.trim() !== ""),
+    };
+
+    await onSave(payload); // POST API call from context
+    setForm(emptyForm); // reset form
+    onClose();
   };
+
+  const handleReset = () => setForm(emptyForm);
 
   return (
     <div className="subscriptionaddmodal-overlay">
       <div className="subscriptionaddmodal-content">
         <h3>Add Subscription</h3>
-        <form onSubmit={handleSubmit}>
-          <label>Membership</label>
-          <div className="membership-row">
-            <input
-              list="membership-options"
-              name="membership"
-              value={form.membership}
-              onChange={handleMembershipChange}
-              placeholder="Choose or type new"
-            />
-            {form.membership && (
-              <button
-                type="button"
-                className="cancel-membership-btn"
-                onClick={handleCancelMembership}
-              >
-                ✕
-              </button>
-            )}
-          </div>
-          <datalist id="membership-options">
-            {Object.keys(membershipSchemas).map((key) => (
-              <option key={key} value={key} />
-            ))}
-          </datalist>
 
+        <form onSubmit={handleSubmit}>
           <label>Plan Name</label>
           <input
-            type="text"
             name="name"
             value={form.name}
             onChange={handleChange}
+            placeholder="Enter plan name"
             required
           />
 
           <label>Price</label>
           <input
-            type="text"
             name="price"
             value={form.price}
             onChange={handleChange}
+            placeholder="e.g. 999.00"
             required
           />
 
@@ -133,12 +80,12 @@ export default function SubscriptionAddModal({ isOpen, onClose, onSave }) {
             onChange={handleChange}
             required
           >
-            <option value="">Select Timespan</option>
-            <option value="Monthly">Monthly</option>
-            <option value="Quarterly">Quarterly</option>
-            <option value="Half-Yearly">Half-Yearly</option>
-            <option value="Annual">Annual</option>
-            <option value="Lifetime">Lifetime</option>
+            <option value="">Select</option>
+            <option value="monthly">Monthly</option>
+            <option value="quarterly">Quarterly</option>
+            <option value="half-yearly">Half-Yearly</option>
+            <option value="annual">Annual</option>
+            <option value="lifetime">Lifetime</option>
           </select>
 
           <label>Content</label>
@@ -147,23 +94,20 @@ export default function SubscriptionAddModal({ isOpen, onClose, onSave }) {
               <input
                 type="text"
                 value={line}
+                placeholder="Enter benefit line"
                 onChange={(e) => handleContentChange(idx, e.target.value)}
-                placeholder="Enter content line"
               />
               <button
                 type="button"
                 className="remove-content-btn"
-                onClick={() => handleRemoveContentLine(idx)}
+                onClick={() => handleRemoveLine(idx)}
               >
                 ✕
               </button>
             </div>
           ))}
-          <button
-            type="button"
-            className="add-content-btn"
-            onClick={handleAddContentLine}
-          >
+
+          <button type="button" className="add-content-btn" onClick={handleAddLine}>
             Add Line
           </button>
 
