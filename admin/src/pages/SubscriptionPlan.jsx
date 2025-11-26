@@ -101,12 +101,12 @@ export default function SubscriptionPlan() {
                       <button className="subscription-btn edit-btn" onClick={() => handleEdit(sub)}>
                         <BiSolidEdit />
                       </button>
-                      <button
+                      {/* <button
                         className="subscription-btn delete-btn"
                         onClick={() => deleteSubscription(sub.id)}
                       >
                         <AiOutlineDelete />
-                      </button>
+                      </button> */}
                     </td>
                   </tr>
                 ))}
