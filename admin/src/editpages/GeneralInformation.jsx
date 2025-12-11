@@ -29,7 +29,7 @@ export default function GeneralInformation() {
           <IoChevronBackOutline className="back-icon" />
           <span>General Information</span>
         </h2>
-        <button className="block-btn">Block User</button>
+        {/* <button className="block-btn">Block User</button> */}
       </div>
 
       {/* Profile Icon */}

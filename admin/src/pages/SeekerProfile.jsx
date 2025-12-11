@@ -16,7 +16,8 @@ import "./SeekerProfile.css";
 export default function SeekerProfile() {
   const { seekers, loading } = useContext(SeekerProfileContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const seekersPerPage = 10;
+  const pagesToShow = 7;
+  const seekersPerPage = 8;
   const [selectedSeekers, setSelectedSeekers] = useState([]);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -81,6 +82,9 @@ export default function SeekerProfile() {
   const indexOfFirst = indexOfLast - seekersPerPage;
   const currentSeekers = filteredSeekers.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredSeekers.length / seekersPerPage);
+
+  const maxLeft = Math.max(currentPage - Math.floor(pagesToShow / 2), 1);
+  const maxRight = Math.min(maxLeft + pagesToShow - 1, totalPages);
 
   // 🔹 Selection
   const allSelected =
@@ -237,6 +241,7 @@ export default function SeekerProfile() {
 
       {/* ===== PAGINATION (BOTTOM ONLY) ===== */}
       <div className="seekerprofile-pagination bottom">
+
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}
@@ -244,15 +249,18 @@ export default function SeekerProfile() {
           Prev
         </button>
 
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            className={currentPage === i + 1 ? "active" : ""}
-            onClick={() => setCurrentPage(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
+        {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
+          const page = i + maxLeft;
+          return (
+            <button
+              key={page}
+              className={currentPage === page ? "active" : ""}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}  
+            </button>
+          );
+        })}
 
         <button
           disabled={currentPage === totalPages}
@@ -260,7 +268,9 @@ export default function SeekerProfile() {
         >
           Next
         </button>
+
       </div>
+
 
       {/* Search Modal */}
       {searchModalOpen && (

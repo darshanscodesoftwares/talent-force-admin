@@ -21,45 +21,49 @@ import RecruiterProfileProvider from "./UseContexts/RecruiterUseContext/Recruite
 import RecruiterJobPostsProvider from "./UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterJobPostsContext"
 import SubscriptionPlanProvider from "./UseContexts/GeneralUseContext/SubscriptionPlansContext/SubscriptionPlanContext"
 import DashboardGraphProvider from "./UseContexts/GeneralUseContext/DashBoardContext/DashboardGraphContext";
+import DashboardMetricProvider from "./UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <DashboardGraphProvider>
-  <SubscriptionPlanProvider>
-    <RecruiterJobPostsProvider>
-      <RecruiterProfileProvider>
-        <ProficiencyProvider>
-          <LanguageProvider>
-            <GeneralInformationProvider>
-              <SeekerProfileProvider>
-                <ExpectedSalaryProvider>
-                  <ExperienceProvider>
-                    <SeekerEduQualificationProvider>
-                      <EducationQualificationProvider>
-                        <CompartmentLevelProvider>
-                          <TeachingQualificationProvider>
-                            <HighestEducationProvider>
-                              <EndDateProvider>
-                                <WorkTypeProvider>
-                                  <SubjectProvider>
-                                    <HomeBannerProvider>
-                                      <App />
-                                    </HomeBannerProvider>
-                                  </SubjectProvider>
-                                </WorkTypeProvider>
-                              </EndDateProvider>
-                            </HighestEducationProvider>
-                          </TeachingQualificationProvider>
-                        </CompartmentLevelProvider>
-                      </EducationQualificationProvider>
-                    </SeekerEduQualificationProvider>
-                  </ExperienceProvider>
-                </ExpectedSalaryProvider>
-              </SeekerProfileProvider>
-            </GeneralInformationProvider>
-          </LanguageProvider>
-        </ProficiencyProvider>
-      </RecruiterProfileProvider>
-    </RecruiterJobPostsProvider>
-  </SubscriptionPlanProvider>
-  </DashboardGraphProvider>
+
+  <DashboardMetricProvider>
+    <DashboardGraphProvider>
+      <SubscriptionPlanProvider>
+        <RecruiterJobPostsProvider>
+          <RecruiterProfileProvider>
+            <ProficiencyProvider>
+              <LanguageProvider>
+                <GeneralInformationProvider>
+                  <SeekerProfileProvider>
+                    <ExpectedSalaryProvider>
+                      <ExperienceProvider>
+                        <SeekerEduQualificationProvider>
+                          <EducationQualificationProvider>
+                            <CompartmentLevelProvider>
+                              <TeachingQualificationProvider>
+                                <HighestEducationProvider>
+                                  <EndDateProvider>
+                                    <WorkTypeProvider>
+                                      <SubjectProvider>
+                                        <HomeBannerProvider>
+                                          <App />
+                                        </HomeBannerProvider>
+                                      </SubjectProvider>
+                                    </WorkTypeProvider>
+                                  </EndDateProvider>
+                                </HighestEducationProvider>
+                              </TeachingQualificationProvider>
+                            </CompartmentLevelProvider>
+                          </EducationQualificationProvider>
+                        </SeekerEduQualificationProvider>
+                      </ExperienceProvider>
+                    </ExpectedSalaryProvider>
+                  </SeekerProfileProvider>
+                </GeneralInformationProvider>
+              </LanguageProvider>
+            </ProficiencyProvider>
+          </RecruiterProfileProvider>
+        </RecruiterJobPostsProvider>
+      </SubscriptionPlanProvider>
+    </DashboardGraphProvider>
+  </DashboardMetricProvider>
 );

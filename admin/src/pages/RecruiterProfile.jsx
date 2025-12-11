@@ -11,7 +11,8 @@ import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/Recr
 export default function RecruiterProfile() {
   const { recruiters, loading } = useContext(RecruiterProfileContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const recruitersPerPage = 5;
+  const pagesToShow = 7;
+  const recruitersPerPage = 8;
   const navigate = useNavigate();
 
   // Calculate pagination
@@ -19,6 +20,10 @@ export default function RecruiterProfile() {
   const indexOfFirst = indexOfLast - recruitersPerPage;
   const currentRecruiters = recruiters.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(recruiters.length / recruitersPerPage);
+
+  const maxLeft = Math.max(currentPage - Math.floor(pagesToShow / 2), 1);
+  const maxRight = Math.min(maxLeft + pagesToShow - 1, totalPages);
+
 
   // ✅ Loader based on context data
   useEffect(() => {
@@ -160,15 +165,20 @@ export default function RecruiterProfile() {
               >
                 Prev
               </button>
-              {[...Array(totalPages)].map((_, i) => (
-                <button
-                  key={i}
-                  className={currentPage === i + 1 ? "active" : ""}
-                  onClick={() => setCurrentPage(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              ))}
+
+              {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
+                const page = i + maxLeft;
+                return (
+                  <button
+                    key={page}
+                    className={currentPage === page ? "active" : ""}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
+
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(currentPage + 1)}
@@ -176,6 +186,7 @@ export default function RecruiterProfile() {
                 Next
               </button>
             </div>
+
           </div>
         </div>
       </div>

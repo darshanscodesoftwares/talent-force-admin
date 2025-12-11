@@ -114,7 +114,7 @@ export default function RecruiterGeneralInfo() {
           <IoChevronBackOutline className="back-icon" />
           <span>Recruiter Information</span>
         </h2>
-        <button className="block-btn">Block User</button>
+        {/* <button className="block-btn">Block User</button> */}
       </div>
 
       {/* Profile Icon */}

@@ -19,20 +19,18 @@ import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
 import { DashboardLoader } from "../Loader/Loader";
-
-// ✅ Import both profile contexts
 import { SeekerProfileContext } from "../UseContexts/SeekerUseContext/SeekerProfileContent.jsx";
 import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterProfileContext.jsx";
-
-// ✅ Import the graph context
 import { useDashboardGraph } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardGraphContext.jsx";
+import { useDashboardMetrics } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext.jsx";
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  // ✅ Contexts
+  // ---- ALL HOOKS MUST BE AT TOP ---- //
   const { seekers, loading: seekerLoading } = useContext(SeekerProfileContext);
   const { recruiters, loading: recruiterLoading } = useContext(RecruiterProfileContext);
+
   const {
     graphData,
     selectedYear,
@@ -43,32 +41,52 @@ const Dashboard = () => {
     setSelectedYear,
   } = useDashboardGraph();
 
-  const [loading, setLoading] = useState(true);
+  const { metrics, loadingMetrics, errorMetrics } = useDashboardMetrics();
 
-  // Temporary loader delay
+  // small loader delay for UI
+  const [loadingUI, setLoadingUI] = useState(true);
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 400);
+    const timer = setTimeout(() => setLoadingUI(false), 400);
     return () => clearTimeout(timer);
   }, []);
 
-  if (loading || seekerLoading || recruiterLoading) return <DashboardLoader />;
+  // ---- COMBINED LOADING ---- //
+  if (
+    loadingUI ||
+    seekerLoading ||
+    recruiterLoading ||
+    graphLoading ||
+    loadingMetrics
+  ) {
+    return <DashboardLoader />;
+  }
 
+  // ---- ERROR STATE ---- //
+  if (errorMetrics) {
+    return <p>Error loading dashboard metrics: {errorMetrics}</p>;
+  }
+
+  // ---- UI ---- //
   return (
     <div className="dashboard-container">
-      {/* --- Top Row Cards --- */}
+
+      {/* --- TOP ROW CARDS --- */}
       <div className="top-row">
         <div className="small-cards">
+
           {/* Total Seekers */}
           <div className="card">
             <div className="card-body">
               <div className="card-icon"><IoIosPeople /></div>
               <div className="font-num">
                 <h4>Total Seeker</h4>
-                <p><span className="amount">{seekers.length}</span></p>
+                <p><span className="amount">{metrics?.total_users ?? 0}</span></p>
               </div>
             </div>
             <div className="card-footer">
-              <button onClick={() => navigate("/dashboard/seeker-profile")}>View More</button>
+              <button onClick={() => navigate("/dashboard/seeker-profile")}>
+                View More
+              </button>
             </div>
           </div>
 
@@ -78,11 +96,13 @@ const Dashboard = () => {
               <div className="card-icon"><HiMiniBriefcase /></div>
               <div className="font-num">
                 <h4>Total Recruiter</h4>
-                <p><span className="amount">{recruiters.length}</span></p>
+                <p><span className="amount">{metrics?.total_recruiters ?? 0}</span></p>
               </div>
             </div>
             <div className="card-footer">
-              <button onClick={() => navigate("/dashboard/recruiter-profile")}>View More</button>
+              <button onClick={() => navigate("/dashboard/recruiter-profile")}>
+                View More
+              </button>
             </div>
           </div>
 
@@ -92,11 +112,7 @@ const Dashboard = () => {
               <div className="card-icon2"><MdPeopleAlt /></div>
               <div className="font-num2">
                 <h4>Subscribed Users</h4>
-                <p>
-                  <span className="amount2">
-                    {recruiters.filter((r) => r.membership === "Advanced").length}
-                  </span>
-                </p>
+                <p><span className="amount2">{metrics?.subscribed_recruiters ?? 0}</span></p>
               </div>
             </div>
           </div>
@@ -109,21 +125,19 @@ const Dashboard = () => {
                 <h4>Total Revenue</h4>
                 <p>
                   <span className="currency2"><LuIndianRupee /></span>
-                  <span className="amount2">50,000</span>
+                  <span className="amount2">{metrics?.total_revenue ?? "0.00"}</span>
                 </p>
               </div>
             </div>
           </div>
+
         </div>
 
-        {/* --- Graph Box --- */}
+        {/* --- GRAPH SECTION --- */}
         <div className="graph-box">
           <h3>User Active - {selectedYear}</h3>
 
-          {/* ✅ Dynamic Graph Rendering */}
-          {graphLoading ? (
-            <p style={{ textAlign: "center", color: "#888" }}>Loading chart...</p>
-          ) : !hasData ? (
+          {!hasData ? (
             <div className="no-data-overlay">
               <p>No data available for {selectedYear}</p>
             </div>
