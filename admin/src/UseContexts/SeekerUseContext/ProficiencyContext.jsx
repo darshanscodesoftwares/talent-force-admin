@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const ProficiencyContext = createContext();
 
-const API_URL = "http://192.168.29.163:8000/api/admin-all-proficiency";
+const API_URL = "http://69.62.74.30:8000/api/admin-all-proficiency";
 
 const ProficiencyProvider = ({ children }) => {
   const [proficiencies, setProficiencies] = useState([]);

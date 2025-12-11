@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const EducationQualificationContext = createContext();
 
-const API_URL = "http://192.168.29.163:8000/api/admin/education-qualification-list";
+const API_URL = "http://69.62.74.30:8000/api/admin/education-qualification-list";
 
 export const EducationQualificationProvider = ({ children }) => {
   const [qualifications, setQualifications] = useState([]);

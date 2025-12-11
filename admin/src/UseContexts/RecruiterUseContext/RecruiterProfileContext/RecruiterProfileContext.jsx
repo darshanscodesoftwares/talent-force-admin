@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const RecruiterProfileContext = createContext();
 
-const API_URL = "http://192.168.29.163:8000/api/admin-recruiter-full-details";
+const API_URL = "http://69.62.74.30:8000/api/admin-recruiter-full-details";
 
 export const RecruiterProfileProvider = ({ children }) => {
   const [recruiters, setRecruiters] = useState([]);

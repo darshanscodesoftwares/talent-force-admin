@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const CompartmentLevelContext = createContext();
 
-const API_URL = "http://192.168.29.163:8000/api/admin/compartment-levels";
+const API_URL = "http://69.62.74.30:8000/api/admin/compartment-levels";
 
 export const CompartmentLevelProvider = ({ children }) => {
   const [levels, setLevels] = useState([]);

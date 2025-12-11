@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const TeachingQualificationContext = createContext();
 
-const API_URL = "http://192.168.29.163:8000/api/admin/course/teaching-qualification";
+const API_URL = "http://69.62.74.30:8000/api/admin/course/teaching-qualification";
 
 export const TeachingQualificationProvider = ({ children }) => {
   const [teachingQual, setTeachingQual] = useState([]);

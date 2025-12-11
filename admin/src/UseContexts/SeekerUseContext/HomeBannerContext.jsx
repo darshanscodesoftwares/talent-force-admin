@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const HomeBannerContext = createContext();
 
-const API_URL = "http://192.168.29.163:8000/api/banners";
+const API_URL = "http://69.62.74.30:8000/api/banners";
 
 const HomeBannerProvider = ({ children }) => {
   const [banners, setBanners] = useState([]);

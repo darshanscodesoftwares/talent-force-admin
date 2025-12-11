@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const EndDateContext = createContext();
 
-const API_URL = "http://192.168.29.163:8000/api/admin/expired-job";
+const API_URL = "http://69.62.74.30:8000/api/admin/expired-job";
 
 export const EndDateProvider = ({ children }) => {
   const [endDates, setEndDates] = useState([]);

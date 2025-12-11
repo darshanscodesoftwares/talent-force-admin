@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const WorkTypeContext = createContext();
 
-const API_URL = "http://192.168.29.163:8000/api/admin/work-type";
+const API_URL = "http://69.62.74.30:8000/api/admin/work-type";
 
 export const WorkTypeProvider = ({ children }) => {
     const [workTypes, setWorkTypes] = useState([]);

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const DashboardMetricContext = createContext();
 
-const API_URL = "http://192.168.29.163:8000/api/admin-dashboard-metrics-data";
+const API_URL = "http://69.62.74.30:8000/api/admin-dashboard-metrics-data";
 
 export const DashboardMetricProvider = ({ children }) => {
   const [metrics, setMetrics] = useState(null);

@@ -14,7 +14,7 @@ export const DashboardGraphProvider = ({ children }) => {
   const fetchGraphData = async (year = selectedYear) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://192.168.29.163:8000/api/admin-dashboard-analytics`);
+      const response = await fetch(`http://69.62.74.30:8000/api/admin-dashboard-analytics`);
       const data = await response.json();
 
       if (data.status === "Success" && Array.isArray(data.data)) {

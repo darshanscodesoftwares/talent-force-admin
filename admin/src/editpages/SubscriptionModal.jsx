@@ -21,12 +21,9 @@ export default function SubscriptionModal({ isOpen, onClose, onSave, subscriptio
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await onSave(subscription.id, {
-      name,
-      price,
-      timespan: timespan.toLowerCase(),   // ✅ required by backend
-      content: contentText.split("\n").map((c) => c.trim()).filter(Boolean),
-    });
+   await onSave(subscription.id, {
+  price: price.trim(),   // ✅ ONLY SEND PRICE
+});
 
     onClose();
   };
@@ -42,21 +39,6 @@ export default function SubscriptionModal({ isOpen, onClose, onSave, subscriptio
 
           <label>Price</label>
           <input value={price} onChange={(e) => setPrice(e.target.value)} />
-
-          {/* <label>Timespan</label>
-          <select value={timespan} onChange={(e) => setTimespan(e.target.value)}>
-            <option value="monthly">Monthly</option>
-            <option value="quarterly">Quarterly</option>
-            <option value="half-yearly">Half-Yearly</option>
-            <option value="annual">Annual</option>
-            <option value="lifetime">Lifetime</option>
-          </select>
-
-          <label>Content</label>
-          <textarea
-            value={contentText}
-            onChange={(e) => setContentText(e.target.value)}
-          ></textarea> */}
 
           <div className="subscriptionmodal-actions">
             <button type="button" onClick={onClose} className="subscriptionmodal-cancel-btn">

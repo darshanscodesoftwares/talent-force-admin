@@ -123,7 +123,7 @@ const Dashboard = () => {
               <div className="card-icon2"><TbCoinRupeeFilled /></div>
               <div className="font-num2">
                 <h4>Total Revenue</h4>
-                <p>
+                <p className="currency-wrap">
                   <span className="currency2"><LuIndianRupee /></span>
                   <span className="amount2">{metrics?.total_revenue ?? "0.00"}</span>
                 </p>

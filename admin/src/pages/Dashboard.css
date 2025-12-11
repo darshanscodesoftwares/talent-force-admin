@@ -330,6 +330,10 @@
   align-items:center ;
 }
 
+.currency2{
+  height: 24px;
+}
+
 .card-footer2 {
   text-align: center;
   padding: 16px;
@@ -401,4 +405,11 @@
   color: #999;
   font-size: 14px;
   font-style: italic;
+}
+
+.currency-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
 }

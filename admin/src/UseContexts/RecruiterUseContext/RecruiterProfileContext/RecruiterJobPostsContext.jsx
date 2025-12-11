@@ -15,7 +15,7 @@ export const RecruiterJobPostsProvider = ({ children }) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://192.168.29.163:8000/api/admin-recruiter-full-details"
+          "http://69.62.74.30:8000/api/admin-recruiter-full-details"
         );
 
         if (response.data.status === "Success") {
