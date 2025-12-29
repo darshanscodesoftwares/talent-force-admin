@@ -6,6 +6,7 @@ import { IoIosPeople } from "react-icons/io";
 import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { TbCoinRupeeFilled } from "react-icons/tb";
+import { useDashboardMetrics } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext.jsx";
 import "./SubscriptionPlan.css";
 import { useState } from "react";
 
@@ -32,6 +33,8 @@ export default function SubscriptionPlan() {
     setIsModalOpen(true);
   };
 
+  const { metrics, loadingMetrics, errorMetrics } = useDashboardMetrics();
+
   return (
     <div className="subscription-container">
       {/* Top Cards */}
@@ -45,7 +48,7 @@ export default function SubscriptionPlan() {
                   <div className="subscription-card-icon"><IoIosPeople /></div>
                   <h4>Subscribed Users</h4>
                 </div>
-                <p className="subscription-amount">100</p>
+                <p className="subscription-amount">{metrics?.subscribed_recruiters ?? 0}</p>
               </div>
             </div>
 
@@ -56,7 +59,7 @@ export default function SubscriptionPlan() {
                   <div className="subscription-card-icon"><TbCoinRupeeFilled /></div>
                   <h4>Total Revenue</h4>
                 </div>
-                <p className="subscription-amount">45000</p>
+                <p className="subscription-amount">{metrics?.total_revenue ?? "0.00"}</p>
               </div>
             </div>
           </div>

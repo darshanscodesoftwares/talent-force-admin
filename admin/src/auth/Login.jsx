@@ -20,7 +20,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://192.168.29.163:8000/api/admin-login", {
+      const response = await fetch("https://hireezee.co.in/api/admin-login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

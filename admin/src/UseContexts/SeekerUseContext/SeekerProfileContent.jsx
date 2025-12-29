@@ -10,7 +10,7 @@ export const SeekerProfileProvider = ({ children }) => {
 const fetchSeekers = async () => {
   try {
     setLoading(true);
-    const res = await fetch("http://69.62.74.30:8000/api/admin-user-details", {
+    const res = await fetch("https://hireezee.co.in/api/admin-user-details", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`, // 🔹 if token required
       },

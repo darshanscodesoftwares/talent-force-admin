@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const SubscriptionPlanContext = createContext();
 
-const API_URL = "http://69.62.74.30:8000/api/admin-subscription-information";
+const API_URL = "https://hireezee.co.in/api/admin-subscription-information";
 
 export const SubscriptionPlanProvider = ({ children }) => {
   const [subscriptions, setSubscriptions] = useState([]);

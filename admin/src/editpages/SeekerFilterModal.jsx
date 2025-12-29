@@ -21,7 +21,7 @@ export default function SeekerFilterModal({ filters = {}, setFilters, onClose })
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://192.168.29.163:8000/api/admin-user-details"
+          "https://hireezee.co.in/api/admin-user-details"
         );
         const users = response.data?.users || [];
 

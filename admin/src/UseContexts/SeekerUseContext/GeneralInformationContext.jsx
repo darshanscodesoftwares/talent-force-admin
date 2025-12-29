@@ -12,7 +12,7 @@ export const GeneralInformationProvider = ({ children }) => {
       setLoading(true);
 
       const response = await axios.get(
-        "http://69.62.74.30:8000/api/admin-user-details"
+        "https://hireezee.co.in/api/admin-user-details"
       );
 
       if (response.data.status === "success" && response.data.users.length > 0) {

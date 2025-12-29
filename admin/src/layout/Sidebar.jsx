@@ -25,7 +25,7 @@ function Sidebar() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://192.168.29.163:8000/api/admin-logout", {
+      const response = await fetch("https://hireezee.co.in/api/admin-logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

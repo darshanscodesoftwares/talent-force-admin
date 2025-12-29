@@ -40,7 +40,7 @@ export default function SeekerProfile() {
         const token =
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s";
         const response = await axios.get(
-          "http://192.168.29.163:8000/api/admin-users-count-list",
+          "https://hireezee.co.in/api/admin-users-count-list",
           { headers: { Authorization: token } }
         );
 

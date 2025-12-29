@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css"
 
 export const HighestEducationContext = createContext();
 
-const API_URL = "http://69.62.74.30:8000/api/admin/course/highest-qualification"
+const API_URL = "https://hireezee.co.in/api/admin/course/highest-qualification"
 
 export const HighestEducationProvider = ({children}) => {
     const [highestEdu, setHighestEdu] = useState([]);

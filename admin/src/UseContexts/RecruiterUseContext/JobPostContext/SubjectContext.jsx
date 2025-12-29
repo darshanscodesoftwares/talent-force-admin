@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const SubjectContext = createContext();
 
-const API_URL = "http://69.62.74.30:8000/api/job-categories";
+const API_URL = "https://hireezee.co.in/api/job-categories";
 
 const SubjectProvider = ({ children }) => {
   const [subjects, setSubjects] = useState([]);
