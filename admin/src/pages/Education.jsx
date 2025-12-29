@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import "./education.css";
+import "./Education.css";
 import { educationFilter } from "../data/contentData.js";
 import { EducationLoader } from "../Loader/Loader.jsx"
 
