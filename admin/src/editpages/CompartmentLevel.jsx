@@ -1,7 +1,7 @@
 // src/pages/CompartmentLevel.jsx
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Compartmentlevel.css";
+import "./CompartmentLevel.css";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { CompartmentLevelContext } from "../UseContexts/RecruiterUseContext/JobPostContext/CompartmentContext";
