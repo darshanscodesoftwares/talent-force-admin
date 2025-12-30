@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const ExperienceContext = createContext();
 
-const API_URL = "https://hireezee.co.in/api/admin/experience";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin/experience`;
 
 export const ExperienceProvider = ({ children }) => {
   const [experiences, setExperiences] = useState([]);

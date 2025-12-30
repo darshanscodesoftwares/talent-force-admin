@@ -10,7 +10,7 @@ export const SeekerProfileProvider = ({ children }) => {
 const fetchSeekers = async () => {
   try {
     setLoading(true);
-    const res = await fetch("https://hireezee.co.in/api/admin-user-details", {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin-user-details`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`, // 🔹 if token required
       },

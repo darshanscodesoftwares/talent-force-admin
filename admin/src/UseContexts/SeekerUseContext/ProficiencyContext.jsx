@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const ProficiencyContext = createContext();
 
-const API_URL = "https://hireezee.co.in/api/admin-all-proficiency";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin-all-proficiency`;
 
 const ProficiencyProvider = ({ children }) => {
   const [proficiencies, setProficiencies] = useState([]);

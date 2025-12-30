@@ -12,7 +12,7 @@ export const GeneralInformationProvider = ({ children }) => {
       setLoading(true);
 
       const response = await axios.get(
-        "https://hireezee.co.in/api/admin-user-details"
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin-user-details`
       );
 
       if (response.data.status === "success" && response.data.users.length > 0) {

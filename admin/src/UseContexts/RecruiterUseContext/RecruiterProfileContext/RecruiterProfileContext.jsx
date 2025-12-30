@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const RecruiterProfileContext = createContext();
 
-const API_URL = "https://hireezee.co.in/api/admin-recruiter-full-details";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin-recruiter-full-details`;
 
 export const RecruiterProfileProvider = ({ children }) => {
   const [recruiters, setRecruiters] = useState([]);

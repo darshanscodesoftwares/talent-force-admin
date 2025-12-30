@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const ExpectedSalaryContext = createContext();
 
-const API_URL = "https://hireezee.co.in/api/admin/salary";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin/salary`;
 
 export const ExpectedSalaryProvider = ({ children }) => {
   const [salaries, setSalaries] = useState([]);

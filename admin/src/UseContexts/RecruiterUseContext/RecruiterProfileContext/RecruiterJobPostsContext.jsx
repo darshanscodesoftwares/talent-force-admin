@@ -15,7 +15,7 @@ export const RecruiterJobPostsProvider = ({ children }) => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://hireezee.co.in/api/admin-recruiter-full-details"
+          `${import.meta.env.VITE_API_BASE_URL}/api/admin-recruiter-full-details`
         );
 
         if (response.data.status === "Success") {

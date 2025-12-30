@@ -14,7 +14,7 @@ export const DashboardGraphProvider = ({ children }) => {
   const fetchGraphData = async (year = selectedYear) => {
     setLoading(true);
     try {
-      const response = await fetch(`https://hireezee.co.in/api/admin-dashboard-analytics`);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admin-dashboard-analytics`);
       const data = await response.json();
 
       if (data.status === "Success" && Array.isArray(data.data)) {

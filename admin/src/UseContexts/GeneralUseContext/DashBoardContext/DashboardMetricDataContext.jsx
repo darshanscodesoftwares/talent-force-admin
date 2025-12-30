@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const DashboardMetricContext = createContext();
 
-const API_URL = "https://hireezee.co.in/api/admin-dashboard-metrics-data";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin-dashboard-metrics-data`;
 
 export const DashboardMetricProvider = ({ children }) => {
   const [metrics, setMetrics] = useState(null);

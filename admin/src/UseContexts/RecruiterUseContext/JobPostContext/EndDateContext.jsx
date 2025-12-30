@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const EndDateContext = createContext();
 
-const API_URL = "https://hireezee.co.in/api/admin/expired-job";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin/expired-job`;
 
 export const EndDateProvider = ({ children }) => {
   const [endDates, setEndDates] = useState([]);

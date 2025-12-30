@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const LanguageContext = createContext();
 
-const API_URL = "https://hireezee.co.in/api/admin-all-languages";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin-all-languages`;
 
 const LanguageProvider = ({ children }) => {
   const [languages, setLanguages] = useState([]);

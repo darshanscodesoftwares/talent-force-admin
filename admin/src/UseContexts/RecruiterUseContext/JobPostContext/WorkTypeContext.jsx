@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const WorkTypeContext = createContext();
 
-const API_URL = "https://hireezee.co.in/api/admin/work-type";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin/work-type`;
 
 export const WorkTypeProvider = ({ children }) => {
     const [workTypes, setWorkTypes] = useState([]);

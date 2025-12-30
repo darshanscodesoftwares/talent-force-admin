@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 export const TeachingQualificationContext = createContext();
 
-const API_URL = "https://hireezee.co.in/api/admin/course/teaching-qualification";
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin/course/teaching-qualification`;
 
 export const TeachingQualificationProvider = ({ children }) => {
   const [teachingQual, setTeachingQual] = useState([]);
