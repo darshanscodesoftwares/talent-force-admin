@@ -3,7 +3,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import "./jobPostSubject.css";
+import "./JobPostSubject.css";
 import JobPostSubjectAddModal from "./JobPostSubjectAddModal.jsx";
 import { SubjectContext } from "../UseContexts/RecruiterUseContext/JobPostContext/SubjectContext.jsx";
 

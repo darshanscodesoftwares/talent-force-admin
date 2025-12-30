@@ -1,5 +1,5 @@
 import React from "react";
-import "./endDateEditModal.css";
+import "./EndDateEditModal.css";
 
 export default function EndDateEditModal({ onClose, onSave, newDate, setNewDate }) {
   return (

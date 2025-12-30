@@ -5,7 +5,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { BiSolidEdit } from "react-icons/bi";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import "./jobPostEducationQualification.css";
+import "./JobPostEducationQualification.css";
 
 import JobPostEducationAddModal from "./JobPostEducationAddModal.jsx";
 // import JobPostEducationEditModal from "./JobPostEducationEditModal.jsx";

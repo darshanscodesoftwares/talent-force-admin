@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import "./workTypeAddModal.css";
+import "./WorkTypeAddModal.css";
 import { WorkTypeContext } from "../UseContexts/RecruiterUseContext/JobPostContext/WorkTypeContext.jsx";
 
 export default function WorkTypeAddModal({ isOpen, onClose }) {

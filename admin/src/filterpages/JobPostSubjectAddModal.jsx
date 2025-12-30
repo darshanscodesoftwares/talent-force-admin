@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import "./jobPostSubjectAddModal.css";
+import "./JobPostSubjectAddModal.css";
 import { SubjectContext } from "../UseContexts/RecruiterUseContext/JobPostContext/SubjectContext.jsx";
 
 export default function JobPostSubjectAddModal({ isOpen, onClose }) {

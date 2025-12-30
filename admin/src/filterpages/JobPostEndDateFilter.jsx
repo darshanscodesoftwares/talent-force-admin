@@ -4,7 +4,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { BiSolidEdit } from "react-icons/bi";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import "./jobPostEndDateFilter.css";
+import "./JobPostEndDateFilter.css";
 
 import { EndDateContext } from "../UseContexts/RecruiterUseContext/JobPostContext/EndDateContext.jsx";
 import EndDateEditModal from "./EndDateEditModal.jsx";

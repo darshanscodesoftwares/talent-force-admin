@@ -1,6 +1,6 @@
 // src/pages/JobPostEducationAddModal.jsx
 import React, { useState, useContext } from "react";
-import "./jobPostEducationAddModal.css";
+import "./JobPostEducationAddModal.css";
 import { EducationQualificationContext } from "../UseContexts/RecruiterUseContext/JobPostContext/EducationQualificationContext";
 
 export default function JobPostEducationAddModal({ isOpen, onClose }) {

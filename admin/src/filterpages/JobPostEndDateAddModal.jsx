@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./jobPostEndDateFilter.css";
+import "./JobPostEndDateFilter.css";
 
 export default function JobPostEndDateAddModal({ isOpen, onClose, onSave }) {
   const [endDate, setEndDate] = useState("");

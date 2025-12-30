@@ -194,7 +194,7 @@ import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import "./expectedSalary.css";
+import "./ExpectedSalary.css";
 import AddSalaryModal from "./AddSalaryModal";
 import EditSalaryModal from "./EditSalaryModal";
 import { ExpectedSalaryContext } from "../UseContexts/SeekerUseContext/ExpectedSalaryContext";
