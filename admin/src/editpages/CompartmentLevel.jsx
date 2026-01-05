@@ -8,7 +8,7 @@ import { CompartmentLevelContext } from "../UseContexts/RecruiterUseContext/JobP
 
 const CompartmentLevel = () => {
   const navigate = useNavigate();
-s
+  
   // ✅ Get levels + loading from context
   const { levels, loading } = useContext(CompartmentLevelContext);
 
