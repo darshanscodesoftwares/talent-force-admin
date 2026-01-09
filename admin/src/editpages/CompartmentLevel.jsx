@@ -8,7 +8,7 @@ import { CompartmentLevelContext } from "../UseContexts/RecruiterUseContext/JobP
 
 const CompartmentLevel = () => {
   const navigate = useNavigate();
-  
+
   // ✅ Get levels + loading from context
   const { levels, loading } = useContext(CompartmentLevelContext);
 
@@ -58,20 +58,24 @@ const CompartmentLevel = () => {
                     <th>Compartment / Level</th>
                     <th>Posted on</th>
                     <th>Created by</th>
-                    <th>Action</th>
+                    {/* <th>Action</th>  */}
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedData.map((item) => (
                     <tr
                       key={item.id}
-                      className={hiddenRows.includes(item.id) ? "hidden-row" : ""}
+                      className={
+                        hiddenRows.includes(item.id) ? "hidden-row" : ""
+                      }
                     >
                       <td>{item.compartment_level}</td>
-                      <td>{new Date(item.created_at).toLocaleDateString("en-IN")}</td>
+                      <td>
+                        {new Date(item.created_at).toLocaleDateString("en-IN")}
+                      </td>
                       <td>Admin</td>
                       <td className="compartment-actions">
-                        <button
+                        {/* <button
                           className="compartment-btn view-btn"
                           onClick={() => toggleHideRow(item.id)}
                         >
@@ -80,7 +84,7 @@ const CompartmentLevel = () => {
                           ) : (
                             <FaEye />
                           )}
-                        </button>
+                        </button> */}
                       </td>
                     </tr>
                   ))}
