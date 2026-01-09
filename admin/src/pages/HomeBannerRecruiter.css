@@ -18,6 +18,10 @@
   margin-bottom: 30px;
 }
 
+.recruiter-banner-top-row {
+  margin-top: 50px;
+}
+
 .homebanner-card {
   /* flex: 1; */
   background: rgba(214, 214, 214, 0.3);

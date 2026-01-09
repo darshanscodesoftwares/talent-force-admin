@@ -1,22 +1,21 @@
-import { BiSolidEdit } from "react-icons/bi";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { AiOutlineDelete } from "react-icons/ai";
-import "./HomeBanner.css";
-import { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
+import { BannerLoader } from "../Loader/Loader";
 import { useNavigate } from "react-router-dom";
-import { HomeBannerContext } from "../UseContexts/SeekerUseContext/HomeBannerContext";
-import { BannerLoader } from "../Loader/Loader"; // ✅ shimmer effect
-import HomeBannerRecruiter from "./HomeBannerRecruiter";
+import { AiOutlineDelete } from "react-icons/ai";
+import { BiSolidEdit } from "react-icons/bi";
+import "./HomeBannerRecruiter.css";
+import { HomeBannerRecruiterContext } from "../UseContexts/SeekerUseContext/HomeBannerRecruiterProvider";
 
-export default function HomeBanner() {
-  const { banners, loading, error, deleteBanner } =
-    useContext(HomeBannerContext);
+const HomeBannerRecruiter = () => {
+  const { banners, loading, error, deleteBanner } = useContext(
+    HomeBannerRecruiterContext
+  );
+
   const [viewedRows, setViewedRows] = useState([]);
   const navigate = useNavigate();
 
   const bannerList = Array.isArray(banners) ? banners : banners?.data || [];
 
-  // ✅ Delete banner with hiddenRows cleanup
   const handleDelete = async (id) => {
     try {
       await deleteBanner(id);
@@ -24,12 +23,6 @@ export default function HomeBanner() {
     } catch (err) {
       console.error("Error deleting banner:", err);
     }
-  };
-
-  const handleView = (id) => {
-    setViewedRows((prev) =>
-      prev.includes(id) ? prev.filter((rowId) => rowId !== id) : [...prev, id]
-    );
   };
 
   // ✅ Context-driven shimmer effect
@@ -40,7 +33,7 @@ export default function HomeBanner() {
     <>
       <div className="homebanner-container">
         {/* --- Top Preview Section --- */}
-        <div className="homebanner-top-row">
+        <div className="homebanner-top-row recruiter-banner-top-row">
           {bannerList.length > 0 ? (
             bannerList.slice(0, 6).map((banner, index) => (
               <div className="homebanner-card" key={banner.id}>
@@ -57,10 +50,10 @@ export default function HomeBanner() {
         <div className="homebanner-rec-seek">
           <div className="homebanner-section">
             <div className="banner-button">
-              <h2 className="seeker-text">Seeker Banner List</h2>
+              <h2 className="seeker-text">Recruiter Banner List</h2>
               <button
                 className="homebanner-add-btn"
-                onClick={() => navigate("/dashboard/home-banner/add")}
+                onClick={() => navigate("/dashboard/home-banner/recruiter-add")}
               >
                 Add Banner
               </button>
@@ -109,7 +102,7 @@ export default function HomeBanner() {
                             className="homebanner-btn edit-btn"
                             onClick={() =>
                               navigate(
-                                `/dashboard/home-banner/edit/${banner.id}`
+                                `/dashboard/home-banner/edit-recruiter/${banner.id}`
                               )
                             }
                           >
@@ -136,10 +129,9 @@ export default function HomeBanner() {
             </div>
           </div>
         </div>
-
-        {/* Recruiter import Component  */}
-        <HomeBannerRecruiter />
       </div>
     </>
   );
-}
+};
+
+export default HomeBannerRecruiter;
