@@ -1,4 +1,10 @@
-import { useSubscriptionPlans } from "../UseContexts/GeneralUseContext/SubscriptionPlansContext/SubscriptionPlanContext.jsx";
+import React, { useContext } from "react";
+import "./SubScriptionLimit.css";
+import {
+  SubscriptionPlanContext,
+  useSubscriptionPlans,
+} from "../UseContexts/GeneralUseContext/SubscriptionPlansContext/SubscriptionPlanContext.jsx";
+
 import SubscriptionPlanLoader from "../Loader/Loader.jsx";
 import SubscriptionModal from "../editpages/SubscriptionModal.jsx";
 import SubscriptionAddModal from "../editpages/SubscriptionAddModal.jsx";
@@ -7,12 +13,10 @@ import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { TbCoinRupeeFilled } from "react-icons/tb";
 import { useDashboardMetrics } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext.jsx";
-import "./SubscriptionPlan.css";
 import { useState } from "react";
-import SubScriptionLimit from "./SubScriptionLimit.jsx";
+import SubScriptionLimitModel from "../editpages/SubScriptionLimitModel.jsx";
 
-export default function SubscriptionPlan() {
-  // ⬅️ FIXED: Now extracting CRUD functions also
+const SubScriptionLimit = () => {
   const {
     subscriptions,
     loading,
@@ -20,7 +24,7 @@ export default function SubscriptionPlan() {
     addSubscription,
     updateSubscription,
     deleteSubscription,
-  } = useSubscriptionPlans();
+  } = useContext(SubscriptionPlanContext);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSub, setSelectedSub] = useState(null);
@@ -34,47 +38,10 @@ export default function SubscriptionPlan() {
     setIsModalOpen(true);
   };
 
-  const { metrics, loadingMetrics, errorMetrics } = useDashboardMetrics();
-
   return (
     <>
       <div className="subscription-container">
         {/* Top Cards */}
-        <div className="subscription-top-row">
-          <div className="subscription-small-cards">
-            <div className="subscription-cards-container">
-              {/* Card 1 */}
-              <div className="subscription-card">
-                <div className="subscription-card-body">
-                  <div className="subscription-card-left">
-                    <div className="subscription-card-icon">
-                      <IoIosPeople />
-                    </div>
-                    <h4>Subscribed Users</h4>
-                  </div>
-                  <p className="subscription-amount">
-                    {metrics?.subscribed_recruiters ?? 0}
-                  </p>
-                </div>
-              </div>
-
-              {/* Card 2 */}
-              <div className="subscription-card">
-                <div className="subscription-card-body">
-                  <div className="subscription-card-left">
-                    <div className="subscription-card-icon">
-                      <TbCoinRupeeFilled />
-                    </div>
-                    <h4>Total Revenue</h4>
-                  </div>
-                  <p className="subscription-amount">
-                    {metrics?.total_revenue ?? "0.00"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Subscription Table */}
         <div className="subscription-rec-seek">
@@ -86,10 +53,10 @@ export default function SubscriptionPlan() {
                 alignItems: "center",
               }}
             >
-              <h2>Subscription List</h2>
+              <h2>Subscription Limit List</h2>
               {/* <button className="subscription-add-btn" onClick={() => setIsAddModalOpen(true)}>
-              Add Subscription
-            </button> */}
+                   Add Subscription
+                 </button> */}
             </div>
 
             <div className="subscription-table-container">
@@ -97,11 +64,10 @@ export default function SubscriptionPlan() {
                 <thead>
                   <tr>
                     <th>Plan Name</th>
-                    <th>Price</th>
-                    <th>Duration Months</th>
-                    <th>Posted On</th>
-                    <th>Updated On</th>
-                    <th>Content</th>
+                    <th>AI Limits</th>
+                    <th>Applicant views</th>
+                    <th>Total Job post</th>
+                    <th>Contact Details</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -109,17 +75,27 @@ export default function SubscriptionPlan() {
                   {subscriptions.map((sub) => (
                     <tr key={sub.id}>
                       <td>{sub.name}</td>
-                      <td>{sub.price}</td>
-                      <td>{sub.duration_months} Month</td>
-                      <td>{sub.created_at}</td>
-                      <td>{sub.updated_at}</td>
                       <td>
-                        <ul className="subscription-content-list">
-                          {sub.content.map((item, i) => (
-                            <li key={i}>{item}</li>
-                          ))}
-                        </ul>
+                        {sub.limits.ai_limit === null
+                          ? "null"
+                          : sub.limits.ai_limit}
                       </td>
+                      <td>
+                        {sub.limits.applicant_views === null
+                          ? "null"
+                          : sub.limits.applicant_views}
+                      </td>
+                      <td>
+                        {sub.limits.job_posts_per_month === null
+                          ? "null"
+                          : sub.limits.job_posts_per_month}
+                      </td>
+                      <td>
+                        {sub.limits.show_contact_details === null
+                          ? "null"
+                          : String(sub.limits.show_contact_details)}
+                      </td>
+
                       <td className="subscription-actions">
                         <button
                           className="subscription-btn edit-btn"
@@ -128,11 +104,11 @@ export default function SubscriptionPlan() {
                           <BiSolidEdit />
                         </button>
                         {/* <button
-                        className="subscription-btn delete-btn"
-                        onClick={() => deleteSubscription(sub.id)}
-                      >
-                        <AiOutlineDelete />
-                      </button> */}
+                             className="subscription-btn delete-btn"
+                             onClick={() => deleteSubscription(sub.id)}
+                           >
+                             <AiOutlineDelete />
+                           </button> */}
                       </td>
                     </tr>
                   ))}
@@ -144,7 +120,7 @@ export default function SubscriptionPlan() {
 
         {/* --- EDIT MODAL --- */}
         {isModalOpen && (
-          <SubscriptionModal
+          <SubScriptionLimitModel
             subscription={selectedSub}
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
@@ -166,11 +142,9 @@ export default function SubscriptionPlan() {
             }}
           />
         )}
-
-        {/* Subscriptioin Limit Components  */}
-
-        <SubScriptionLimit />
       </div>
     </>
   );
-}
+};
+
+export default SubScriptionLimit;

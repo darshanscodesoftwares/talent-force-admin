@@ -10,7 +10,6 @@ import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/Recr
 import { useDashboardMetrics } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext.jsx";
 
 export default function RecruiterProfile() {
-
   // ✅ ALL HOOKS MUST BE AT THE TOP — ALWAYS
   const { recruiters, loading } = useContext(RecruiterProfileContext);
   const { metrics, loadingMetrics, errorMetrics } = useDashboardMetrics();
@@ -43,12 +42,13 @@ export default function RecruiterProfile() {
       <div className="recruiterprofile-top-row">
         <div className="recruiterprofile-small-cards">
           <div className="recruiterprofile-cards-container">
-
             {/* Total Recruiters */}
             <div className="recruiterprofile-card">
               <div className="recruiterprofile-card-body">
                 <div className="recruiterprofile-card-left">
-                  <div className="recruiterprofile-card-icon"><IoIosPeople /></div>
+                  <div className="recruiterprofile-card-icon">
+                    <IoIosPeople />
+                  </div>
                   <h4>Total Recruiters</h4>
                 </div>
                 <p className="recruiterprofile-amount">{recruiters.length}</p>
@@ -59,7 +59,9 @@ export default function RecruiterProfile() {
             <div className="recruiterprofile-card">
               <div className="recruiterprofile-card-body">
                 <div className="recruiterprofile-card-left">
-                  <div className="recruiterprofile-card-icon"><FaUserCheck /></div>
+                  <div className="recruiterprofile-card-icon">
+                    <FaUserCheck />
+                  </div>
                   <h4>Active Users</h4>
                 </div>
                 <p className="recruiterprofile-amount">
@@ -72,13 +74,16 @@ export default function RecruiterProfile() {
             <div className="recruiterprofile-card">
               <div className="recruiterprofile-card-body">
                 <div className="recruiterprofile-card-left">
-                  <div className="recruiterprofile-card-icon"><HiCurrencyRupee /></div>
+                  <div className="recruiterprofile-card-icon">
+                    <HiCurrencyRupee />
+                  </div>
                   <h4>Subscribed Users</h4>
                 </div>
-                <p className="recruiterprofile-amount">{metrics?.subscribed_recruiters ?? 0}</p>
+                <p className="recruiterprofile-amount">
+                  {metrics?.subscribed_recruiters ?? 0}
+                </p>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -105,9 +110,10 @@ export default function RecruiterProfile() {
                   <tr
                     key={recruiter.id}
                     className="recruiterprofile-row"
-                    onClick={() => navigate(`/dashboard/recruiter-profile/${recruiter.id}`)}
+                    onClick={() =>
+                      navigate(`/dashboard/recruiter-profile/${recruiter.id}`)
+                    }
                   >
-
                     {/* School */}
                     <td>
                       <div className="icon-school">
@@ -116,7 +122,13 @@ export default function RecruiterProfile() {
                             src={recruiter.schoolImage}
                             alt={recruiter.schoolName}
                             className="school-logo"
-                            style={{ width: 32, height: 32, borderRadius: "50%", marginRight: 8, objectFit: "cover" }}
+                            style={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: "50%",
+                              marginRight: 8,
+                              objectFit: "cover",
+                            }}
                           />
                         ) : (
                           <FaSchool className="school-logo" />
@@ -132,7 +144,11 @@ export default function RecruiterProfile() {
                     <td>{recruiter.phoneNumber}</td>
 
                     {/* Pincode */}
-                    <td>{recruiter.job_posts?.[0]?.pincode?.pincode || "N/A"}</td>
+                    {/* <td>{recruiter.job_posts?.[0]?.pincode?.pincode || "N/A"}</td>
+                     */}
+                    <td>
+                      {recruiter.jobPosts?.[0]?.pincode?.pincode || "N/A"}
+                    </td>
 
                     {/* Membership */}
                     <td>
@@ -142,13 +158,16 @@ export default function RecruiterProfile() {
                         if (!plan) return <span>N/A</span>;
 
                         return plan.toLowerCase() === "free" ? (
-                          <span className="recruiterprofile-membership basic">{plan}</span>
+                          <span className="recruiterprofile-membership basic">
+                            {plan}
+                          </span>
                         ) : (
-                          <span className="recruiterprofile-membership advanced">{plan}</span>
+                          <span className="recruiterprofile-membership advanced">
+                            {plan}
+                          </span>
                         );
                       })()}
                     </td>
-
                   </tr>
                 ))}
               </tbody>
@@ -156,7 +175,12 @@ export default function RecruiterProfile() {
 
             {/* ===== PAGINATION ===== */}
             <div className="recruiterprofile-pagination">
-              <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Prev</button>
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(currentPage - 1)}
+              >
+                Prev
+              </button>
 
               {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
                 const page = maxLeft + i;
@@ -171,9 +195,13 @@ export default function RecruiterProfile() {
                 );
               })}
 
-              <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</button>
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                Next
+              </button>
             </div>
-
           </div>
         </div>
       </div>

@@ -103,8 +103,8 @@
 .subscription-section h2 {
   margin-bottom: 15px;
   font-size: 16px;
-  font-weight: 500 !important;
-  color: #ff6a2f !important;
+  font-weight: 300;
+  color: #444;
 }
 
 .subscription-table-container {
@@ -118,9 +118,9 @@
 }
 
 /* .subscription-table th:first-child {
-  width: 40px; 
-  color: #a7caf400;
-} */
+    width: 40px; 
+    color: #a7caf400;
+  } */
 
 .subscription-table th,
 .subscription-table td {
