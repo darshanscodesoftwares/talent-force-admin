@@ -33,12 +33,30 @@ const SubScriptionLimitModel = ({ isOpen, onClose, onSave, subscription }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // const updatedData = {
+    //   limits: {
+    //     ai_limit: aiLimits,
+    //     applicant_views: applicantviews,
+    //     job_posts_per_month: totalJobpost,
+    //     show_contact_details: contactDetails,
+    //   },
+    // };
+
     const updatedData = {
       limits: {
-        ai_limit: aiLimits,
-        applicant_views: applicantviews,
-        job_posts_per_month: totalJobpost,
-        show_contact_details: contactDetails,
+        ai_limit: aiLimits === "null" ? null : Number(aiLimits),
+        applicant_views:
+          applicantviews === "null" ? null : Number(applicantviews),
+        job_posts_per_month:
+          totalJobpost === "null" ? null : Number(totalJobpost),
+
+        // 🔥 FIX FOR BOOLEAN
+        show_contact_details:
+          contactDetails === "true"
+            ? true
+            : contactDetails === "false"
+            ? false
+            : null,
       },
     };
 
