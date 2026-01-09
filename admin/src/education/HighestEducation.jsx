@@ -111,7 +111,7 @@ export default function HighestEducation() {
                       <td>{deg.updatedOn || "-"}</td>
                       <td className="highestedu-actions">
                         {/* Toggle Visibility */}
-                        <button
+                        {/* <button
                           className="highestedu-btn view-btn"
                           onClick={() => toggleHideRow(deg.id)}
                         >
@@ -120,7 +120,7 @@ export default function HighestEducation() {
                           ) : (
                             <FaRegEye />
                           )}
-                        </button>
+                        </button> */}
 
                         {/* Edit */}
                         <button

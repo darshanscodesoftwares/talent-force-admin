@@ -107,7 +107,7 @@ export default function JobPostEducationQualification() {
                     <td>{item.postedOn || "-"}</td>
                     <td>{item.updatedOn || "-"}</td>
                     <td className="jobposteducation-actions">
-                      <button
+                      {/* <button
                         className="jobposteducation-btn view-btn"
                         onClick={() => toggleHideRow(item.id)}
                       >
@@ -116,7 +116,7 @@ export default function JobPostEducationQualification() {
                         ) : (
                           <FaRegEye />
                         )}
-                      </button>
+                      </button> */}
 
                       {/* <button
                         className="jobposteducation-btn edit-btn"

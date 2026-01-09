@@ -98,7 +98,7 @@ export default function EducationQualification() {
                     <td>{item.postedOn}</td>
                     <td>{item.createdBy}</td>
                     <td className="education-actions">
-                      <button
+                      {/* <button
                         className="education-btn view-btn"
                         onClick={() => toggleHideRow(item.id)}
                       >
@@ -107,7 +107,7 @@ export default function EducationQualification() {
                         ) : (
                           <FaRegEye />
                         )}
-                      </button>
+                      </button> */}
                       <button
                         className="education-btn delete-btn"
                         onClick={() => handleDelete(item.id)}

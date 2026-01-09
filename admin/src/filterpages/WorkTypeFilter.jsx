@@ -96,7 +96,7 @@ export default function WorkTypeFilter() {
                       <td>{formatDate(workType.created_at)}</td>
                       <td>{formatDate(workType.updated_at)}</td>
                       <td className="worktypefilter-actions">
-                        <button
+                        {/* <button
                           className="worktypefilter-btn view-btn"
                           onClick={() => toggleHideRow(workType.id)}
                         >
@@ -105,7 +105,7 @@ export default function WorkTypeFilter() {
                           ) : (
                             <FaRegEye />
                           )}
-                        </button>
+                        </button> */}
                         <button
                           className="worktypefilter-btn delete-btn"
                           onClick={() => handleDelete(workType.id)}

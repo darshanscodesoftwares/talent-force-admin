@@ -103,7 +103,7 @@ export default function JobPostSubjectFilter() {
                     <td>{formatDate(subject.created_at)}</td>
                     <td>{formatDate(subject.updated_at)}</td>
                     <td className="jobpostsubjectfilter-actions">
-                      <button
+                      {/* <button
                         className="jobpostsubjectfilter-btn view-btn"
                         onClick={() => toggleHideRow(subject.id)}
                       >
@@ -112,7 +112,7 @@ export default function JobPostSubjectFilter() {
                         ) : (
                           <FaRegEye />
                         )}
-                      </button>
+                      </button> */}
                       <button
                         className="jobpostsubjectfilter-btn delete-btn"
                         onClick={() => handleDelete(subject.id)}

@@ -66,7 +66,7 @@ export default function JobPostFilter() {
                     <td>{filter.postedOn}</td>
                     <td>{filter.createdBy}</td>
                     <td className="jobpostfilter-actions">
-                      <button
+                      {/* <button
                         className="jobpostfilter-btn view-btn"
                         onClick={() => toggleHideRow(filter.id)}
                       >
@@ -75,7 +75,7 @@ export default function JobPostFilter() {
                         ) : (
                           <FaRegEye />
                         )}
-                      </button>
+                      </button> */}
 
                       {!["Job Role", "Location", "Pincode", "Number Of Opening"].includes(
                         filter.specifications

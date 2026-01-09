@@ -94,7 +94,7 @@ export default function HomeBanner() {
                       <td>{banner.postedOn || "—"}</td>
                       <td>{banner.createdBy || "—"}</td>
                       <td className="homebanner-actions">
-                        <button
+                        {/* <button
                           className="homebanner-btn view-btn"
                           onClick={() => handleView(banner.id)}
                         >
@@ -103,7 +103,7 @@ export default function HomeBanner() {
                           ) : (
                             <FaRegEye />
                           )}
-                        </button>
+                        </button> */}
                         <button
                           className="homebanner-btn edit-btn"
                           onClick={() =>

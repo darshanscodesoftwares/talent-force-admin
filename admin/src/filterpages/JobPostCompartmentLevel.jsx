@@ -71,12 +71,12 @@ const JobPostCompartmentLevel = () => {
                       <td>{new Date(item.created_at).toLocaleDateString("en-IN")}</td>
                       <td>{new Date(item.updated_at).toLocaleDateString("en-IN")}</td>
                       <td className="jobpostcompartment-actions">
-                        <button
+                        {/* <button
                           className="jobpostcompartment-btn view-btn"
                           onClick={() => toggleHideRow(item.id)}
                         >
                           {hiddenRows.includes(item.id) ? <FaRegEyeSlash /> : <FaRegEye />}
-                        </button>
+                        </button> */}
                       </td>
                     </tr>
                   ))}

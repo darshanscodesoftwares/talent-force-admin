@@ -101,7 +101,7 @@ export default function SubjectFilter() {
                     <td>{formatDate(subject.created_at)}</td>
                     <td>{formatDate(subject.updated_at)}</td>
                     <td className="subjectfilter-actions">
-                      <button
+                      {/* <button
                         className="subjectfilter-btn view-btn"
                         onClick={() => toggleHideRow(subject.id)}
                       >
@@ -110,7 +110,7 @@ export default function SubjectFilter() {
                         ) : (
                           <FaRegEye />
                         )}
-                      </button>
+                      </button> */}
                       <button
                         className="subjectfilter-btn delete-btn"
                         onClick={() => handleDelete(subject.id)}

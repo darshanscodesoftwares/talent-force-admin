@@ -131,12 +131,12 @@ export default function LanguageAndProficiency() {
                                         <td>{formatDate(language.created_at)}</td>
                                         <td>{formatDate(language.updated_at)}</td>
                                         <td className="languagefilter-actions">
-                                            <button
+                                            {/* <button
                                                 className="languagefilter-btn view-btn"
                                                 onClick={() => toggleHideLangRow(language.id)}
                                             >
                                                 {hiddenLangRows.includes(language.id) ? <FaRegEyeSlash /> : <FaRegEye />}
-                                            </button>
+                                            </button> */}
                                             <button
                                                 className="languagefilter-btn delete-btn"
                                                 onClick={() => handleDeleteLanguage(language.id)}
@@ -212,7 +212,7 @@ export default function LanguageAndProficiency() {
                                         <td className="languagefilter-actions">
                                             {/* 👁️ optional toggle (kept disabled for now) */}
 
-                                            <button
+                                            {/* <button
                                                 className="languagefilter-btn view-btn"
                                                 onClick={() =>
                                                     setHiddenProfRows((prev) =>
@@ -227,7 +227,7 @@ export default function LanguageAndProficiency() {
                                                 ) : (
                                                     <FaRegEye />
                                                 )}
-                                            </button>
+                                            </button> */}
 
                                             <button
                                                 className="languagefilter-btn delete-btn"

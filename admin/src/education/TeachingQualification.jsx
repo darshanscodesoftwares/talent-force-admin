@@ -112,7 +112,7 @@ export default function TeachingQualification() {
                       <td>{item.postedOn || "-"}</td>
                       <td>{item.updatedOn || "-"}</td>
                       <td className="teachingqualif-actions">
-                        <button
+                        {/* <button
                           className="teachingqualif-btn view-btn"
                           onClick={() => toggleHideRow(item.id)}
                         >
@@ -121,7 +121,7 @@ export default function TeachingQualification() {
                           ) : (
                             <FaRegEye />
                           )}
-                        </button>
+                        </button> */}
                         <button
                           className="teachingqualif-btn edit-btn"
                           onClick={() => {

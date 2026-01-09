@@ -65,7 +65,7 @@ export default function SeekerSearchFilter() {
                     <td>{filter.postedOn}</td>
                     <td>{filter.createdBy}</td>
                     <td className="seekerfilter-actions">
-                      <button
+                      {/* <button
                         className="seekerfilter-btn view-btn"
                         onClick={() => toggleHideRow(filter.id)}
                       >
@@ -74,7 +74,7 @@ export default function SeekerSearchFilter() {
                         ) : (
                           <FaRegEye />
                         )}
-                      </button>
+                      </button> */}
 
                       {filter.specifications !== "Location" && (
                         <button

@@ -78,12 +78,12 @@ export default function ExperienceFilter() {
                       <td>{new Date(exp.created_at).toLocaleDateString("en-IN")}</td>
                       <td>{new Date(exp.updated_at).toLocaleDateString("en-IN")}</td>
                       <td className="experiencefilter-actions">
-                        <button
+                        {/* <button
                           className="experiencefilter-btn view-btn"
                           onClick={() => toggleHideRow(exp.id)}
                         >
                           {hiddenRows.includes(exp.id) ? <FaRegEyeSlash /> : <FaRegEye />}
-                        </button>
+                        </button> */}
                         {/* <button
                           className="experiencefilter-btn edit-btn"
                           onClick={() => handleEdit(exp)}

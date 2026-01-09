@@ -299,7 +299,7 @@ export default function ExpectedSalary() {
                         {new Date(salary.created_at).toLocaleDateString()}
                       </td>
                       <td className="expectedSalary-actions">
-                        <button
+                        {/* <button
                           className="expectedSalary-btn view-btn"
                           onClick={() => toggleHideRow(salary.id)}
                         >
@@ -308,7 +308,7 @@ export default function ExpectedSalary() {
                           ) : (
                             <FaRegEye />
                           )}
-                        </button>
+                        </button> */}
 
                         <button
                           className="expectedSalary-btn edit-btn"

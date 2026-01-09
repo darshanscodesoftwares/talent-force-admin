@@ -95,7 +95,7 @@ export default function JobPostEndDateFilter() {
                       >
                         <BiSolidEdit />
                       </button>
-                      <button
+                      {/* <button
                         className="jobpostenddatefilter-btn view-btn"
                         onClick={() => toggleHideRow(filter.id)}
                       >
@@ -104,7 +104,7 @@ export default function JobPostEndDateFilter() {
                         ) : (
                           <FaRegEye />
                         )}
-                      </button>
+                      </button> */}
                       {/* <button
                         className="jobpostenddatefilter-btn delete-btn"
                         onClick={() => handleDelete(filter.id)}
