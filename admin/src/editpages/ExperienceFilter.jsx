@@ -6,12 +6,18 @@ import { useNavigate } from "react-router-dom";
 import { IoChevronBackOutline } from "react-icons/io5";
 import "./ExperienceFilter.css";
 import { ExperienceContext } from "../UseContexts/SeekerUseContext/ExperienceContext";
-// import ExperienceModal from "../editpages/ExperienceModal.jsx";
-// import AddExperienceModal from "../editpages/AddExperienceModal.jsx";
+import ExperienceModal from "../editpages/ExperienceModal.jsx";
+import AddExperienceModal from "../editpages/AddExperienceModal.jsx";
 
 export default function ExperienceFilter() {
   const navigate = useNavigate();
-  const { experiences, loading, deleteExperience } = useContext(ExperienceContext);
+  const {
+    experiences,
+    loading,
+    addExperience,
+    deleteExperience,
+    updateExperience,
+  } = useContext(ExperienceContext);
 
   const [hiddenRows, setHiddenRows] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -46,9 +52,9 @@ export default function ExperienceFilter() {
                 <IoChevronBackOutline /> Experience List
               </h2>
             </div>
-            {/* <button className="experiencefilter-add-btn" onClick={handleAdd}>
+            <button className="experiencefilter-add-btn" onClick={handleAdd}>
               Add Experience
-            </button> */}
+            </button>
           </div>
 
           {loading ? (
@@ -70,13 +76,19 @@ export default function ExperienceFilter() {
                   {experiences.map((exp) => (
                     <tr
                       key={exp.id}
-                      className={hiddenRows.includes(exp.id) ? "hidden-row" : ""}
+                      className={
+                        hiddenRows.includes(exp.id) ? "hidden-row" : ""
+                      }
                     >
                       <td>{exp.experience}</td>
                       <td>{exp.min_value}</td>
                       <td>{exp.max_value}</td>
-                      <td>{new Date(exp.created_at).toLocaleDateString("en-IN")}</td>
-                      <td>{new Date(exp.updated_at).toLocaleDateString("en-IN")}</td>
+                      <td>
+                        {new Date(exp.created_at).toLocaleDateString("en-IN")}
+                      </td>
+                      <td>
+                        {new Date(exp.updated_at).toLocaleDateString("en-IN")}
+                      </td>
                       <td className="experiencefilter-actions">
                         {/* <button
                           className="experiencefilter-btn view-btn"
@@ -84,18 +96,18 @@ export default function ExperienceFilter() {
                         >
                           {hiddenRows.includes(exp.id) ? <FaRegEyeSlash /> : <FaRegEye />}
                         </button> */}
-                        {/* <button
+                        <button
                           className="experiencefilter-btn edit-btn"
                           onClick={() => handleEdit(exp)}
                         >
                           <BiSolidEdit />
-                        </button> */}
-                        {/* <button
+                        </button>
+                        <button
                           className="experiencefilter-btn delete-btn"
                           onClick={() => deleteExperience(exp.id)}
                         >
                           Delete
-                        </button> */}
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -106,19 +118,28 @@ export default function ExperienceFilter() {
         </div>
       </div>
 
-      {/* {isAddModalOpen && (
+      {isAddModalOpen && (
         <AddExperienceModal
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
+          onSave={(payload) => {
+            addExperience(payload);
+            setIsAddModalOpen(false);
+          }}
         />
       )}
+
       {isEditModalOpen && (
         <ExperienceModal
           experience={selectedExp}
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
+          onSave={(updatedExp) => {
+            updateExperience(updatedExp.id, updatedExp);
+            setIsEditModalOpen(false);
+          }}
         />
-      )} */}
+      )}
     </div>
   );
 }

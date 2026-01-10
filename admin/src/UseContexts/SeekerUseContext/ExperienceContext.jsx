@@ -28,22 +28,43 @@ export const ExperienceProvider = ({ children }) => {
   };
 
   // ✅ Create
+  // const addExperience = async (newExp) => {
+  //   try {
+  //     const res = await axios.post(API_URL, newExp);
+  //     setExperiences((prev) => [...prev, res.data.data]);
+
+  //     await fetchExperiences();
+  //   } catch (err) {
+  //     console.error("Error adding experience:", err);
+  //   }
+  // };
+
   const addExperience = async (newExp) => {
     try {
-      const res = await axios.post(API_URL, newExp);
-      setExperiences((prev) => [...prev, res.data.data]);
+      await axios.post(API_URL, newExp);
+      await fetchExperiences(); // 🔥 IMPORTANT
     } catch (err) {
       console.error("Error adding experience:", err);
     }
   };
 
   // ✅ Update
+  // const updateExperience = async (id, updatedExp) => {
+  //   try {
+  //     const res = await axios.put(`${API_URL}/${id}`, updatedExp);
+  //     setExperiences((prev) =>
+  //       prev.map((exp) => (exp.id === id ? res.data.data : exp))
+  //     );
+  //     await fetchExperiences();
+  //   } catch (err) {
+  //     console.error("Error updating experience:", err);
+  //   }
+  // };
+
   const updateExperience = async (id, updatedExp) => {
     try {
-      const res = await axios.put(`${API_URL}/${id}`, updatedExp);
-      setExperiences((prev) =>
-        prev.map((exp) => (exp.id === id ? res.data.data : exp))
-      );
+      await axios.put(`${API_URL}/${id}`, updatedExp);
+      await fetchExperiences(); // 🔥 IMPORTANT
     } catch (err) {
       console.error("Error updating experience:", err);
     }
