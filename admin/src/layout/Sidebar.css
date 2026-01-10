@@ -14,8 +14,11 @@
 }
 
 .section-title {
-  color: #656d79;
-  font-size: 11px;
+  /* color: #656d79; */
+  /* color: #e89e2f; */
+  color: #ef6b37d7;
+
+  font-size: 13px;
   font-weight: 600;
   padding: 5px 20px;
   margin: 8px 0px;
@@ -43,16 +46,16 @@
   background-color: transparent;
   color: inherit;
 }
-  
+
 .nav-link .icon {
   font-size: 20px;
 }
 
-.nav-link .icon-b{
+.nav-link .icon-b {
   font-size: 23px;
 }
 
-.nav-link.active .icon-b{
+.nav-link.active .icon-b {
   color: #f07e21;
 }
 
@@ -61,10 +64,9 @@
 }
 
 .nav-link:hover {
-  background-color: #334155;  
+  background-color: #334155;
   color: #fff;
 }
-
 
 .nav-link.active {
   color: #fff;
@@ -83,7 +85,7 @@
   border-radius: 0 4px 4px 0;
 }
 
-.sidebar-logo{
+.sidebar-logo {
   height: 60px;
   width: 65px;
   margin-bottom: 7px;
@@ -113,7 +115,7 @@
 }
 
 .logout-btn:hover {
-  background-color: #334155;  
+  background-color: #334155;
   color: #fff;
 }
 
