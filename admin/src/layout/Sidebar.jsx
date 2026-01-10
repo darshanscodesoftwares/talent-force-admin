@@ -16,6 +16,9 @@ import logo from "../assets/talentforce.png";
 
 import LogoutModal from "../editpages/LogoutModal";
 
+import { LuFileSliders } from "react-icons/lu";
+import { MdPrivacyTip } from "react-icons/md";
+
 function Sidebar() {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -96,13 +99,38 @@ function Sidebar() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/dashboard/seeker-search-filter" className="nav-link">
+              <NavLink
+                to="/dashboard/seeker-search-filter"
+                className="nav-link"
+              >
                 <FaFilter className="icon" /> Seeker Search Filter
               </NavLink>
             </li>
             <li>
               <NavLink to="/dashboard/seeker-profile" className="nav-link">
                 <IoPeopleSharp className="icon" /> Seeker Profile
+              </NavLink>
+            </li>
+
+            {/*--------------Terms & Condition----------------*/}
+            <li>
+              <NavLink
+                to="/dashboard/seeker-terms-condition"
+                className="nav-link"
+              >
+                <LuFileSliders className="icon" />
+                Terms & Condition
+              </NavLink>
+            </li>
+
+            {/*------------- Privacy & Policy --------------*/}
+            <li>
+              <NavLink
+                to="/dashboard/seeker-privacy-policy"
+                className="nav-link"
+              >
+                <MdPrivacyTip className="icon" />
+                Privacy & Policy
               </NavLink>
             </li>
           </ul>
@@ -122,6 +150,25 @@ function Sidebar() {
                 <HiMiniBriefcase className="icon" /> Recruiter Profile
               </NavLink>
             </li>
+
+            {/*--------------Terms & Condition----------------*/}
+            <li>
+              <NavLink
+                to="/dashboard/recruiter-terms-condition"
+                className="nav-link"
+              >
+                <LuFileSliders className="icon" /> Terms & Condition
+              </NavLink>
+            </li>
+            {/*------------- Privacy & Policy --------------*/}
+            <li>
+              <NavLink
+                to="/dashboard/recruiter-privacy-policy"
+                className="nav-link"
+              >
+                <MdPrivacyTip className="icon" /> Privacy & Policy
+              </NavLink>
+            </li>
           </ul>
         </div>
 
@@ -135,7 +182,8 @@ function Sidebar() {
                 className="logout-btn"
                 disabled={loading}
               >
-                <SlLogout className="icon" /> {loading ? "Logging out..." : "Logout"}
+                <SlLogout className="icon" />{" "}
+                {loading ? "Logging out..." : "Logout"}
               </button>
             </li>
           </ul>

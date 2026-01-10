@@ -23,49 +23,61 @@ import SubscriptionPlanProvider from "./UseContexts/GeneralUseContext/Subscripti
 import DashboardGraphProvider from "./UseContexts/GeneralUseContext/DashBoardContext/DashboardGraphContext";
 import DashboardMetricProvider from "./UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext";
 import HomeBannerRecruiterProvider from "./UseContexts/SeekerUseContext/HomeBannerRecruiterProvider";
+import SeekerTermsConditionContext from "./UseContexts/SeekerTerms&ConditionContext/SeekerTermsConditionContext";
+import SeekerPrivacyPolicyContext from "./UseContexts/SeekerTerms&ConditionContext/SeekerPrivacyPolicyContext";
+import RecruiterTermsConditionContext from "./UseContexts/RecruiterTerms&ConditionContext/RecruiterTermsConditionContext";
+import RecruiterPrivacyPolicyContext from "./UseContexts/RecruiterTerms&ConditionContext/RecruiterPrivacyPolicyContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <HomeBannerRecruiterProvider>
-    <DashboardMetricProvider>
-      <DashboardGraphProvider>
-        <SubscriptionPlanProvider>
-          <RecruiterJobPostsProvider>
-            <RecruiterProfileProvider>
-              <ProficiencyProvider>
-                <LanguageProvider>
-                  <GeneralInformationProvider>
-                    <SeekerProfileProvider>
-                      <ExpectedSalaryProvider>
-                        <ExperienceProvider>
-                          <SeekerEduQualificationProvider>
-                            <EducationQualificationProvider>
-                              <CompartmentLevelProvider>
-                                <TeachingQualificationProvider>
-                                  <HighestEducationProvider>
-                                    <EndDateProvider>
-                                      <WorkTypeProvider>
-                                        <SubjectProvider>
-                                          <HomeBannerProvider>
-                                            <App />
-                                          </HomeBannerProvider>
-                                        </SubjectProvider>
-                                      </WorkTypeProvider>
-                                    </EndDateProvider>
-                                  </HighestEducationProvider>
-                                </TeachingQualificationProvider>
-                              </CompartmentLevelProvider>
-                            </EducationQualificationProvider>
-                          </SeekerEduQualificationProvider>
-                        </ExperienceProvider>
-                      </ExpectedSalaryProvider>
-                    </SeekerProfileProvider>
-                  </GeneralInformationProvider>
-                </LanguageProvider>
-              </ProficiencyProvider>
-            </RecruiterProfileProvider>
-          </RecruiterJobPostsProvider>
-        </SubscriptionPlanProvider>
-      </DashboardGraphProvider>
-    </DashboardMetricProvider>
-  </HomeBannerRecruiterProvider>
+  <RecruiterPrivacyPolicyContext>
+    <RecruiterTermsConditionContext>
+      <SeekerPrivacyPolicyContext>
+        <SeekerTermsConditionContext>
+          <HomeBannerRecruiterProvider>
+            <DashboardMetricProvider>
+              <DashboardGraphProvider>
+                <SubscriptionPlanProvider>
+                  <RecruiterJobPostsProvider>
+                    <RecruiterProfileProvider>
+                      <ProficiencyProvider>
+                        <LanguageProvider>
+                          <GeneralInformationProvider>
+                            <SeekerProfileProvider>
+                              <ExpectedSalaryProvider>
+                                <ExperienceProvider>
+                                  <SeekerEduQualificationProvider>
+                                    <EducationQualificationProvider>
+                                      <CompartmentLevelProvider>
+                                        <TeachingQualificationProvider>
+                                          <HighestEducationProvider>
+                                            <EndDateProvider>
+                                              <WorkTypeProvider>
+                                                <SubjectProvider>
+                                                  <HomeBannerProvider>
+                                                    <App />
+                                                  </HomeBannerProvider>
+                                                </SubjectProvider>
+                                              </WorkTypeProvider>
+                                            </EndDateProvider>
+                                          </HighestEducationProvider>
+                                        </TeachingQualificationProvider>
+                                      </CompartmentLevelProvider>
+                                    </EducationQualificationProvider>
+                                  </SeekerEduQualificationProvider>
+                                </ExperienceProvider>
+                              </ExpectedSalaryProvider>
+                            </SeekerProfileProvider>
+                          </GeneralInformationProvider>
+                        </LanguageProvider>
+                      </ProficiencyProvider>
+                    </RecruiterProfileProvider>
+                  </RecruiterJobPostsProvider>
+                </SubscriptionPlanProvider>
+              </DashboardGraphProvider>
+            </DashboardMetricProvider>
+          </HomeBannerRecruiterProvider>
+        </SeekerTermsConditionContext>
+      </SeekerPrivacyPolicyContext>
+    </RecruiterTermsConditionContext>
+  </RecruiterPrivacyPolicyContext>
 );

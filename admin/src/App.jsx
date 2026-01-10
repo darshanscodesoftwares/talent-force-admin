@@ -50,6 +50,10 @@ import WorkTypeFilter from "./filterpages/WorkTypeFilter.jsx";
 import JobPostEndDateFilter from "./filterpages/JobPostEndDateFilter.jsx";
 import AddRecruiterBanner from "./editpages/AddRecruiterBanner.jsx";
 import EditRecruiterBanner from "./editpages/EditRecruiterBanner.jsx";
+import SeekerTermsCondition from "./pages/SeekerTermsCondition.jsx";
+import SeekerPrivacyPolicy from "./pages/SeekerPrivacyPolicy.jsx";
+import RecruiterTermsCondition from "./pages/RecruiterTermsCondition.jsx";
+import RecruiterPrivacyPolicy from "./pages/RecruiterPrivacyPolicy.jsx";
 
 const App = () => {
   return (
@@ -84,6 +88,31 @@ const App = () => {
               path="seeker-search-filter"
               element={<SeekerSearchFilter />}
             />
+
+            {/* Terms & Condition  */}
+            <Route
+              path="seeker-terms-condition"
+              element={<SeekerTermsCondition />}
+            />
+
+            {/* Privacy & Policy  */}
+            <Route
+              path="seeker-privacy-policy"
+              element={<SeekerPrivacyPolicy />}
+            />
+
+            {/*--------Recruiter Terms & Condition-----------*/}
+            <Route
+              path="recruiter-terms-condition"
+              element={<RecruiterTermsCondition />}
+            />
+
+            {/* Privacy & Policy  */}
+            <Route
+              path="recruiter-privacy-policy"
+              element={<RecruiterPrivacyPolicy />}
+            />
+
             <Route path="subscription-plan" element={<SubscriptionPlan />} />
             <Route path="education-filter" element={<Education />} />
 
