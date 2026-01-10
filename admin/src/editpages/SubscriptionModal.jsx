@@ -64,7 +64,7 @@ export default function SubscriptionModal({
 
           <label>Duration (Months)</label>
           <input
-            type="text"
+            // type="text"
             value={durationMonths}
             onChange={(e) => setDurationMonths(e.target.value)}
           />
