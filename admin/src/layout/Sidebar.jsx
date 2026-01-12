@@ -12,7 +12,8 @@ import { HiMiniBriefcase } from "react-icons/hi2";
 import { FaUserGraduate } from "react-icons/fa6";
 import { SlLogout } from "react-icons/sl";
 import "./Sidebar.css";
-import logo from "../assets/talentforce.png";
+// import logo from "../assets/talentforce.png";
+import adminLogo from "../assets/adminlogo.png";
 
 import LogoutModal from "../editpages/LogoutModal";
 
@@ -65,7 +66,7 @@ function Sidebar() {
   return (
     <aside className="sidebar">
       <nav>
-        <img src={logo} alt="template Logo" className="sidebar-logo" />
+        <img src={adminLogo} alt="template Logo" className="sidebar-logo" />
 
         {/* GENERAL */}
         <div className="sidebar-section">

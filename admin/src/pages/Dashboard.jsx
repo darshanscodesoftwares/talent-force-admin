@@ -29,7 +29,9 @@ const Dashboard = () => {
 
   // ---- ALL HOOKS MUST BE AT TOP ---- //
   const { seekers, loading: seekerLoading } = useContext(SeekerProfileContext);
-  const { recruiters, loading: recruiterLoading } = useContext(RecruiterProfileContext);
+  const { recruiters, loading: recruiterLoading } = useContext(
+    RecruiterProfileContext
+  );
 
   const {
     graphData,
@@ -69,18 +71,20 @@ const Dashboard = () => {
   // ---- UI ---- //
   return (
     <div className="dashboard-container">
-
       {/* --- TOP ROW CARDS --- */}
       <div className="top-row">
         <div className="small-cards">
-
           {/* Total Seekers */}
           <div className="card">
             <div className="card-body">
-              <div className="card-icon"><IoIosPeople /></div>
+              <div className="card-icon">
+                <IoIosPeople />
+              </div>
               <div className="font-num">
                 <h4>Total Seeker</h4>
-                <p><span className="amount">{metrics?.total_users ?? 0}</span></p>
+                <p>
+                  <span className="amount">{metrics?.total_users ?? 0}</span>
+                </p>
               </div>
             </div>
             <div className="card-footer">
@@ -93,10 +97,16 @@ const Dashboard = () => {
           {/* Total Recruiters */}
           <div className="card">
             <div className="card-body">
-              <div className="card-icon"><HiMiniBriefcase /></div>
+              <div className="card-icon">
+                <HiMiniBriefcase />
+              </div>
               <div className="font-num">
                 <h4>Total Recruiter</h4>
-                <p><span className="amount">{metrics?.total_recruiters ?? 0}</span></p>
+                <p>
+                  <span className="amount">
+                    {metrics?.total_recruiters ?? 0}
+                  </span>
+                </p>
               </div>
             </div>
             <div className="card-footer">
@@ -109,10 +119,16 @@ const Dashboard = () => {
           {/* Subscribed Users */}
           <div className="card-2">
             <div className="card-body2">
-              <div className="card-icon2"><MdPeopleAlt /></div>
+              <div className="card-icon2">
+                <MdPeopleAlt />
+              </div>
               <div className="font-num2">
                 <h4>Subscribed Users</h4>
-                <p><span className="amount2">{metrics?.subscribed_recruiters ?? 0}</span></p>
+                <p>
+                  <span className="amount2">
+                    {metrics?.subscribed_recruiters ?? 0}
+                  </span>
+                </p>
               </div>
             </div>
           </div>
@@ -120,17 +136,22 @@ const Dashboard = () => {
           {/* Total Revenue */}
           <div className="card-2">
             <div className="card-body2">
-              <div className="card-icon2"><TbCoinRupeeFilled /></div>
+              <div className="card-icon2">
+                <TbCoinRupeeFilled />
+              </div>
               <div className="font-num2">
                 <h4>Total Revenue</h4>
                 <p className="currency-wrap">
-                  <span className="currency2"><LuIndianRupee /></span>
-                  <span className="amount2">{metrics?.total_revenue ?? "0.00"}</span>
+                  <span className="currency2">
+                    <LuIndianRupee />
+                  </span>
+                  <span className="amount2">
+                    {metrics?.total_revenue ?? "0.00"}
+                  </span>
                 </p>
               </div>
             </div>
           </div>
-
         </div>
 
         {/* --- GRAPH SECTION --- */}
@@ -148,7 +169,12 @@ const Dashboard = () => {
                 margin={{ top: 10, right: 10, left: 0, bottom: 5 }}
                 barSize={8}
               >
-                <CartesianGrid stroke="#ccc" strokeDasharray="3 3" vertical={false} opacity={0.3} />
+                <CartesianGrid
+                  stroke="#ccc"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                  opacity={0.3}
+                />
                 <XAxis
                   dataKey="month"
                   tick={{ fontSize: 12, fill: "#6666668b" }}
@@ -168,10 +194,20 @@ const Dashboard = () => {
                   iconType="circle"
                   iconSize={6}
                   wrapperStyle={{ fontSize: "12px", color: "#666" }}
-                  formatter={(value) => <span style={{ color: "#666" }}>{value}</span>}
+                  formatter={(value) => (
+                    <span style={{ color: "#666" }}>{value}</span>
+                  )}
                 />
-                <Bar dataKey="recruiter" fill="#e5671eff" radius={[20, 20, 20, 20]} />
-                <Bar dataKey="seeker" fill="#3dca5eff" radius={[20, 20, 20, 20]} />
+                <Bar
+                  dataKey="recruiter"
+                  fill="#e5671eff"
+                  radius={[20, 20, 20, 20]}
+                />
+                <Bar
+                  dataKey="seeker"
+                  fill="#3dca5eff"
+                  radius={[20, 20, 20, 20]}
+                />
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -179,7 +215,9 @@ const Dashboard = () => {
           {/* --- Year Selector --- */}
           <div className="year-selector">
             <button
-              className={`year-nav-btn prev ${selectedYear > 2024 ? "enabled" : ""}`}
+              className={`year-nav-btn prev ${
+                selectedYear > 2024 ? "enabled" : ""
+              }`}
               onClick={() => {
                 const newYear = selectedYear - 1;
                 if (newYear >= 2024) {
@@ -195,7 +233,9 @@ const Dashboard = () => {
             <span className="year-current">{selectedYear}</span>
 
             <button
-              className={`year-nav-btn next ${selectedYear < 2025 ? "enabled" : ""}`}
+              className={`year-nav-btn next ${
+                selectedYear < 2025 ? "enabled" : ""
+              }`}
               onClick={() => {
                 const newYear = selectedYear + 1;
                 if (newYear <= 2025) {
@@ -240,7 +280,9 @@ const Dashboard = () => {
                   <tr
                     key={rec.id}
                     className="recruiterprofile-row"
-                    onClick={() => navigate(`/dashboard/recruiter-profile/${rec.id}`)}
+                    onClick={() =>
+                      navigate(`/dashboard/recruiter-profile/${rec.id}`)
+                    }
                   >
                     <td>
                       <div className="icon-school">
@@ -268,10 +310,16 @@ const Dashboard = () => {
                     <td>{rec.phoneNumber}</td>
                     <td>{rec.jobPosts?.[0]?.pincode?.pincode || "N/A"}</td>
                     <td>
-                      {rec.membership === "Advanced" ? (
-                        <span className="membership advanced">👑 Advanced</span>
+                      {rec.current_plan?.plan_name ? (
+                        <span
+                          className={`membership plan-${rec.current_plan.plan_name
+                            .toLowerCase()
+                            .replace(/\s+/g, "-")}`}
+                        >
+                          {rec.current_plan.plan_name}
+                        </span>
                       ) : (
-                        <span className="membership basic">● Basic</span>
+                        <span className="membership plan-na">N/A</span>
                       )}
                     </td>
                   </tr>
@@ -309,7 +357,9 @@ const Dashboard = () => {
                   <tr
                     key={seeker.id}
                     className="seekerprofile-row"
-                    onClick={() => navigate(`/dashboard/seeker-profile/${seeker.id}`)}
+                    onClick={() =>
+                      navigate(`/dashboard/seeker-profile/${seeker.id}`)
+                    }
                   >
                     <td>
                       <div className="icon-school">

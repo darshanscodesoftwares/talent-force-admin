@@ -7,6 +7,7 @@ import { PiEyeBold, PiEyeSlashBold } from "react-icons/pi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../assets/talfrc.svg";
+import adminLogo from "../assets/adminlogo.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -64,7 +65,7 @@ const Login = () => {
     <>
       <div className="login-container">
         <div className="greet-card">
-          <img src={logo} alt="TalentForce Logo" className="login-logo" />
+          <img src={adminLogo} alt="TalentForce Logo" className="login-logo" />
 
           <div className="login-title-wrap">
             <h2 className="login1">Welcome Back</h2>
