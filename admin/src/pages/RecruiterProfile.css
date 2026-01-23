@@ -13,7 +13,7 @@
 .recruiterprofile-small-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px; 
+  gap: 20px;
 }
 
 .recruiterprofile-cards-container {
@@ -24,14 +24,14 @@
 .recruiterprofile-card {
   flex: 1;
   display: flex;
-  flex-direction: column;     
+  flex-direction: column;
   justify-content: center;
   background: white;
   height: 80px;
   width: 240px;
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease;
 }
 
@@ -53,10 +53,10 @@
 
 .recruiterprofile-card-icon {
   font-size: 30px;
-  background: #fadacb;   
+  background: #fadacb;
   padding: 10px;
   border-radius: 8px;
-  color: #ef6a37;        
+  color: #ef6a37;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,7 +86,7 @@
   background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .recruiterprofile-section h2 {
@@ -159,7 +159,7 @@
 }
 
 .recruiterprofile-pagination button.active {
-  background: #ef6a37; 
+  background: #ef6a37;
   color: white;
   border-color: #ef6a37;
 }
@@ -179,13 +179,55 @@
 
 .recruiterprofile-membership.basic {
   color: #444;
-} 
+}
 
-.icon-school{
+.icon-school {
   display: flex;
   flex-direction: row;
   gap: 12px;
   justify-content: center;
   align-items: center;
   width: 110px;
+}
+
+/*-------------------JERIN CODE---------------------*/
+.recruiter-school-cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.school-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.recruiter-school-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.school-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #222;
+}
+
+.user-type {
+  font-size: 12px;
+  color: #ef6a37;
+  font-weight: 500;
+}
+
+.login-date {
+  font-size: 12px;
+  color: #666;
+}
+
+.login-time {
+  font-size: 11px;
+  color: #999;
 }

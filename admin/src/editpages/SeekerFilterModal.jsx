@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import "./SeekerFilterModal.css";
 import axios from "axios";
 
-export default function SeekerFilterModal({ filters = {}, setFilters, onClose }) {
+export default function SeekerFilterModal({
+  filters = {},
+  setFilters,
+  onClose,
+}) {
   const [specializations, setSpecializations] = useState([]);
   const [pincodes, setPincodes] = useState([]);
   const [statuses, setStatuses] = useState([]);
@@ -26,13 +30,15 @@ export default function SeekerFilterModal({ filters = {}, setFilters, onClose })
         const users = response.data?.users || [];
 
         const specs = [
-          ...new Set(users.map(u => u.course?.specialization).filter(Boolean))
+          ...new Set(
+            users.map((u) => u.course?.specialization).filter(Boolean)
+          ),
         ];
         const pins = [
-          ...new Set(users.map(u => u.address?.pincode).filter(Boolean))
+          ...new Set(users.map((u) => u.address?.pincode).filter(Boolean)),
         ];
         const stats = [
-          ...new Set(users.flatMap(u => u.status || []).filter(Boolean))
+          ...new Set(users.flatMap((u) => u.status || []).filter(Boolean)),
         ];
 
         setSpecializations(specs);
@@ -69,7 +75,9 @@ export default function SeekerFilterModal({ filters = {}, setFilters, onClose })
       <div className="seeker-filter-modal-content">
         <div className="seeker-filter-modal-header">
           <h2>Advanced Search Filters</h2>
-          <button className="seeker-filter-close-btn" onClick={onClose}>✖</button>
+          <button className="seeker-filter-close-btn" onClick={onClose}>
+            ✖
+          </button>
         </div>
 
         {/* Specialization */}
@@ -78,15 +86,21 @@ export default function SeekerFilterModal({ filters = {}, setFilters, onClose })
           <select
             value={localFilters.specialization}
             onChange={(e) =>
-              setLocalFilters({ ...localFilters, specialization: e.target.value })
+              setLocalFilters({
+                ...localFilters,
+                specialization: e.target.value,
+              })
             }
+            // size={7}
           >
             <option value="">All</option>
             {loading ? (
               <option disabled>Loading...</option>
             ) : (
               specializations.map((spec, i) => (
-                <option key={i} value={spec}>{spec}</option>
+                <option key={i} value={spec}>
+                  {spec}
+                </option>
               ))
             )}
           </select>
@@ -106,7 +120,9 @@ export default function SeekerFilterModal({ filters = {}, setFilters, onClose })
               <option disabled>Loading...</option>
             ) : (
               pincodes.map((pin, i) => (
-                <option key={i} value={pin}>{pin}</option>
+                <option key={i} value={pin}>
+                  {pin}
+                </option>
               ))
             )}
           </select>
@@ -126,7 +142,9 @@ export default function SeekerFilterModal({ filters = {}, setFilters, onClose })
               <option disabled>Loading...</option>
             ) : (
               statuses.map((st, i) => (
-                <option key={i} value={st}>{st}</option>
+                <option key={i} value={st}>
+                  {st}
+                </option>
               ))
             )}
           </select>
@@ -134,8 +152,12 @@ export default function SeekerFilterModal({ filters = {}, setFilters, onClose })
 
         {/* Actions */}
         <div className="seeker-filter-modal-actions">
-          <button className="seeker-filter-clear-btn" onClick={handleClear}>Clear</button>
-          <button className="seeker-filter-apply-btn" onClick={handleApply}>Apply</button>
+          <button className="seeker-filter-clear-btn" onClick={handleClear}>
+            Clear
+          </button>
+          <button className="seeker-filter-apply-btn" onClick={handleApply}>
+            Apply
+          </button>
         </div>
       </div>
     </div>

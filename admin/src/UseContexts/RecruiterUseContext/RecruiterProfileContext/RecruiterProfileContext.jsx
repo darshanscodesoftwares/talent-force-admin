@@ -4,7 +4,9 @@ import { toast } from "react-toastify";
 
 export const RecruiterProfileContext = createContext();
 
-const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin-recruiter-full-details`;
+const API_URL = `${
+  import.meta.env.VITE_API_BASE_URL
+}/api/admin-recruiter-full-details`;
 
 export const RecruiterProfileProvider = ({ children }) => {
   const [recruiters, setRecruiters] = useState([]);
@@ -38,6 +40,11 @@ export const RecruiterProfileProvider = ({ children }) => {
           isLogin: item.is_login ? "Yes" : "No",
           isDetailsCompleted: item.is_school_details_completed ? "Yes" : "No",
           signupDate: new Date(item.signup_date).toLocaleDateString(),
+
+          // 🔥 NEW FIELDS
+          userType: item.user_type || "",
+          loginDate: item.login_date || "",
+          loginTime: item.login_time || "",
 
           // FIXED → backend field name matches UI
           current_plan: item.current_plan || null,

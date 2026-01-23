@@ -4,13 +4,15 @@
   padding: 20px;
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 15px;
 
-  position: relative;   /* ✅ create stacking context */
-  z-index: 1000;        /* ✅ ensure it's above overlay */
+  position: relative; /* ✅ create stacking context */
+  z-index: 1000; /* ✅ ensure it's above overlay */
+
+  overflow: visible !important; /* ✅ REQUIRED */
 }
 
 .seeker-filter-modal-header h2 {
@@ -25,14 +27,15 @@ label {
   color: #444;
 }
 
-input, select {
+input,
+select {
   padding: 8px 10px;
   margin-top: 5px;
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 0.9rem;
-  background: #fff;   /* ✅ ensures dropdown not transparent */
-  cursor: pointer;    /* ✅ clear affordance */
+  background: #fff; /* ✅ ensures dropdown not transparent */
+  cursor: pointer; /* ✅ clear affordance */
 }
 
 .seeker-filter-modal-actions {
@@ -75,11 +78,13 @@ input, select {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
+
+  overflow: visible; /* ✅ REQUIRED */
 }
 
 .seeker-filter-close-btn {
@@ -92,4 +97,18 @@ input, select {
   top: 10px;
   right: 15px;
   z-index: 1100; /* ✅ ensure button stays clickable */
+}
+
+label {
+  overflow: visible; /* ✅ REQUIRED */
+}
+
+select {
+  padding: 8px 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  background: #fff;
+  cursor: pointer;
 }

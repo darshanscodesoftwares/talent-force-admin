@@ -116,7 +116,7 @@ export default function RecruiterProfile() {
                   >
                     {/* School */}
                     <td>
-                      <div className="icon-school">
+                      {/* <div className="icon-school">
                         {recruiter.schoolImage ? (
                           <img
                             src={recruiter.schoolImage}
@@ -134,6 +134,31 @@ export default function RecruiterProfile() {
                           <FaSchool className="school-logo" />
                         )}
                         {recruiter.schoolName}
+                      </div> */}
+
+                      <div className="recruiter-school-cell">
+                        {recruiter.schoolImage ? (
+                          <img
+                            src={recruiter.schoolImage}
+                            alt={recruiter.schoolName}
+                            className="school-logo"
+                          />
+                        ) : (
+                          <FaSchool className="school-logo" />
+                        )}
+
+                        <div className="recruiter-school-info">
+                          <div className="school-name">
+                            {recruiter.schoolName}
+                          </div>
+                          <div className="user-type">{recruiter.userType}</div>
+                          <div className="login-date">
+                            {recruiter.loginDate}
+                          </div>
+                          <div className="login-time">
+                            {recruiter.loginTime}
+                          </div>
+                        </div>
                       </div>
                     </td>
 

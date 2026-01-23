@@ -19,7 +19,7 @@
 .seekerprofile-small-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px; 
+  gap: 20px;
 }
 
 .seekerprofile-cards-container {
@@ -37,7 +37,7 @@
   width: 240px;
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s ease;
 }
 
@@ -48,7 +48,7 @@
 .seekerprofile-card-body {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; 
+  align-items: flex-start;
   justify-content: flex-start;
   gap: 14px;
 }
@@ -285,8 +285,6 @@
   margin-top: 20px;
 }
 
-
-
 /* =======================================
    Column Filter Panel
 ======================================= */
@@ -296,7 +294,7 @@
   padding: 15px;
   border-radius: 8px;
   margin-top: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .column-checkbox {
@@ -439,4 +437,103 @@
   object-fit: cover;
   margin-right: 6px;
   vertical-align: middle;
+}
+
+/*-------------------------JERIN CODE-------------------------------*/
+.seeker-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.seekerprofile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.seekerprofile-avatar-icon {
+  font-size: 36px;
+  color: #999;
+}
+
+.seeker-user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.seeker-name {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.seeker-meta {
+  font-size: 10px;
+  color: #777;
+  gap: 6px;
+}
+
+.seeker-user-cell {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.seekerprofile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.seekerprofile-avatar-icon {
+  font-size: 36px;
+  color: #999;
+}
+
+.seeker-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.seeker-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #222;
+}
+
+.seeker-user-type {
+  font-size: 12px;
+  color: #ef6a37;
+  font-weight: 500;
+}
+
+.seeker-login-date {
+  font-size: 12px;
+  color: #666;
+}
+
+.seeker-login-time {
+  font-size: 11px;
+  color: #999;
+}
+.seeker-user-info span {
+  font-size: 12px;
+}
+.user-type {
+  font-size: 12px;
+  color: #ef6a37;
+  font-weight: 500;
+}
+.login-date {
+  font-size: 12px;
+  color: #666;
+}
+.login-time {
+  font-size: 11px;
+  color: #999;
 }
