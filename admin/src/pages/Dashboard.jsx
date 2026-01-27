@@ -285,7 +285,7 @@ const Dashboard = () => {
                     }
                   >
                     <td>
-                      <div className="icon-school">
+                      {/* <div className="icon-school">
                         {rec.schoolImage ? (
                           <img
                             src={rec.schoolImage}
@@ -304,6 +304,24 @@ const Dashboard = () => {
                           <FaSchool className="school-logo" />
                         )}
                         {rec.schoolName}
+                      </div> */}
+                      <div className="recruiter-school-cell">
+                        {rec.schoolImage ? (
+                          <img
+                            src={rec.schoolImage}
+                            alt={rec.schoolName}
+                            className="school-logo"
+                          />
+                        ) : (
+                          <FaSchool className="school-logo" />
+                        )}
+
+                        <div className="recruiter-school-info">
+                          <div className="school-name">{rec.schoolName}</div>
+                          <div className="user-type">{rec.userType}</div>
+                          <div className="login-date">{rec.loginDate}</div>
+                          <div className="login-time">{rec.loginTime}</div>
+                        </div>
                       </div>
                     </td>
                     <td>{rec.schoolEmail}</td>
@@ -362,7 +380,7 @@ const Dashboard = () => {
                     }
                   >
                     <td>
-                      <div className="icon-school">
+                      {/* <div className="icon-school">
                         {seeker.profile_img ? (
                           <img
                             src={seeker.profile_img}
@@ -381,6 +399,31 @@ const Dashboard = () => {
                           <FaUserCircle className="school-logo" />
                         )}
                         {seeker.name}
+                      </div> */}
+                      <div className="seeker-user-cell">
+                        {/* Avatar */}
+                        {seeker.profile_img ? (
+                          <img
+                            src={seeker.profile_img}
+                            alt={seeker.name}
+                            className="seekerprofile-avatar"
+                          />
+                        ) : (
+                          <FaUserCircle className="seekerprofile-avatar-icon" />
+                        )}
+
+                        {/* Text Info */}
+                        <div className="seeker-user-info">
+                          <div className="seeker-name">{seeker.name}</div>
+
+                          <span className="user-type">{seeker.user_type}</span>
+                          <span className="login-date">
+                            {seeker.login_date}
+                          </span>
+                          <span className="login-time">
+                            {seeker.login_time}
+                          </span>
+                        </div>
                       </div>
                     </td>
                     <td>{seeker.specialization || "N/A"}</td>
