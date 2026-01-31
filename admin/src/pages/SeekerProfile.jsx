@@ -17,7 +17,7 @@ export default function SeekerProfile() {
   const { seekers, loading } = useContext(SeekerProfileContext);
   const [currentPage, setCurrentPage] = useState(1);
   const pagesToShow = 7;
-  const seekersPerPage = 8;
+  const seekersPerPage = 10;
   const [selectedSeekers, setSelectedSeekers] = useState([]);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [filters, setFilters] = useState({

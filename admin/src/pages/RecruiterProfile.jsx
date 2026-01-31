@@ -15,7 +15,7 @@ export default function RecruiterProfile() {
   const { metrics, loadingMetrics, errorMetrics } = useDashboardMetrics();
   const [currentPage, setCurrentPage] = useState(1);
   const pagesToShow = 7;
-  const recruitersPerPage = 8;
+  const recruitersPerPage = 10;
   const navigate = useNavigate();
 
   // Pagination calculations (pure JS, safe)
