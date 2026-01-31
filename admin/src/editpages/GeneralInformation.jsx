@@ -2,12 +2,14 @@ import "./GeneralInformation.css";
 import { FaUserCircle } from "react-icons/fa";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { FaFilePdf } from "react-icons/fa6";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { GeneralInformationContext } from "../UseContexts/SeekerUseContext/GeneralInformationContext";
 
 export default function GeneralInformation() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { id } = useParams(); // ✅ dynamic user id from URL
   const { users, loading } = useContext(GeneralInformationContext);
 
@@ -18,14 +20,19 @@ export default function GeneralInformation() {
 
   if (!profile) return <p className="loading-text">Profile not found!</p>;
 
+  const handleBack = () => {
+    if (location.state?.from) {
+      navigate(location.state.from);
+    } else {
+      navigate("/dashboard/seeker-profile");
+    }
+  };
+
   return (
     <div className="generalinfo-container">
       {/* Header */}
       <div className="generalinfo-header">
-        <h2
-          onClick={() => navigate("/dashboard/seeker-profile")}
-          className="generalinfo-back"
-        >
+        <h2 onClick={handleBack} className="generalinfo-back">
           <IoChevronBackOutline className="back-icon" />
           <span>General Information</span>
         </h2>

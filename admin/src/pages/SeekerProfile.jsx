@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { SeekerProfileContext } from "../UseContexts/SeekerUseContext/SeekerProfileContent.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { IoIosPeople } from "react-icons/io";
 import { FaUserClock, FaUserCheck } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
@@ -26,6 +26,7 @@ export default function SeekerProfile() {
     status: "",
   });
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [userCounts, setUserCounts] = useState({
     total_users: 0,
@@ -145,6 +146,15 @@ export default function SeekerProfile() {
 
   if (loading) return <SeekerProfileLoader />;
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const pageFromUrl = Number(params.get("page"));
+
+    if (pageFromUrl && pageFromUrl >= 1) {
+      setCurrentPage(pageFromUrl);
+    }
+  }, [location.search]);
+
   return (
     <div className="seekerprofile-container">
       {/* 🔹 Top Cards */}
@@ -215,7 +225,7 @@ export default function SeekerProfile() {
 
       {/* ===== PAGINATION  ===== */}
       <div className="seekerprofile-pagination bottom">
-        <button
+        {/* <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}
         >
@@ -238,6 +248,44 @@ export default function SeekerProfile() {
         <button
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          Next
+        </button> */}
+
+        <button
+          disabled={currentPage === 1}
+          onClick={() => {
+            const prev = currentPage - 1;
+            setCurrentPage(prev);
+            navigate(`?page=${prev}`, { replace: true });
+          }}
+        >
+          Prev
+        </button>
+
+        {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
+          const page = i + maxLeft;
+          return (
+            <button
+              key={page}
+              className={currentPage === page ? "active" : ""}
+              onClick={() => {
+                setCurrentPage(page);
+                navigate(`?page=${page}`, { replace: true });
+              }}
+            >
+              {page}
+            </button>
+          );
+        })}
+
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => {
+            const next = currentPage + 1;
+            setCurrentPage(next);
+            navigate(`?page=${next}`, { replace: true });
+          }}
         >
           Next
         </button>
@@ -267,8 +315,15 @@ export default function SeekerProfile() {
               <tr
                 key={seeker.id}
                 className="seekerprofile-row"
+                // onClick={() =>
+                //   navigate(`/dashboard/seeker-profile/${seeker.id}`)
+                // }
                 onClick={() =>
-                  navigate(`/dashboard/seeker-profile/${seeker.id}`)
+                  navigate(`/dashboard/seeker-profile/${seeker.id}`, {
+                    state: {
+                      from: `/dashboard/seeker-profile?page=${currentPage}`,
+                    },
+                  })
                 }
               >
                 <td

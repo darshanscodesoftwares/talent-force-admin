@@ -4,7 +4,7 @@ import { FaSchool } from "react-icons/fa";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import "./RecruiterProfile.css";
 import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import RecruiterProfileLoader from "../Loader/Loader.jsx";
 import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterProfileContext.jsx";
 import { useDashboardMetrics } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext.jsx";
@@ -17,6 +17,7 @@ export default function RecruiterProfile() {
   const pagesToShow = 7;
   const recruitersPerPage = 10;
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Pagination calculations (pure JS, safe)
   const indexOfLast = currentPage * recruitersPerPage;
@@ -25,6 +26,15 @@ export default function RecruiterProfile() {
   const totalPages = Math.ceil(recruiters.length / recruitersPerPage);
   const maxLeft = Math.max(currentPage - Math.floor(pagesToShow / 2), 1);
   const maxRight = Math.min(maxLeft + pagesToShow - 1, totalPages);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const pageFromUrl = Number(params.get("page"));
+
+    if (pageFromUrl && pageFromUrl >= 1) {
+      setCurrentPage(pageFromUrl);
+    }
+  }, [location.search]);
 
   // Scroll to top (safe)
   useEffect(() => {
@@ -95,9 +105,20 @@ export default function RecruiterProfile() {
 
           {/* ===== PAGINATION ===== */}
           <div className="recruiterprofile-pagination">
-            <button
+            {/* <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              Prev
+            </button> */}
+
+            <button
+              disabled={currentPage === 1}
+              onClick={() => {
+                const prev = currentPage - 1;
+                setCurrentPage(prev);
+                navigate(`?page=${prev}`, { replace: true });
+              }}
             >
               Prev
             </button>
@@ -105,19 +126,39 @@ export default function RecruiterProfile() {
             {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
               const page = maxLeft + i;
               return (
+                // <button
+                //   key={page}
+                //   className={currentPage === page ? "active" : ""}
+                //   onClick={() => setCurrentPage(page)}
+                // >
+                //   {page}
+                // </button>
                 <button
                   key={page}
                   className={currentPage === page ? "active" : ""}
-                  onClick={() => setCurrentPage(page)}
+                  onClick={() => {
+                    setCurrentPage(page);
+                    navigate(`?page=${page}`, { replace: true });
+                  }}
                 >
                   {page}
                 </button>
               );
             })}
 
-            <button
+            {/* <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Next
+            </button> */}
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => {
+                const next = currentPage + 1;
+                setCurrentPage(next);
+                navigate(`?page=${next}`, { replace: true });
+              }}
             >
               Next
             </button>
@@ -140,8 +181,15 @@ export default function RecruiterProfile() {
                   <tr
                     key={recruiter.id}
                     className="recruiterprofile-row"
+                    // onClick={() =>
+                    //   navigate(`/dashboard/recruiter-profile/${recruiter.id}`)
+                    // }
                     onClick={() =>
-                      navigate(`/dashboard/recruiter-profile/${recruiter.id}`)
+                      navigate(`/dashboard/recruiter-profile/${recruiter.id}`, {
+                        state: {
+                          from: `/dashboard/recruiter-profile?page=${currentPage}`,
+                        },
+                      })
                     }
                   >
                     {/* School */}

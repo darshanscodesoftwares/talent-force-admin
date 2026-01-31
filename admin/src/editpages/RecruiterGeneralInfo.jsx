@@ -86,12 +86,13 @@
 import "./RecruiterGeneralInfo.css";
 import { FaSchool } from "react-icons/fa";
 import { IoChevronBackOutline } from "react-icons/io5";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useRecruiterJobPosts } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterJobPostsContext.jsx";
 import RecruiterProfileLoader from "../Loader/Loader.jsx"; // optional loader
 
 export default function RecruiterGeneralInfo() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams(); // recruiter_id from URL
   const { recruiters, loading, error } = useRecruiterJobPosts();
 
@@ -103,17 +104,31 @@ export default function RecruiterGeneralInfo() {
 
   const { school_profile, stats, job_posts } = recruiter;
 
+  const handleBack = () => {
+    if (location.state?.from) {
+      navigate(location.state.from);
+    } else {
+      navigate("/dashboard/recruiter-profile"); // fallback
+    }
+  };
+
   return (
     <div className="recruitergeneralinfo-container">
       {/* Header */}
       <div className="recruitergeneralinfo-header">
-        <h2
+        {/* <h2
           onClick={() => navigate("/dashboard/recruiter-profile")}
           className="recruitergeneralinfo-back"
         >
           <IoChevronBackOutline className="back-icon" />
           <span>Recruiter Information</span>
+        </h2> */}
+
+        <h2 onClick={handleBack} className="recruitergeneralinfo-back">
+          <IoChevronBackOutline className="back-icon" />
+          <span>Recruiter Information</span>
         </h2>
+
         {/* <button className="block-btn">Block User</button> */}
       </div>
 
@@ -141,22 +156,42 @@ export default function RecruiterGeneralInfo() {
         <div className="recruitergeneralinfo-row">
           <div className="recruitergeneralinfo-field">
             <label>School Name</label>
-            <input type="text" value={school_profile?.school_name || "N/A"} readOnly />
+            <input
+              type="text"
+              value={school_profile?.school_name || "N/A"}
+              readOnly
+            />
           </div>
           <div className="recruitergeneralinfo-field">
             <label>Address</label>
-            <input type="text" value={school_profile?.school_address || "N/A"} readOnly />
+            <input
+              type="text"
+              value={school_profile?.school_address || "N/A"}
+              readOnly
+            />
           </div>
         </div>
 
         <div className="recruitergeneralinfo-row">
           <div className="recruitergeneralinfo-field">
             <label>Email Id</label>
-            <input type="email" value={school_profile?.school_email || "N/A"} readOnly />
+            <input
+              type="email"
+              value={school_profile?.school_email || "N/A"}
+              readOnly
+            />
           </div>
           <div className="recruitergeneralinfo-field">
             <label>Number</label>
-            <input type="text" value={school_profile?.school_phone_number || recruiter.phone_number || "N/A"} readOnly />
+            <input
+              type="text"
+              value={
+                school_profile?.school_phone_number ||
+                recruiter.phone_number ||
+                "N/A"
+              }
+              readOnly
+            />
           </div>
         </div>
 
@@ -233,7 +268,10 @@ export default function RecruiterGeneralInfo() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: "center", color: "#999" }}>
+                  <td
+                    colSpan="6"
+                    style={{ textAlign: "center", color: "#999" }}
+                  >
                     No Job Posts Found
                   </td>
                 </tr>
@@ -245,4 +283,3 @@ export default function RecruiterGeneralInfo() {
     </div>
   );
 }
-
