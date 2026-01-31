@@ -93,6 +93,36 @@ export default function RecruiterProfile() {
         <div className="recruiterprofile-section">
           <h2>Recruiter Profiles List</h2>
 
+          {/* ===== PAGINATION ===== */}
+          <div className="recruiterprofile-pagination">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              Prev
+            </button>
+
+            {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
+              const page = maxLeft + i;
+              return (
+                <button
+                  key={page}
+                  className={currentPage === page ? "active" : ""}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </button>
+              );
+            })}
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Next
+            </button>
+          </div>
+
           <div className="recruiterprofile-table-container">
             <table className="recruiterprofile-table">
               <thead>
@@ -197,36 +227,6 @@ export default function RecruiterProfile() {
                 ))}
               </tbody>
             </table>
-
-            {/* ===== PAGINATION ===== */}
-            <div className="recruiterprofile-pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage(currentPage - 1)}
-              >
-                Prev
-              </button>
-
-              {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
-                const page = maxLeft + i;
-                return (
-                  <button
-                    key={page}
-                    className={currentPage === page ? "active" : ""}
-                    onClick={() => setCurrentPage(page)}
-                  >
-                    {page}
-                  </button>
-                );
-              })}
-
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage(currentPage + 1)}
-              >
-                Next
-              </button>
-            </div>
           </div>
         </div>
       </div>

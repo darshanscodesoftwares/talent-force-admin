@@ -213,6 +213,36 @@ export default function SeekerProfile() {
         </div>
       </div>
 
+      {/* ===== PAGINATION  ===== */}
+      <div className="seekerprofile-pagination bottom">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          Prev
+        </button>
+
+        {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
+          const page = i + maxLeft;
+          return (
+            <button
+              key={page}
+              className={currentPage === page ? "active" : ""}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          );
+        })}
+
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+        >
+          Next
+        </button>
+      </div>
+
       {/* Table */}
       <div className="seekerprofile-table-container">
         <table className="seekerprofile-table">
@@ -257,21 +287,6 @@ export default function SeekerProfile() {
                   .filter((c) => visibleColumns.includes(c.key))
                   .map((col) => (
                     <td key={col.key}>
-                      {/* {col.key === "name" ? (
-                      <>
-                        {seeker.profile_img ? (
-                          <img
-                            src={seeker.profile_img}
-                            alt={seeker.name}
-                            className="seekerprofile-avatar"
-                          />
-                        ) : (
-                          <FaUserCircle className="school-logo" />
-                        )}
-                        {seeker[col.key]}
-                      </>
-                    ) : seeker[col.key] || ""} */}
-
                       {col.key === "name" ? (
                         <div className="seeker-user-cell">
                           {/* Avatar */}
@@ -309,36 +324,6 @@ export default function SeekerProfile() {
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* ===== PAGINATION (BOTTOM ONLY) ===== */}
-      <div className="seekerprofile-pagination bottom">
-        <button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          Prev
-        </button>
-
-        {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
-          const page = i + maxLeft;
-          return (
-            <button
-              key={page}
-              className={currentPage === page ? "active" : ""}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </button>
-          );
-        })}
-
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          Next
-        </button>
       </div>
 
       {/* Search Modal */}
