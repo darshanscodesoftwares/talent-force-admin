@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 export const SubjectContext = createContext();
 
 const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/job-categories`;
+const API_URL_2 = `${import.meta.env.VITE_API_BASE_URL}/api`;
 
 const SubjectProvider = ({ children }) => {
   const [subjects, setSubjects] = useState([]);
@@ -19,7 +20,10 @@ const SubjectProvider = ({ children }) => {
       const res = await axios.get(API_URL);
 
       // Since API returns an array directly, just set it
-      setSubjects(res.data?.result || []);
+      // setSubjects(res.data?.result || []);
+      setSubjects(
+        (res.data?.result || []).sort((a, b) => a.order_index - b.order_index)
+      );
     } catch (err) {
       setError(err.message || "Failed to fetch subjects");
       toast.error("Failed to fetch subjects");
@@ -35,7 +39,10 @@ const SubjectProvider = ({ children }) => {
       await fetchSubjects();
       toast.success("Subject added successfully");
     } catch (err) {
-      console.error("Failed to add subject:", err.response?.data || err.message);
+      console.error(
+        "Failed to add subject:",
+        err.response?.data || err.message
+      );
       toast.error("Failed to add subject");
       throw err;
     }
@@ -48,9 +55,29 @@ const SubjectProvider = ({ children }) => {
       await fetchSubjects();
       toast.success("Subject deleted successfully");
     } catch (err) {
-      console.error("Failed to delete subject:", err.response?.data || err.message);
+      console.error(
+        "Failed to delete subject:",
+        err.response?.data || err.message
+      );
       toast.error("Failed to delete subject");
       throw err;
+    }
+  };
+
+  const reorderSubjects = async (orderedSubjects) => {
+    try {
+      await axios.post(`${API_URL_2}/subjects-reorder`, {
+        orders: orderedSubjects.map((s, index) => ({
+          id: s.id,
+          order_index: index + 1,
+        })),
+      });
+
+      setSubjects(orderedSubjects);
+      toast.success("Order updated");
+    } catch (err) {
+      console.error("Reorder failed:", err);
+      toast.error("Reorder failed");
     }
   };
 
@@ -67,6 +94,8 @@ const SubjectProvider = ({ children }) => {
         fetchSubjects,
         addSubject,
         deleteSubject,
+
+        reorderSubjects,
       }}
     >
       {children}

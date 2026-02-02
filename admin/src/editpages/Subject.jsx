@@ -7,10 +7,18 @@ import "./Subject.css";
 import SubjectAddModal from "./SubjectAddModal.jsx";
 import { SubjectContext } from "../UseContexts/RecruiterUseContext/JobPostContext/SubjectContext.jsx";
 
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+
 export default function SubjectFilter() {
   const navigate = useNavigate();
-  const { subjects, loading, error, addSubject, deleteSubject } =
-    useContext(SubjectContext);
+  const {
+    subjects,
+    loading,
+    error,
+    addSubject,
+    deleteSubject,
+    reorderSubjects,
+  } = useContext(SubjectContext);
 
   const [hiddenRows, setHiddenRows] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -36,7 +44,8 @@ export default function SubjectFilter() {
   const itemsPerPage = 9;
   const totalPages = Math.ceil((subjects?.length || 0) / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = subjects?.slice(startIndex, startIndex + itemsPerPage) || [];
+  const paginatedData =
+    subjects?.slice(startIndex, startIndex + itemsPerPage) || [];
 
   // ✅ Toggle Hide Row
   const toggleHideRow = (id) => {
@@ -54,6 +63,24 @@ export default function SubjectFilter() {
       month: "short",
       day: "numeric",
     });
+  };
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const sourceIndex = result.source.index + startIndex;
+    const destinationIndex = result.destination.index + startIndex;
+
+    const items = Array.from(subjects);
+    const [moved] = items.splice(sourceIndex, 1);
+    items.splice(destinationIndex, 0, moved);
+
+    reorderSubjects(
+      items.map((item, index) => ({
+        ...item,
+        order_index: index + 1,
+      }))
+    );
   };
 
   return (
@@ -85,32 +112,25 @@ export default function SubjectFilter() {
             <table className="subjectfilter-table">
               <thead>
                 <tr>
+                  <th>S.No</th>
                   <th>Subject</th>
                   <th>Posted on</th>
                   <th>Updated on</th>
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
+              {/* <tbody>
                 {paginatedData.map((subject) => (
                   <tr
                     key={subject.id}
-                    className={hiddenRows.includes(subject.id) ? "hidden-row" : ""}
+                    className={
+                      hiddenRows.includes(subject.id) ? "hidden-row" : ""
+                    }
                   >
                     <td>{subject.category_name}</td>
                     <td>{formatDate(subject.created_at)}</td>
                     <td>{formatDate(subject.updated_at)}</td>
                     <td className="subjectfilter-actions">
-                      {/* <button
-                        className="subjectfilter-btn view-btn"
-                        onClick={() => toggleHideRow(subject.id)}
-                      >
-                        {hiddenRows.includes(subject.id) ? (
-                          <FaRegEyeSlash />
-                        ) : (
-                          <FaRegEye />
-                        )}
-                      </button> */}
                       <button
                         className="subjectfilter-btn delete-btn"
                         onClick={() => handleDelete(subject.id)}
@@ -120,7 +140,54 @@ export default function SubjectFilter() {
                     </td>
                   </tr>
                 ))}
-              </tbody>
+              </tbody> */}
+
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable droppableId="subjects">
+                  {(provided) => (
+                    <tbody ref={provided.innerRef} {...provided.droppableProps}>
+                      {paginatedData.map((subject, index) => (
+                        <Draggable
+                          key={subject.id}
+                          draggableId={subject.id.toString()}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <tr
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              style={{
+                                ...provided.draggableProps.style,
+                                background: snapshot.isDragging
+                                  ? "#f0f9ff"
+                                  : "white",
+                              }}
+                            >
+                              <td {...provided.dragHandleProps}>
+                                {startIndex + index + 1}
+                              </td>
+                              <td>{subject.category_name}</td>
+                              <td>{formatDate(subject.created_at)}</td>
+                              <td>{formatDate(subject.updated_at)}</td>
+                              <td className="jobpostsubjectfilter-actions">
+                                {/* buttons untouched */}
+
+                                <button
+                                  className="jobpostsubjectfilter-btn delete-btn"
+                                  onClick={() => handleDelete(subject.id)}
+                                >
+                                  <AiOutlineDelete />
+                                </button>
+                              </td>
+                            </tr>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </tbody>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </table>
 
             {/* Empty State */}
