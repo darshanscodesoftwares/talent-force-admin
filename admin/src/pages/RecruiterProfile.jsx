@@ -8,6 +8,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import RecruiterProfileLoader from "../Loader/Loader.jsx";
 import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterProfileContext.jsx";
 import { useDashboardMetrics } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext.jsx";
+import * as XLSX from "xlsx";
+import { toast } from "react-toastify";
 
 export default function RecruiterProfile() {
   // ✅ ALL HOOKS MUST BE AT THE TOP — ALWAYS
@@ -27,6 +29,14 @@ export default function RecruiterProfile() {
   const maxLeft = Math.max(currentPage - Math.floor(pagesToShow / 2), 1);
   const maxRight = Math.min(maxLeft + pagesToShow - 1, totalPages);
 
+  const [selectedRecruiters, setSelectedRecruiters] = useState([]);
+
+  const currentPageIds = currentRecruiters.map((r) => r.id);
+
+  const allSelected =
+    currentPageIds.length > 0 &&
+    currentPageIds.every((id) => selectedRecruiters.includes(id));
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const pageFromUrl = Number(params.get("page"));
@@ -40,6 +50,38 @@ export default function RecruiterProfile() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleDownload = () => {
+    const selectedData = recruiters.filter((r) =>
+      selectedRecruiters.includes(r.id)
+    );
+
+    if (selectedData.length === 0) {
+      toast.warning("Please select at least one recruiter");
+      return;
+    }
+
+    const excelData = selectedData.map((r) => ({
+      School: r.schoolName || "N/A",
+      Email: r.schoolEmail || "N/A",
+      Phone: r.phoneNumber || "N/A",
+      Pincode: r.jobPosts?.[0]?.pincode?.pincode || "N/A",
+      Membership: r.current_plan?.plan_name || "N/A",
+      UserType: r.userType,
+      LoginDate: r.loginDate,
+      LoginTime: r.loginTime,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Recruiters");
+    XLSX.writeFile(workbook, "Recruiters_List.xlsx");
+
+    toast.success(
+      `Downloaded ${selectedData.length} recruiter(s) successfully`
+    );
+  };
 
   // ❗ CONDITIONAL RETURNS MUST COME AFTER ALL HOOKS
   if (loading || loadingMetrics) return <RecruiterProfileLoader />;
@@ -101,7 +143,19 @@ export default function RecruiterProfile() {
       {/* ===== RECRUITER LIST TABLE ===== */}
       <div className="recruiterprofile-rec-seek">
         <div className="recruiterprofile-section">
-          <h2>Recruiter Profiles List</h2>
+          <div className="recruiter-header-btn">
+            <h2>Recruiter Profiles List</h2>
+
+            {/* download recruiter  */}
+            <div className="recruiter-header-buttons">
+              <button
+                onClick={handleDownload}
+                className="seekerprofile-add-btn"
+              >
+                Download
+              </button>
+            </div>
+          </div>
 
           {/* ===== PAGINATION ===== */}
           <div className="recruiterprofile-pagination">
@@ -168,6 +222,24 @@ export default function RecruiterProfile() {
             <table className="recruiterprofile-table">
               <thead>
                 <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      onChange={() => {
+                        if (allSelected) {
+                          // ❌ unselect only current page
+                          setSelectedRecruiters((prev) =>
+                            prev.filter((id) => !currentPageIds.includes(id))
+                          );
+                        } else {
+                          // ✅ select only current page
+                          setSelectedRecruiters((prev) => [
+                            ...new Set([...prev, ...currentPageIds]),
+                          ]);
+                        }
+                      }}
+                    />
+                  </th>
                   <th>School</th>
                   <th>Email</th>
                   <th>Phone</th>
@@ -192,28 +264,23 @@ export default function RecruiterProfile() {
                       })
                     }
                   >
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedRecruiters.includes(recruiter.id)}
+                        readOnly
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={() => {
+                          setSelectedRecruiters((prev) =>
+                            prev.includes(recruiter.id)
+                              ? prev.filter((id) => id !== recruiter.id)
+                              : [...prev, recruiter.id]
+                          );
+                        }}
+                      />
+                    </td>
                     {/* School */}
                     <td>
-                      {/* <div className="icon-school">
-                        {recruiter.schoolImage ? (
-                          <img
-                            src={recruiter.schoolImage}
-                            alt={recruiter.schoolName}
-                            className="school-logo"
-                            style={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              marginRight: 8,
-                              objectFit: "cover",
-                            }}
-                          />
-                        ) : (
-                          <FaSchool className="school-logo" />
-                        )}
-                        {recruiter.schoolName}
-                      </div> */}
-
                       <div className="recruiter-school-cell">
                         {recruiter.schoolImage ? (
                           <img

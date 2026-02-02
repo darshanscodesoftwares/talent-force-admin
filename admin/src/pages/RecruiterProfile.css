@@ -232,3 +232,9 @@
   font-size: 11px;
   color: #999;
 }
+
+/*--------------*/
+.recruiter-header-btn {
+  display: flex;
+  justify-content: space-between;
+}
