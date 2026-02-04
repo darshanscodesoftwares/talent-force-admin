@@ -144,8 +144,6 @@ export default function SeekerProfile() {
     toast.success("Excel downloaded successfully!");
   };
 
-  if (loading) return <SeekerProfileLoader />;
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const pageFromUrl = Number(params.get("page"));
@@ -154,6 +152,8 @@ export default function SeekerProfile() {
       setCurrentPage(pageFromUrl);
     }
   }, [location.search]);
+
+  if (loading) return <SeekerProfileLoader />;
 
   return (
     <div className="seekerprofile-container">
