@@ -10,11 +10,14 @@ import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/Recr
 import { useDashboardMetrics } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext.jsx";
 import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 
 export default function RecruiterProfile() {
   // ✅ ALL HOOKS MUST BE AT THE TOP — ALWAYS
   const { recruiters, loading } = useContext(RecruiterProfileContext);
   const { metrics, loadingMetrics, errorMetrics } = useDashboardMetrics();
+  const [searchModalOpen, setSearchModalOpen] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const pagesToShow = 7;
   const recruitersPerPage = 10;
@@ -154,6 +157,13 @@ export default function RecruiterProfile() {
               >
                 Download
               </button>
+              {/* <button
+                onClick={() => setSearchModalOpen((prev) => !prev)}
+                className="seekerprofile-search-btn"
+              >
+                Advanced Search{" "}
+                {searchModalOpen ? <FaAngleUp /> : <FaAngleDown />}
+              </button> */}
             </div>
           </div>
 
@@ -345,6 +355,53 @@ export default function RecruiterProfile() {
           </div>
         </div>
       </div>
+
+      {/* {searchModalOpen && (
+        <div
+          className="recruiter-modal-overlay"
+          onClick={() => setSearchModalOpen(false)}
+        >
+          <div
+            className="recruiter-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="recruiter-modal-close-btn"
+              onClick={() => setSearchModalOpen(false)}
+            >
+              &times;
+            </button>
+            <h2 className="recruiter-modal-title">Advanced Search</h2>
+            <div className="recruiter-modal-body">
+              <div className="recruiter-search-field-group">
+                <label className="recruiter-search-label">School Name</label>
+                <input
+                  type="text"
+                  className="recruiter-search-input"
+                  placeholder="School Name"
+                />
+              </div>
+              <div className="recruiter-search-field-group">
+                <label className="recruiter-search-label">Phone Number</label>
+                <input
+                  type="text"
+                  className="recruiter-search-input"
+                  placeholder="Phone Number"
+                />
+              </div>
+
+              <div className="recruiter-search-actions">
+                <button type="button" className="recruiter-search-btn-clear">
+                  Clear
+                </button>
+                <button type="button" className="recruiter-search-btn-apply">
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 }

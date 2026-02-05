@@ -6,6 +6,7 @@ const SubScriptionLimitModel = ({ isOpen, onClose, onSave, subscription }) => {
   const [applicantviews, setApplicantviews] = useState("");
   const [totalJobpost, setTotalJobpost] = useState("");
   const [contactDetails, setContactDetails] = useState("");
+  const [viewsType, setViewsType] = useState("");
 
   if (!isOpen) return null;
 
@@ -26,21 +27,16 @@ const SubScriptionLimitModel = ({ isOpen, onClose, onSave, subscription }) => {
           ? "null"
           : subscription.limits.job_posts_per_month
       );
+
+      // ✅ SHOW ONLY
+      setViewsType(subscription.limits.views_type ?? "null");
+
       setContactDetails(String(subscription.limits.show_contact_details));
     }
   }, [subscription]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // const updatedData = {
-    //   limits: {
-    //     ai_limit: aiLimits,
-    //     applicant_views: applicantviews,
-    //     job_posts_per_month: totalJobpost,
-    //     show_contact_details: contactDetails,
-    //   },
-    // };
 
     const updatedData = {
       limits: {
@@ -57,6 +53,9 @@ const SubScriptionLimitModel = ({ isOpen, onClose, onSave, subscription }) => {
             : contactDetails === "false"
             ? false
             : null,
+
+        // ✅ VERY IMPORTANT
+        views_type: subscription?.limits?.views_type,
       },
     };
 
@@ -93,6 +92,16 @@ const SubScriptionLimitModel = ({ isOpen, onClose, onSave, subscription }) => {
             <input
               value={contactDetails}
               onChange={(e) => setContactDetails(e.target.value)}
+            />
+
+            <label>View Type</label>
+            <input
+              value={viewsType}
+              disabled
+              style={{
+                backgroundColor: "#f2f2f2",
+                cursor: "not-allowed",
+              }}
             />
 
             <div className="subscriptionmodal-actions">

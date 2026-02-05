@@ -23,16 +23,6 @@ export default function SubscriptionModal({
     }
   }, [subscription]);
 
-  //   const handleSubmit = async (e) => {
-  //     e.preventDefault();
-
-  //    await onSave(subscription.id, {
-  //   price: price.trim(),   // ✅ ONLY SEND PRICE
-  // });
-
-  //     onClose();
-  //   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -68,6 +68,7 @@ const SubScriptionLimit = () => {
                     <th>Applicant views</th>
                     <th>Total Job post</th>
                     <th>Contact Details</th>
+                    <th>View Type</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -95,6 +96,8 @@ const SubScriptionLimit = () => {
                           ? "null"
                           : String(sub.limits.show_contact_details)}
                       </td>
+
+                      <td>{sub.limits?.views_type || "null"}</td>
 
                       <td className="subscription-actions">
                         <button

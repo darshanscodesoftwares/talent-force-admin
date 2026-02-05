@@ -87,9 +87,12 @@ export default function SubscriptionPlan() {
               }}
             >
               <h2>Subscription List</h2>
-              {/* <button className="subscription-add-btn" onClick={() => setIsAddModalOpen(true)}>
-              Add Subscription
-            </button> */}
+              <button
+                className="subscription-add-btn"
+                onClick={() => setIsAddModalOpen(true)}
+              >
+                Add Subscription
+              </button>
             </div>
 
             <div className="subscription-table-container">
@@ -127,12 +130,12 @@ export default function SubscriptionPlan() {
                         >
                           <BiSolidEdit />
                         </button>
-                        {/* <button
-                        className="subscription-btn delete-btn"
-                        onClick={() => deleteSubscription(sub.id)}
-                      >
-                        <AiOutlineDelete />
-                      </button> */}
+                        <button
+                          className="subscription-btn delete-btn"
+                          onClick={() => deleteSubscription(sub.id)}
+                        >
+                          <AiOutlineDelete />
+                        </button>
                       </td>
                     </tr>
                   ))}
