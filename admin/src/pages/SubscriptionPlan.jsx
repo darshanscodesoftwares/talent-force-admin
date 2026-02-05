@@ -130,12 +130,14 @@ export default function SubscriptionPlan() {
                         >
                           <BiSolidEdit />
                         </button>
-                        <button
-                          className="subscription-btn delete-btn"
-                          onClick={() => deleteSubscription(sub.id)}
-                        >
-                          <AiOutlineDelete />
-                        </button>
+                        {sub.id !== 2 && (
+                          <button
+                            className="subscription-btn delete-btn"
+                            onClick={() => deleteSubscription(sub.id)}
+                          >
+                            <AiOutlineDelete />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
