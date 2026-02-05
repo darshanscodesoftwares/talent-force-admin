@@ -13,13 +13,19 @@
 
 .subscriptionaddmodal-content {
   background: #fff;
-  padding: 30px 40px;
-  border-radius: 12px;
+  padding: 15px 40px;
+  border-radius: 8px;
   width: 600px;
   max-width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.button-headline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .subscriptionaddmodal-content h3 {
@@ -68,13 +74,13 @@
 }
 
 .cancel-btn {
-  background: #f1f1f1;
+  background: #dcdcdc !important;
   color: #333;
   border: none;
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  /* transition: background 0.2s ease; */
 }
 
 .cancel-btn:hover {

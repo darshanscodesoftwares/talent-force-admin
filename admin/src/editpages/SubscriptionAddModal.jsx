@@ -78,7 +78,13 @@ export default function SubscriptionAddModal({ isOpen, onClose, onSave }) {
   return (
     <div className="subscriptionaddmodal-overlay">
       <div className="subscriptionaddmodal-content">
-        <h3>Add Subscription Plans</h3>
+        <div className="button-headline">
+          <h3>Add Subscription Plans</h3>
+
+          <button type="button" className="cancel-btn" onClick={onClose}>
+            Cancel
+          </button>
+        </div>
 
         <form onSubmit={handleSubmit}>
           <label>Plan Name</label>
