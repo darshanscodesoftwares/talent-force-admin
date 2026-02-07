@@ -2,7 +2,7 @@
   background: white;
   border-radius: 12px;
   padding: 25px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   max-width: 900px;
   margin: 30px auto;
 }
@@ -158,8 +158,8 @@
 }
 
 .profile-img {
-  width: 180px;  /* adjust as needed */
+  width: 180px; /* adjust as needed */
   height: 180px;
   border-radius: 50%; /* circular */
-  object-fit: cover;  /* keeps aspect ratio */
+  object-fit: cover; /* keeps aspect ratio */
 }

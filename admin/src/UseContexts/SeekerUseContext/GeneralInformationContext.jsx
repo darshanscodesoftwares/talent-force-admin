@@ -15,7 +15,10 @@ export const GeneralInformationProvider = ({ children }) => {
         `${import.meta.env.VITE_API_BASE_URL}/api/admin-user-details`
       );
 
-      if (response.data.status === "success" && response.data.users.length > 0) {
+      if (
+        response.data.status === "success" &&
+        response.data.users.length > 0
+      ) {
         const simplifiedUsers = response.data.users.map((user) => ({
           id: user.user_id,
           user: user.profile?.name || "",

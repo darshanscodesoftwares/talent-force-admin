@@ -13,8 +13,6 @@ export default function GeneralInformation() {
   const { id } = useParams(); // ✅ dynamic user id from URL
   const { users, loading } = useContext(GeneralInformationContext);
 
-  if (loading) return <p className="loading-text">Loading...</p>;
-
   // 🔑 find the right profile based on dynamic id
   const profile = users.find((u) => u.id === parseInt(id));
 
@@ -27,6 +25,8 @@ export default function GeneralInformation() {
       navigate("/dashboard/seeker-profile");
     }
   };
+
+  if (loading) return <p className="loading-text">Loading...</p>;
 
   return (
     <div className="generalinfo-container">

@@ -3,18 +3,20 @@ import { FaUserCheck } from "react-icons/fa6";
 import { FaSchool } from "react-icons/fa";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import "./RecruiterProfile.css";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import RecruiterProfileLoader from "../Loader/Loader.jsx";
 import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterProfileContext.jsx";
 import { useDashboardMetrics } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext.jsx";
 import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import { FaDeleteLeft } from "react-icons/fa6";
 
 export default function RecruiterProfile() {
   // ✅ ALL HOOKS MUST BE AT THE TOP — ALWAYS
-  const { recruiters, loading } = useContext(RecruiterProfileContext);
+  const { recruiters, loading, softdelete } = useContext(
+    RecruiterProfileContext
+  );
   const { metrics, loadingMetrics, errorMetrics } = useDashboardMetrics();
   const [searchModalOpen, setSearchModalOpen] = useState(false);
 
@@ -23,6 +25,9 @@ export default function RecruiterProfile() {
   const recruitersPerPage = 25;
   const navigate = useNavigate();
   const location = useLocation();
+
+  const topScrollRef = useRef(null);
+  const tableScrollRef = useRef(null);
 
   // Pagination calculations (pure JS, safe)
   const indexOfLast = currentPage * recruitersPerPage;
@@ -95,6 +100,42 @@ export default function RecruiterProfile() {
       `Downloaded ${selectedData.length} recruiter(s) successfully`
     );
   };
+
+  const handleSoftDelete = async (id) => {
+    await softdelete(id);
+  };
+
+  useEffect(() => {
+    const top = topScrollRef.current;
+    const table = tableScrollRef.current;
+
+    if (!top || !table) return;
+
+    const syncTop = () => {
+      table.scrollLeft = top.scrollLeft;
+    };
+
+    const syncTable = () => {
+      top.scrollLeft = table.scrollLeft;
+    };
+
+    top.addEventListener("scroll", syncTop);
+    table.addEventListener("scroll", syncTable);
+
+    return () => {
+      top.removeEventListener("scroll", syncTop);
+      table.removeEventListener("scroll", syncTable);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (tableScrollRef.current && topScrollRef.current) {
+      const tableWidth =
+        tableScrollRef.current.querySelector("table").scrollWidth;
+
+      topScrollRef.current.firstChild.style.width = tableWidth + "px";
+    }
+  }, [recruiters]);
 
   // ❗ CONDITIONAL RETURNS MUST COME AFTER ALL HOOKS
   if (loading || loadingMetrics) return <RecruiterProfileLoader />;
@@ -246,130 +287,158 @@ export default function RecruiterProfile() {
             </button>
           </div>
 
-          <div className="recruiterprofile-table-container">
-            <table className="recruiterprofile-table">
-              <thead>
-                <tr>
-                  <th>
-                    <input
-                      type="checkbox"
-                      onChange={() => {
-                        if (allSelected) {
-                          // ❌ unselect only current page
-                          setSelectedRecruiters((prev) =>
-                            prev.filter((id) => !currentPageIds.includes(id))
-                          );
-                        } else {
-                          // ✅ select only current page
-                          setSelectedRecruiters((prev) => [
-                            ...new Set([...prev, ...currentPageIds]),
-                          ]);
-                        }
-                      }}
-                    />
-                  </th>
-                  <th>School</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Pincode</th>
-                  <th>Membership</th>
-                </tr>
-              </thead>
+          <div className="recruiter-table-wrapper">
+            {/* Top Scroll */}
+            <div className="top-scroll" ref={topScrollRef}>
+              <div className="top-scroll-inner"></div>
+            </div>
 
-              <tbody>
-                {currentRecruiters.map((recruiter) => (
-                  <tr
-                    key={recruiter.id}
-                    className="recruiterprofile-row"
-                    // onClick={() =>
-                    //   navigate(`/dashboard/recruiter-profile/${recruiter.id}`)
-                    // }
-                    onClick={() =>
-                      navigate(`/dashboard/recruiter-profile/${recruiter.id}`, {
-                        state: {
-                          from: `/dashboard/recruiter-profile?page=${currentPage}`,
-                        },
-                      })
-                    }
-                  >
-                    <td>
+            <div
+              className="recruiterprofile-table-container"
+              ref={tableScrollRef}
+            >
+              <table className="recruiterprofile-table">
+                <thead>
+                  <tr>
+                    <th>
                       <input
                         type="checkbox"
-                        checked={selectedRecruiters.includes(recruiter.id)}
-                        readOnly
-                        onClick={(e) => e.stopPropagation()}
                         onChange={() => {
-                          setSelectedRecruiters((prev) =>
-                            prev.includes(recruiter.id)
-                              ? prev.filter((id) => id !== recruiter.id)
-                              : [...prev, recruiter.id]
-                          );
+                          if (allSelected) {
+                            // ❌ unselect only current page
+                            setSelectedRecruiters((prev) =>
+                              prev.filter((id) => !currentPageIds.includes(id))
+                            );
+                          } else {
+                            // ✅ select only current page
+                            setSelectedRecruiters((prev) => [
+                              ...new Set([...prev, ...currentPageIds]),
+                            ]);
+                          }
                         }}
                       />
-                    </td>
-                    {/* School */}
-                    <td>
-                      <div className="recruiter-school-cell">
-                        {recruiter.schoolImage ? (
-                          <img
-                            src={recruiter.schoolImage}
-                            alt={recruiter.schoolName}
-                            className="school-logo"
-                          />
-                        ) : (
-                          <FaSchool className="school-logo" />
-                        )}
+                    </th>
+                    <th>School</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Pincode</th>
+                    <th>Membership</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
 
-                        <div className="recruiter-school-info">
-                          <div className="school-name">
-                            {recruiter.schoolName}
-                          </div>
-                          <div className="user-type">{recruiter.userType}</div>
-                          <div className="login-date">
-                            {recruiter.loginDate}
-                          </div>
-                          <div className="login-time">
-                            {recruiter.loginTime}
+                <tbody>
+                  {currentRecruiters.map((recruiter) => (
+                    <tr
+                      key={recruiter.id}
+                      className="recruiterprofile-row"
+                      // onClick={() =>
+                      //   navigate(`/dashboard/recruiter-profile/${recruiter.id}`)
+                      // }
+                      onClick={() =>
+                        navigate(
+                          `/dashboard/recruiter-profile/${recruiter.id}`,
+                          {
+                            state: {
+                              from: `/dashboard/recruiter-profile?page=${currentPage}`,
+                            },
+                          }
+                        )
+                      }
+                    >
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedRecruiters.includes(recruiter.id)}
+                          readOnly
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={() => {
+                            setSelectedRecruiters((prev) =>
+                              prev.includes(recruiter.id)
+                                ? prev.filter((id) => id !== recruiter.id)
+                                : [...prev, recruiter.id]
+                            );
+                          }}
+                        />
+                      </td>
+                      {/* School */}
+                      <td>
+                        <div className="recruiter-school-cell">
+                          {recruiter.schoolImage ? (
+                            <img
+                              src={recruiter.schoolImage}
+                              alt={recruiter.schoolName}
+                              className="school-logo"
+                            />
+                          ) : (
+                            <FaSchool className="school-logo" />
+                          )}
+
+                          <div className="recruiter-school-info">
+                            <div className="school-name">
+                              {recruiter.schoolName}
+                            </div>
+                            <div className="user-type">
+                              {recruiter.userType}
+                            </div>
+                            <div className="login-date">
+                              {recruiter.loginDate}
+                            </div>
+                            <div className="login-time">
+                              {recruiter.loginTime}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Email */}
-                    <td>{recruiter.schoolEmail}</td>
+                      {/* Email */}
+                      <td>{recruiter.schoolEmail}</td>
 
-                    {/* Phone */}
-                    <td>{recruiter.phoneNumber}</td>
+                      {/* Phone */}
+                      <td>{recruiter.phoneNumber}</td>
 
-                    {/* Pincode */}
-                    {/* <td>{recruiter.job_posts?.[0]?.pincode?.pincode || "N/A"}</td>
-                     */}
-                    <td>
-                      {recruiter.jobPosts?.[0]?.pincode?.pincode || "N/A"}
-                    </td>
+                      {/* Pincode */}
+                      {/* <td>{recruiter.job_posts?.[0]?.pincode?.pincode || "N/A"}</td>
+                       */}
+                      <td>
+                        {recruiter.jobPosts?.[0]?.pincode?.pincode || "N/A"}
+                      </td>
 
-                    {/* Membership */}
-                    <td>
-                      {(() => {
-                        const plan = recruiter.current_plan?.plan_name;
+                      {/* Membership */}
+                      <td>
+                        {(() => {
+                          const plan = recruiter.current_plan?.plan_name;
 
-                        if (!plan) return <span>N/A</span>;
+                          if (!plan) return <span>N/A</span>;
 
-                        return plan.toLowerCase() === "free" ? (
-                          <span className="recruiterprofile-membership basic">
-                            {plan}
-                          </span>
-                        ) : (
-                          <span className="recruiterprofile-membership advanced">
-                            {plan}
-                          </span>
-                        );
-                      })()}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                          return plan.toLowerCase() === "free" ? (
+                            <span className="recruiterprofile-membership basic">
+                              {plan}
+                            </span>
+                          ) : (
+                            <span className="recruiterprofile-membership advanced">
+                              {plan}
+                            </span>
+                          );
+                        })()}
+                      </td>
+                      <td onClick={(e) => e.stopPropagation()}>
+                        <button
+                          type="button"
+                          className="delete-btn-table"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSoftDelete(recruiter.id);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

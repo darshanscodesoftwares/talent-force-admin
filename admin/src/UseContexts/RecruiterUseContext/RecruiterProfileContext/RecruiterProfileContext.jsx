@@ -74,6 +74,27 @@ export const RecruiterProfileProvider = ({ children }) => {
     }
   };
 
+  //soft delete
+
+  // soft delete recruiter
+  const softdelete = async (id) => {
+    try {
+      // ✅ Optimistic UI remove (instant delete)
+      setRecruiters((prev) => prev.filter((r) => r.id !== id));
+
+      await axios.put(
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/api/admin/recruiter-soft-delete/${id}`
+      );
+    } catch (error) {
+      console.error("Delete failed:", error);
+
+      // rollback if API fails
+      fetchRecruiters();
+    }
+  };
+
   useEffect(() => {
     fetchRecruiters();
   }, []);
@@ -84,6 +105,7 @@ export const RecruiterProfileProvider = ({ children }) => {
         recruiters,
         loading,
         fetchRecruiters,
+        softdelete,
       }}
     >
       {children}

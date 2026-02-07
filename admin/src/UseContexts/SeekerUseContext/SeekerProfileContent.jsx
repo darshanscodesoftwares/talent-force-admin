@@ -1,5 +1,6 @@
 // src/contexts/SeekerProfileContext.jsx
 import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
 export const SeekerProfileContext = createContext();
 
@@ -65,6 +66,20 @@ export const SeekerProfileProvider = ({ children }) => {
     return seekers.find((s) => s.id === parseInt(id));
   };
 
+  const softdelete = async (id) => {
+    try {
+      // Immediate UI update
+      setSeekers((prev) => prev.filter((s) => s.id !== id));
+
+      await axios.put(
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin/delete-user/${id}`
+      );
+    } catch (error) {
+      console.error("Delete failed:", error);
+      fetchSeekers(); // rollback
+    }
+  };
+
   useEffect(() => {
     fetchSeekers();
   }, []);
@@ -78,6 +93,7 @@ export const SeekerProfileProvider = ({ children }) => {
         addSeeker,
         editSeeker,
         getSeekerById,
+        softdelete,
       }}
     >
       {children}

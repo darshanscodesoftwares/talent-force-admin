@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { SeekerProfileContext } from "../UseContexts/SeekerUseContext/SeekerProfileContent.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IoIosPeople } from "react-icons/io";
-import { FaUserClock, FaUserCheck } from "react-icons/fa6";
+import { FaUserClock, FaUserCheck, FaDeleteLeft } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import SeekerFilterModal from "../editpages/SeekerFilterModal.jsx";
@@ -14,7 +14,8 @@ import axios from "axios";
 import "./SeekerProfile.css";
 
 export default function SeekerProfile() {
-  const { seekers, loading } = useContext(SeekerProfileContext);
+  const { seekers, loading, softdelete } = useContext(SeekerProfileContext);
+
   const [currentPage, setCurrentPage] = useState(1);
   const pagesToShow = 7;
   const seekersPerPage = 25;
@@ -66,6 +67,7 @@ export default function SeekerProfile() {
     { key: "phone", label: "Phone" },
     { key: "pincode", label: "Pincode" },
     { key: "status", label: "Status" },
+    { key: "action", label: "Action" },
   ];
   const [visibleColumns, setVisibleColumns] = useState(
     allColumns.map((c) => c.key)
@@ -162,6 +164,10 @@ export default function SeekerProfile() {
       setCurrentPage(pageFromUrl);
     }
   }, [location.search]);
+
+  const handleSoftDelete = async (id) => {
+    await softdelete(id);
+  };
 
   if (loading) return <SeekerProfileLoader />;
 
@@ -326,9 +332,6 @@ export default function SeekerProfile() {
               <tr
                 key={seeker.id}
                 className="seekerprofile-row"
-                // onClick={() =>
-                //   navigate(`/dashboard/seeker-profile/${seeker.id}`)
-                // }
                 onClick={() =>
                   navigate(`/dashboard/seeker-profile/${seeker.id}`, {
                     state: {
@@ -349,13 +352,12 @@ export default function SeekerProfile() {
                     readOnly
                   />
                 </td>
-                {allColumns
+                {/* {allColumns
                   .filter((c) => visibleColumns.includes(c.key))
                   .map((col) => (
                     <td key={col.key}>
                       {col.key === "name" ? (
                         <div className="seeker-user-cell">
-                          {/* Avatar */}
                           {seeker.profile_img ? (
                             <img
                               src={seeker.profile_img}
@@ -366,7 +368,53 @@ export default function SeekerProfile() {
                             <FaUserCircle className="seekerprofile-avatar-icon" />
                           )}
 
-                          {/* Text Info */}
+                          <div className="seeker-user-info">
+                            <div className="seeker-name">{seeker.name}</div>
+
+                            <span className="user-type">
+                              {seeker.user_type}
+                            </span>
+                            <span className="login-date">
+                              {seeker.login_date}
+                            </span>
+                            <span className="login-time">
+                              {seeker.login_time}
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        seeker[col.key] || ""
+                      )}
+                    </td>
+                  ))} */}
+
+                {allColumns
+                  .filter((c) => visibleColumns.includes(c.key))
+                  .map((col) => (
+                    <td key={col.key}>
+                      {col.key === "action" ? (
+                        <button
+                          type="button"
+                          className="delete-btn-table"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSoftDelete(seeker.id);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      ) : col.key === "name" ? (
+                        <div className="seeker-user-cell">
+                          {seeker.profile_img ? (
+                            <img
+                              src={seeker.profile_img}
+                              alt={seeker.name}
+                              className="seekerprofile-avatar"
+                            />
+                          ) : (
+                            <FaUserCircle className="seekerprofile-avatar-icon" />
+                          )}
+
                           <div className="seeker-user-info">
                             <div className="seeker-name">{seeker.name}</div>
 

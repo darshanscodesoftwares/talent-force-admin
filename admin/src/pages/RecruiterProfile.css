@@ -96,6 +96,21 @@
   color: #444;
 }
 
+.recruiter-table-wrapper {
+  width: 100%;
+}
+
+.top-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 15px;
+}
+
+.top-scroll-inner {
+  width: 1500px; /* must match table width */
+  height: 1px;
+}
+
 .recruiterprofile-table-container {
   overflow-x: auto;
 }
@@ -213,7 +228,7 @@
 
 .school-name {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   color: #222;
 }
 
@@ -409,4 +424,23 @@
 .recruiterprofile-pagination button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
+}
+
+/*-------Scroll top css----*/
+.scroll-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 10px 14px;
+  background: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 999;
+}
+
+.scroll-top-btn:hover {
+  background: #1565c0;
 }
