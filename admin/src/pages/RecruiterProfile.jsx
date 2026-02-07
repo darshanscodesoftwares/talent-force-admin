@@ -20,7 +20,7 @@ export default function RecruiterProfile() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const pagesToShow = 7;
-  const recruitersPerPage = 10;
+  const recruitersPerPage = 25;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,6 +31,16 @@ export default function RecruiterProfile() {
   const totalPages = Math.ceil(recruiters.length / recruitersPerPage);
   const maxLeft = Math.max(currentPage - Math.floor(pagesToShow / 2), 1);
   const maxRight = Math.min(maxLeft + pagesToShow - 1, totalPages);
+
+  /*-----------------------------------------------------*/
+  const totalRecords = recruiters.length;
+
+  const startRecord =
+    totalRecords === 0 ? 0 : (currentPage - 1) * recruitersPerPage + 1;
+
+  const endRecord = Math.min(currentPage * recruitersPerPage, totalRecords);
+
+  /*-----------------------------------------------------*/
 
   const [selectedRecruiters, setSelectedRecruiters] = useState([]);
 
@@ -168,14 +178,7 @@ export default function RecruiterProfile() {
           </div>
 
           {/* ===== PAGINATION ===== */}
-          <div className="recruiterprofile-pagination">
-            {/* <button
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              Prev
-            </button> */}
-
+          {/* <div className="recruiterprofile-pagination">
             <button
               disabled={currentPage === 1}
               onClick={() => {
@@ -190,13 +193,6 @@ export default function RecruiterProfile() {
             {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
               const page = maxLeft + i;
               return (
-                // <button
-                //   key={page}
-                //   className={currentPage === page ? "active" : ""}
-                //   onClick={() => setCurrentPage(page)}
-                // >
-                //   {page}
-                // </button>
                 <button
                   key={page}
                   className={currentPage === page ? "active" : ""}
@@ -210,12 +206,6 @@ export default function RecruiterProfile() {
               );
             })}
 
-            {/* <button
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              Next
-            </button> */}
             <button
               disabled={currentPage === totalPages}
               onClick={() => {
@@ -225,6 +215,34 @@ export default function RecruiterProfile() {
               }}
             >
               Next
+            </button>
+          </div> */}
+
+          <div className="recruiterprofile-pagination">
+            <span className="pagination-range">
+              {startRecord}-{endRecord} of {totalRecords}
+            </span>
+
+            <button
+              disabled={currentPage === 1}
+              onClick={() => {
+                const prev = currentPage - 1;
+                setCurrentPage(prev);
+                navigate(`?page=${prev}`, { replace: true });
+              }}
+            >
+              ❮
+            </button>
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => {
+                const next = currentPage + 1;
+                setCurrentPage(next);
+                navigate(`?page=${next}`, { replace: true });
+              }}
+            >
+              ❯
             </button>
           </div>
 

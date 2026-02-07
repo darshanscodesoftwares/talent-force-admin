@@ -537,3 +537,30 @@
   font-size: 11px;
   color: #999;
 }
+
+.seekerprofile-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 15px;
+  padding: 15px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.pagination-range {
+  font-weight: 500;
+}
+
+.seekerprofile-pagination button {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.seekerprofile-pagination button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

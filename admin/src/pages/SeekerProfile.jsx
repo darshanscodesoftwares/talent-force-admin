@@ -17,7 +17,7 @@ export default function SeekerProfile() {
   const { seekers, loading } = useContext(SeekerProfileContext);
   const [currentPage, setCurrentPage] = useState(1);
   const pagesToShow = 7;
-  const seekersPerPage = 10;
+  const seekersPerPage = 25;
   const [selectedSeekers, setSelectedSeekers] = useState([]);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -86,6 +86,16 @@ export default function SeekerProfile() {
   const indexOfFirst = indexOfLast - seekersPerPage;
   const currentSeekers = filteredSeekers.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredSeekers.length / seekersPerPage);
+
+  /*-----------------------------------------------------*/
+  const totalRecords = filteredSeekers.length;
+
+  const startRecord =
+    totalRecords === 0 ? 0 : (currentPage - 1) * seekersPerPage + 1;
+
+  const endRecord = Math.min(currentPage * seekersPerPage, totalRecords);
+
+  /*------------------------------------------------------*/
 
   const maxLeft = Math.max(currentPage - Math.floor(pagesToShow / 2), 1);
   const maxRight = Math.min(maxLeft + pagesToShow - 1, totalPages);
@@ -224,34 +234,7 @@ export default function SeekerProfile() {
       </div>
 
       {/* ===== PAGINATION  ===== */}
-      <div className="seekerprofile-pagination bottom">
-        {/* <button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
-        >
-          Prev
-        </button>
-
-        {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
-          const page = i + maxLeft;
-          return (
-            <button
-              key={page}
-              className={currentPage === page ? "active" : ""}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </button>
-          );
-        })}
-
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage(currentPage + 1)}
-        >
-          Next
-        </button> */}
-
+      {/* <div className="seekerprofile-pagination bottom">
         <button
           disabled={currentPage === 1}
           onClick={() => {
@@ -288,6 +271,34 @@ export default function SeekerProfile() {
           }}
         >
           Next
+        </button>
+      </div> */}
+
+      <div className="seekerprofile-pagination bottom">
+        <span className="pagination-range">
+          {startRecord}-{endRecord} of {totalRecords}
+        </span>
+
+        <button
+          disabled={currentPage === 1}
+          onClick={() => {
+            const prev = currentPage - 1;
+            setCurrentPage(prev);
+            navigate(`?page=${prev}`, { replace: true });
+          }}
+        >
+          ❮
+        </button>
+
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => {
+            const next = currentPage + 1;
+            setCurrentPage(next);
+            navigate(`?page=${next}`, { replace: true });
+          }}
+        >
+          ❯
         </button>
       </div>
 
