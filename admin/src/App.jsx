@@ -54,6 +54,7 @@ import SeekerTermsCondition from "./pages/SeekerTermsCondition.jsx";
 import SeekerPrivacyPolicy from "./pages/SeekerPrivacyPolicy.jsx";
 import RecruiterTermsCondition from "./pages/RecruiterTermsCondition.jsx";
 import RecruiterPrivacyPolicy from "./pages/RecruiterPrivacyPolicy.jsx";
+import SubscribedRecruiterList from "./pages/SubscribedRecruiterList.jsx";
 
 const App = () => {
   return (
@@ -205,6 +206,12 @@ const App = () => {
             <Route
               path="job-post-filter/enddate"
               element={<JobPostEndDateFilter />}
+            />
+
+            {/* Subscribed List  */}
+            <Route
+              path="subscribed-recruiter"
+              element={<SubscribedRecruiterList />}
             />
           </Route>
         </Routes>

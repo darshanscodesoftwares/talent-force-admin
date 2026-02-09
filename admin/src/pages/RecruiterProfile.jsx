@@ -1,5 +1,5 @@
 import { IoIosPeople } from "react-icons/io";
-import { FaUserCheck } from "react-icons/fa6";
+
 import { FaSchool } from "react-icons/fa";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import "./RecruiterProfile.css";
@@ -10,7 +10,8 @@ import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/Recr
 import { useDashboardMetrics } from "../UseContexts/GeneralUseContext/DashBoardContext/DashboardMetricDataContext.jsx";
 import * as XLSX from "xlsx";
 import { toast } from "react-toastify";
-import { FaDeleteLeft } from "react-icons/fa6";
+
+import { FaAngleDown, FaAngleUp, FaUserCheck } from "react-icons/fa6";
 
 export default function RecruiterProfile() {
   // ✅ ALL HOOKS MUST BE AT THE TOP — ALWAYS
@@ -19,6 +20,16 @@ export default function RecruiterProfile() {
   );
   const { metrics, loadingMetrics, errorMetrics } = useDashboardMetrics();
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+
+  const [searchFilters, setSearchFilters] = useState({
+    schoolName: "",
+    phoneNumber: "",
+  });
+
+  const [appliedFilters, setAppliedFilters] = useState({
+    schoolName: "",
+    phoneNumber: "",
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const pagesToShow = 7;
@@ -32,13 +43,53 @@ export default function RecruiterProfile() {
   // Pagination calculations (pure JS, safe)
   const indexOfLast = currentPage * recruitersPerPage;
   const indexOfFirst = indexOfLast - recruitersPerPage;
-  const currentRecruiters = recruiters.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(recruiters.length / recruitersPerPage);
+
+  // const currentRecruiters = recruiters.slice(indexOfFirst, indexOfLast);
+
+  const filteredRecruiters = recruiters.filter((r) => {
+    return (
+      (!appliedFilters.schoolName ||
+        r.schoolName
+          ?.toLowerCase()
+          .includes(appliedFilters.schoolName.toLowerCase())) &&
+      (!appliedFilters.phoneNumber ||
+        r.phoneNumber?.includes(appliedFilters.phoneNumber))
+    );
+  });
+
+  const currentRecruiters = filteredRecruiters.slice(indexOfFirst, indexOfLast);
+
+  // const totalPages = Math.ceil(recruiters.length / recruitersPerPage);
+
+  const totalPages = Math.ceil(filteredRecruiters.length / recruitersPerPage);
+
+  const totalRecords = filteredRecruiters.length;
+
+  const handleApplySearch = () => {
+    setAppliedFilters(searchFilters);
+    setCurrentPage(1);
+    setSearchModalOpen(false);
+  };
+
+  const handleClearSearch = () => {
+    setSearchFilters({
+      schoolName: "",
+      phoneNumber: "",
+    });
+
+    setAppliedFilters({
+      schoolName: "",
+      phoneNumber: "",
+    });
+
+    setCurrentPage(1);
+  };
+
   const maxLeft = Math.max(currentPage - Math.floor(pagesToShow / 2), 1);
   const maxRight = Math.min(maxLeft + pagesToShow - 1, totalPages);
 
   /*-----------------------------------------------------*/
-  const totalRecords = recruiters.length;
+  // const totalRecords = recruiters.length;
 
   const startRecord =
     totalRecords === 0 ? 0 : (currentPage - 1) * recruitersPerPage + 1;
@@ -208,56 +259,15 @@ export default function RecruiterProfile() {
               >
                 Download
               </button>
-              {/* <button
+              <button
                 onClick={() => setSearchModalOpen((prev) => !prev)}
                 className="seekerprofile-search-btn"
               >
                 Advanced Search{" "}
                 {searchModalOpen ? <FaAngleUp /> : <FaAngleDown />}
-              </button> */}
+              </button>
             </div>
           </div>
-
-          {/* ===== PAGINATION ===== */}
-          {/* <div className="recruiterprofile-pagination">
-            <button
-              disabled={currentPage === 1}
-              onClick={() => {
-                const prev = currentPage - 1;
-                setCurrentPage(prev);
-                navigate(`?page=${prev}`, { replace: true });
-              }}
-            >
-              Prev
-            </button>
-
-            {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
-              const page = maxLeft + i;
-              return (
-                <button
-                  key={page}
-                  className={currentPage === page ? "active" : ""}
-                  onClick={() => {
-                    setCurrentPage(page);
-                    navigate(`?page=${page}`, { replace: true });
-                  }}
-                >
-                  {page}
-                </button>
-              );
-            })}
-
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => {
-                const next = currentPage + 1;
-                setCurrentPage(next);
-                navigate(`?page=${next}`, { replace: true });
-              }}
-            >
-              Next
-            </button>
-          </div> */}
 
           <div className="recruiterprofile-pagination">
             <span className="pagination-range">
@@ -443,7 +453,7 @@ export default function RecruiterProfile() {
         </div>
       </div>
 
-      {/* {searchModalOpen && (
+      {searchModalOpen && (
         <div
           className="recruiter-modal-overlay"
           onClick={() => setSearchModalOpen(false)}
@@ -466,6 +476,13 @@ export default function RecruiterProfile() {
                   type="text"
                   className="recruiter-search-input"
                   placeholder="School Name"
+                  value={searchFilters.schoolName}
+                  onChange={(e) =>
+                    setSearchFilters((prev) => ({
+                      ...prev,
+                      schoolName: e.target.value,
+                    }))
+                  }
                 />
               </div>
               <div className="recruiter-search-field-group">
@@ -474,21 +491,36 @@ export default function RecruiterProfile() {
                   type="text"
                   className="recruiter-search-input"
                   placeholder="Phone Number"
+                  value={searchFilters.phoneNumber}
+                  onChange={(e) =>
+                    setSearchFilters((prev) => ({
+                      ...prev,
+                      phoneNumber: e.target.value,
+                    }))
+                  }
                 />
               </div>
 
               <div className="recruiter-search-actions">
-                <button type="button" className="recruiter-search-btn-clear">
+                <button
+                  type="button"
+                  className="recruiter-search-btn-clear"
+                  onClick={handleClearSearch}
+                >
                   Clear
                 </button>
-                <button type="button" className="recruiter-search-btn-apply">
+                <button
+                  type="button"
+                  className="recruiter-search-btn-apply"
+                  onClick={handleApplySearch}
+                >
                   Apply
                 </button>
               </div>
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

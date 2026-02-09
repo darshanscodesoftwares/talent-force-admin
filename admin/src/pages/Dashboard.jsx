@@ -11,9 +11,10 @@ import {
 } from "recharts";
 import { FaUserCircle, FaSchool } from "react-icons/fa";
 import { HiMiniBriefcase } from "react-icons/hi2";
+
 import { MdPeopleAlt } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
-import { TbCoinRupeeFilled } from "react-icons/tb";
+import { TbCoinRupeeFilled, TbCircleDashedNumber0 } from "react-icons/tb";
 import { LuIndianRupee } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
@@ -117,7 +118,7 @@ const Dashboard = () => {
           </div>
 
           {/* Subscribed Users */}
-          <div className="card-2">
+          {/* <div className="card-2">
             <div className="card-body2">
               <div className="card-icon2">
                 <MdPeopleAlt />
@@ -130,6 +131,34 @@ const Dashboard = () => {
                   </span>
                 </p>
               </div>
+            </div>
+            <div className="card-footer">
+              <button onClick={() => navigate("/dashboard/seeker-profile")}>
+                View More
+              </button>
+            </div>
+          </div> */}
+
+          <div className="card">
+            <div className="card-body">
+              <div className="card-icon">
+                <MdPeopleAlt />
+              </div>
+              <div className="font-num">
+                <h4>Subscribed Users</h4>
+                <p>
+                  <span className="amount">
+                    {metrics?.subscribed_recruiters ?? 0}
+                  </span>
+                </p>
+              </div>
+            </div>
+            <div className="card-footer">
+              <button
+                onClick={() => navigate("/dashboard/subscribed-recruiter")}
+              >
+                View More
+              </button>
             </div>
           </div>
 
@@ -147,6 +176,74 @@ const Dashboard = () => {
                   </span>
                   <span className="amount2">
                     {metrics?.total_revenue ?? "0.00"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Seeker New Users */}
+          <div className="card-2 seeker-users">
+            <div className="card-body2">
+              <div className="card-icon2">
+                <TbCircleDashedNumber0 />
+              </div>
+              <div className="font-num2 ">
+                <h4>Seeker New Users</h4>
+                <p>
+                  <span className="amount2">
+                    {metrics?.new_seeker_count ?? "0"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Seeker OLD Users */}
+          <div className="card-2 seeker-users">
+            <div className="card-body2">
+              <div className="card-icon2">
+                <TbCircleDashedNumber0 />
+              </div>
+              <div className="font-num2">
+                <h4>Seeker Old Users</h4>
+                <p>
+                  <span className="amount2">
+                    {metrics?.old_seeker_count ?? "0"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Recruiter New Users */}
+          <div className="card-2">
+            <div className="card-body2">
+              <div className="card-icon2">
+                <TbCircleDashedNumber0 />
+              </div>
+              <div className="font-num2">
+                <h4>Recruiter New Users</h4>
+                <p>
+                  <span className="amount2">
+                    {metrics?.new_recruiter_count ?? "0"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Recruiter Old Users */}
+          <div className="card-2">
+            <div className="card-body2">
+              <div className="card-icon2">
+                <TbCircleDashedNumber0 />
+              </div>
+              <div className="font-num2">
+                <h4>Recruiter Old Users</h4>
+                <p>
+                  <span className="amount2">
+                    {metrics?.old_recruiter_count ?? "0"}
                   </span>
                 </p>
               </div>
@@ -285,26 +382,6 @@ const Dashboard = () => {
                     }
                   >
                     <td>
-                      {/* <div className="icon-school">
-                        {rec.schoolImage ? (
-                          <img
-                            src={rec.schoolImage}
-                            alt={rec.schoolName}
-                            className="school-logo"
-                            style={{
-                              width: "32px",
-                              height: "32px",
-                              borderRadius: "50%",
-                              marginRight: "8px",
-                              objectFit: "cover",
-                            }}
-                            onError={(e) => (e.target.style.display = "none")}
-                          />
-                        ) : (
-                          <FaSchool className="school-logo" />
-                        )}
-                        {rec.schoolName}
-                      </div> */}
                       <div className="recruiter-school-cell">
                         {rec.schoolImage ? (
                           <img
@@ -380,26 +457,6 @@ const Dashboard = () => {
                     }
                   >
                     <td>
-                      {/* <div className="icon-school">
-                        {seeker.profile_img ? (
-                          <img
-                            src={seeker.profile_img}
-                            alt={seeker.name}
-                            className="seekerprofile-avatar"
-                            style={{
-                              width: "32px",
-                              height: "32px",
-                              borderRadius: "50%",
-                              marginRight: "8px",
-                              objectFit: "cover",
-                            }}
-                            onError={(e) => (e.target.style.display = "none")}
-                          />
-                        ) : (
-                          <FaUserCircle className="school-logo" />
-                        )}
-                        {seeker.name}
-                      </div> */}
                       <div className="seeker-user-cell">
                         {/* Avatar */}
                         {seeker.profile_img ? (

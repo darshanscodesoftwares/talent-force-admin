@@ -12,13 +12,15 @@ import { HiMiniBriefcase } from "react-icons/hi2";
 import { FaUserGraduate } from "react-icons/fa6";
 import { SlLogout } from "react-icons/sl";
 import "./Sidebar.css";
-// import logo from "../assets/talentforce.png";
+
 import adminLogo from "../assets/adminlogo.png";
 
 import LogoutModal from "../editpages/LogoutModal";
 
 import { LuFileSliders } from "react-icons/lu";
 import { MdPrivacyTip } from "react-icons/md";
+
+import { RiMoneyRupeeCircleFill } from "react-icons/ri";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -168,6 +170,16 @@ function Sidebar() {
                 className="nav-link"
               >
                 <MdPrivacyTip className="icon" /> Privacy & Policy
+              </NavLink>
+            </li>
+            {/*------------- Subscribed Recruiters --------------*/}
+            <li>
+              <NavLink
+                to="/dashboard/subscribed-recruiter"
+                className="nav-link"
+              >
+                <RiMoneyRupeeCircleFill className="icon" /> Subscribed
+                Recruiters
               </NavLink>
             </li>
           </ul>
