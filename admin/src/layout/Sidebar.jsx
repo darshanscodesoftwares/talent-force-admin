@@ -136,6 +136,15 @@ function Sidebar() {
                 Privacy & Policy
               </NavLink>
             </li>
+
+            {/* Seeker Privacy Policy  */}
+
+            <li>
+              <NavLink to="/dashboard/seeker-block-list" className="nav-link">
+                <MdPrivacyTip className="icon" />
+                Blocked Users
+              </NavLink>
+            </li>
           </ul>
         </div>
 
@@ -180,6 +189,12 @@ function Sidebar() {
               >
                 <RiMoneyRupeeCircleFill className="icon" /> Subscribed
                 Recruiters
+              </NavLink>
+            </li>
+            {/* Blocked Recruiter List  */}
+            <li>
+              <NavLink to="/dashboard/blocked-recruiters" className="nav-link">
+                <RiMoneyRupeeCircleFill className="icon" /> Blocked Recruiters
               </NavLink>
             </li>
           </ul>

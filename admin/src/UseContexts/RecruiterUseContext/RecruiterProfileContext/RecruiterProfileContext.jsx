@@ -11,6 +11,7 @@ const API_URL = `${
 export const RecruiterProfileProvider = ({ children }) => {
   const [recruiters, setRecruiters] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [blockedRecruiters, setBlockedRecruiters] = useState([]);
 
   // ==========================
   // Fetch Recruiter Profiles
@@ -95,8 +96,73 @@ export const RecruiterProfileProvider = ({ children }) => {
     }
   };
 
+  const blockRecruitersList = async () => {
+    try {
+      setLoading(true);
+
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin-recruiter-deactivate`
+      );
+
+      const data = res.data?.data || [];
+
+      const formatted = data.map((item) => ({
+        id: item.recruiter_id,
+        status: item.is_deactivated ? "blocked" : "active",
+        schoolImage: item.school_image || "",
+        schoolName: item.school_name || "N/A",
+        schoolEmail: item.school_email || "N/A",
+        schoolPhone: item.school_phone_number || "N/A",
+      }));
+
+      const unique = [
+        ...new Map(formatted.map((item) => [item.id, item])).values(),
+      ];
+
+      // 🔥 IMPORTANT
+      setBlockedRecruiters(unique.filter((r) => r.status === "blocked"));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleBlockRecruiter = async (id, currentStatus) => {
+    try {
+      const action = currentStatus === "blocked" ? "unblock" : "block";
+
+      setRecruiters((prev) =>
+        prev.map((r) =>
+          r.id === id
+            ? { ...r, status: action === "block" ? "blocked" : "active" }
+            : r
+        )
+      );
+
+      if (action === "unblock") {
+        setBlockedRecruiters((prev) => prev.filter((r) => r.id !== id));
+      }
+
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin-recruiter-deactivate`,
+        {
+          recruiter_id: Number(id),
+          action,
+        }
+      );
+
+      toast.success(`Recruiter ${action}ed successfully`);
+    } catch (error) {
+      console.error(error);
+      fetchRecruiters();
+      blockRecruitersList();
+    }
+  };
+
   useEffect(() => {
     fetchRecruiters();
+    // blockRecruitersList();
   }, []);
 
   return (
@@ -106,6 +172,10 @@ export const RecruiterProfileProvider = ({ children }) => {
         loading,
         fetchRecruiters,
         softdelete,
+
+        toggleBlockRecruiter,
+        blockRecruitersList,
+        blockedRecruiters,
       }}
     >
       {children}

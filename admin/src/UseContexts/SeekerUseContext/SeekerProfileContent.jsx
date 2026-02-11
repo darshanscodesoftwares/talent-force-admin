@@ -6,6 +6,7 @@ export const SeekerProfileContext = createContext();
 
 export const SeekerProfileProvider = ({ children }) => {
   const [seekers, setSeekers] = useState([]);
+  const [blockedUsers, setBlockedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchSeekers = async () => {
@@ -31,6 +32,12 @@ export const SeekerProfileProvider = ({ children }) => {
           specialization: user.course?.specialization || "",
           status: user.status?.[0] || "",
           profile_img: user.profile?.profile_img || "",
+
+          highestQualification: user.course?.highest_qualification_level || "",
+
+          teachingQualification: user.course?.teaching_qualification || "",
+
+          resume: user.profile?.resume_path || "",
 
           // 🔥 ADD THESE
           user_type: user.user_type || "",
@@ -80,8 +87,108 @@ export const SeekerProfileProvider = ({ children }) => {
     }
   };
 
+  // const toggleBlockSeeker = async (id, currentStatus) => {
+  //   try {
+  //     const action = currentStatus === "blocked" ? "unblock" : "block";
+
+  //     // 🔥 Instant UI update
+  //     setSeekers((prev) =>
+  //       prev.map((s) =>
+  //         s.id === id
+  //           ? { ...s, status: action === "block" ? "blocked" : "active" }
+  //           : s
+  //       )
+  //     );
+
+  //     await axios.post(
+  //       `${import.meta.env.VITE_API_BASE_URL}/api/admin-seeker-deactivate`,
+  //       {
+  //         user_id: id,
+  //         action,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.error("Block/unblock failed:", error);
+  //     fetchSeekers(); // rollback if failed
+  //   }
+  // };
+
+  // Block users list
+
+  const toggleBlockSeeker = async (id, currentStatus) => {
+    try {
+      const action = currentStatus === "blocked" ? "unblock" : "block";
+
+      // ✔ Update seekers list
+      setSeekers((prev) =>
+        prev.map((s) =>
+          s.id === id
+            ? { ...s, status: action === "block" ? "blocked" : "active" }
+            : s
+        )
+      );
+
+      // ⭐ Remove from blocked list instantly if unblocking
+      if (action === "unblock") {
+        setBlockedUsers((prev) => prev.filter((user) => user.id !== id));
+      }
+
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin-seeker-deactivate`,
+        {
+          user_id: id,
+          action,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Block/unblock failed:", error);
+      fetchSeekers();
+      blockusersList();
+    }
+  };
+
+  const blockusersList = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin-seeker-deactivate`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (res.data.status === "Success") {
+        const blockedList = res.data.data.map((user) => ({
+          id: user.user_id,
+          name: user.name,
+          phone: user.phone,
+          email: user.email,
+          profile_img: user.profile_img,
+          status: user.is_deactivated === 1 ? "blocked" : "active",
+          blocked_at: user.deactivate_at,
+        }));
+
+        setBlockedUsers(blockedList);
+      }
+    } catch (error) {
+      console.error("Blocked users fetch error:", error);
+    }
+  };
+
   useEffect(() => {
     fetchSeekers();
+    blockusersList();
   }, []);
 
   return (
@@ -94,6 +201,10 @@ export const SeekerProfileProvider = ({ children }) => {
         editSeeker,
         getSeekerById,
         softdelete,
+
+        toggleBlockSeeker,
+        blockedUsers,
+        blockusersList,
       }}
     >
       {children}

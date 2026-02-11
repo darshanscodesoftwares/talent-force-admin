@@ -55,6 +55,8 @@ import SeekerPrivacyPolicy from "./pages/SeekerPrivacyPolicy.jsx";
 import RecruiterTermsCondition from "./pages/RecruiterTermsCondition.jsx";
 import RecruiterPrivacyPolicy from "./pages/RecruiterPrivacyPolicy.jsx";
 import SubscribedRecruiterList from "./pages/SubscribedRecruiterList.jsx";
+import SeekerBlockList from "./pages/SeekerBlockList.jsx";
+import RecruiterBlockList from "./pages/RecruiterBlockList.jsx";
 
 const App = () => {
   return (
@@ -113,6 +115,10 @@ const App = () => {
               path="recruiter-privacy-policy"
               element={<RecruiterPrivacyPolicy />}
             />
+
+            {/* Seeker Block List  */}
+
+            <Route path="seeker-block-list" element={<SeekerBlockList />} />
 
             <Route path="subscription-plan" element={<SubscriptionPlan />} />
             <Route path="education-filter" element={<Education />} />
@@ -213,6 +219,9 @@ const App = () => {
               path="subscribed-recruiter"
               element={<SubscribedRecruiterList />}
             />
+
+            {/* Bllocked Recruiter List  */}
+            <Route path="blocked-recruiters" element={<RecruiterBlockList />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -5,16 +5,22 @@ import { FaFilePdf } from "react-icons/fa6";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { GeneralInformationContext } from "../UseContexts/SeekerUseContext/GeneralInformationContext";
+import { SeekerProfileContext } from "../UseContexts/SeekerUseContext/SeekerProfileContent";
 
 export default function GeneralInformation() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const { id } = useParams(); // ✅ dynamic user id from URL
-  const { users, loading } = useContext(GeneralInformationContext);
+  const { users } = useContext(GeneralInformationContext);
+
+  const { seekers, loading, toggleBlockSeeker } =
+    useContext(SeekerProfileContext);
 
   // 🔑 find the right profile based on dynamic id
-  const profile = users.find((u) => u.id === parseInt(id));
+  // const profile = users.find((u) => u.id === parseInt(id));
+
+  const profile = seekers.find((s) => s.id === parseInt(id));
 
   if (!profile) return <p className="loading-text">Profile not found!</p>;
 
@@ -36,7 +42,25 @@ export default function GeneralInformation() {
           <IoChevronBackOutline className="back-icon" />
           <span>General Information</span>
         </h2>
-        {/* <button className="block-btn">Block User</button> */}
+        <button
+          className="block-btn"
+          onClick={() => toggleBlockSeeker(profile.id, profile.status)}
+        >
+          {profile.status?.toLowerCase() === "blocked"
+            ? "Unblock User"
+            : "Block User"}
+        </button>
+
+        {/* {seekers.map((profile) => (
+          <button
+            className="block-btn"
+            onClick={() => toggleBlockSeeker(profile.id, profile.status)}
+          >
+            {profile.status?.toLowerCase() === "blocked"
+              ? "Unblock User"
+              : "Block User"}
+          </button>
+        ))} */}
       </div>
 
       {/* Profile Icon */}
@@ -57,7 +81,7 @@ export default function GeneralInformation() {
         <div className="generalinfo-row">
           <div className="generalinfo-field">
             <label>Name</label>
-            <input type="text" value={profile.user} readOnly />
+            <input type="text" value={profile.name} readOnly />
           </div>
           <div className="generalinfo-field">
             <label>Specialization</label>
@@ -68,11 +92,11 @@ export default function GeneralInformation() {
         <div className="generalinfo-row">
           <div className="generalinfo-field">
             <label>Email ID</label>
-            <input type="email" value={profile.mail} readOnly />
+            <input type="email" value={profile.email} readOnly />
           </div>
           <div className="generalinfo-field">
             <label>Phone Number</label>
-            <input type="text" value={profile.phoneNo} readOnly />
+            <input type="text" value={profile.phone} readOnly />
           </div>
         </div>
 

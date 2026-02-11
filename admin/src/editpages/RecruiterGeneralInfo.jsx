@@ -1,94 +1,11 @@
-// import React from "react";
-// import { useParams, useNavigate } from "react-router-dom";
-// import { useRecruiterJobPosts } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterJobPostsContext";
-// import "./RecruiterGeneralInfo.css"
-
-// export default function RecruiterGeneralInfo() {
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-//   const { recruiters, loading, error } = useRecruiterJobPosts();
-
-//   if (loading) return <p>Loading recruiter data...</p>;
-//   if (error) return <p>Error: {error}</p>;
-
-//   const recruiter = recruiters.find((r) => r.recruiter_id === Number(id));
-//   if (!recruiter) return <p>Recruiter not found.</p>;
-
-//   const { school_profile, stats, job_posts } = recruiter;
-
-//   return (
-//     <div className="recruitergeneralinfo-container">
-//       {/* header, etc. */}
-//       <div className="recruitergeneralinfo-field">
-//         <label>School Name</label>
-//         <input type="text" value={school_profile.school_name} readOnly />
-//       </div>
-
-//       <div className="recruitergeneralinfo-field">
-//         <label>Address</label>
-//         <input type="text" value={school_profile.school_address} readOnly />
-//       </div>
-
-//       {/* Stats cards */}
-//       <div className="detailCard-wrap">
-//         <div className="detail-card">
-//           <h2>{stats.total_job_posts}</h2>
-//           <span>Total Job Posts</span>
-//         </div>
-//         <div className="detail-card">
-//           <h2>{stats.open_job_posts}</h2>
-//           <span>Open Job Posts</span>
-//         </div>
-//         <div className="detail-card">
-//           <h2>{stats.total_applications}</h2>
-//           <span>Total Applicants</span>
-//         </div>
-//         <div className="detail-card">
-//           <h2>{stats.selected_candidates}</h2>
-//           <span>Selected</span>
-//         </div>
-//       </div>
-
-//       {/* Job Posts */}
-//       <div className="recruiter-jobs-section">
-//         <h3>Job Postings</h3>
-//         <table className="recruiter-jobs-table">
-//           <thead>
-//             <tr>
-//               <th>Job Role</th>
-//               <th>Subject</th>
-//               <th>Posted Date</th>
-//               <th>Applicants</th>
-//               <th>Selected</th>
-//               <th>Status</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {job_posts.map((job) => (
-//               <tr key={job.job_post_id}>
-//                 <td>{job.job_role}</td>
-//                 <td>{job.subject}</td>
-//                 <td>{job.post_date}</td>
-//                 <td>{job.applicants_count}</td>
-//                 <td>{job.selected_count}</td>
-//                 <td className={`job-status ${job.current_status.toLowerCase()}`}>
-//                   {job.current_status}
-//                 </td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// }
-
 import "./RecruiterGeneralInfo.css";
 import { FaSchool } from "react-icons/fa";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useRecruiterJobPosts } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterJobPostsContext.jsx";
 import RecruiterProfileLoader from "../Loader/Loader.jsx"; // optional loader
+import { useContext } from "react";
+import { RecruiterProfileContext } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterProfileContext.jsx";
 
 export default function RecruiterGeneralInfo() {
   const navigate = useNavigate();
@@ -96,10 +13,23 @@ export default function RecruiterGeneralInfo() {
   const { id } = useParams(); // recruiter_id from URL
   const { recruiters, loading, error } = useRecruiterJobPosts();
 
+  // const { toggleBlockRecruiter, blockRecruitersList } = useContext(
+  //   RecruiterProfileContext
+  // );
+  const { toggleBlockRecruiter, recruiters: formattedRecruiters } = useContext(
+    RecruiterProfileContext
+  );
+
   if (loading) return <RecruiterProfileLoader />;
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
 
   const recruiter = recruiters.find((r) => r.recruiter_id === Number(id));
+  const formattedRecruiter = formattedRecruiters.find(
+    (r) => r.id === Number(id)
+  );
+
+  // const recruiter = recruiters.find((r) => r.id === Number(id));
+
   if (!recruiter) return <p>Recruiter not found.</p>;
 
   const { school_profile, stats, job_posts } = recruiter;
@@ -116,20 +46,22 @@ export default function RecruiterGeneralInfo() {
     <div className="recruitergeneralinfo-container">
       {/* Header */}
       <div className="recruitergeneralinfo-header">
-        {/* <h2
-          onClick={() => navigate("/dashboard/recruiter-profile")}
-          className="recruitergeneralinfo-back"
-        >
-          <IoChevronBackOutline className="back-icon" />
-          <span>Recruiter Information</span>
-        </h2> */}
-
         <h2 onClick={handleBack} className="recruitergeneralinfo-back">
           <IoChevronBackOutline className="back-icon" />
           <span>Recruiter Information</span>
         </h2>
 
-        {/* <button className="block-btn">Block User</button> */}
+        <button
+          className="block-btn"
+          onClick={() =>
+            toggleBlockRecruiter(
+              formattedRecruiter?.id,
+              formattedRecruiter?.status
+            )
+          }
+        >
+          {formattedRecruiter?.status === "blocked" ? "Unblock" : "Block"}
+        </button>
       </div>
 
       {/* Profile Icon */}
