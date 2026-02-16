@@ -21,6 +21,7 @@ import { LuFileSliders } from "react-icons/lu";
 import { MdPrivacyTip } from "react-icons/md";
 
 import { RiMoneyRupeeCircleFill } from "react-icons/ri";
+import { TbLockHeart } from "react-icons/tb";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -141,8 +142,16 @@ function Sidebar() {
 
             <li>
               <NavLink to="/dashboard/seeker-block-list" className="nav-link">
-                <MdPrivacyTip className="icon" />
+                <TbLockHeart className="icon" />
                 Blocked Users
+              </NavLink>
+            </li>
+
+            {/* Seeker Report Abuse  */}
+            <li>
+              <NavLink to="/dashboard/seeker-report-abuse" className="nav-link">
+                <TbLockHeart className="icon" />
+                Report Abuse
               </NavLink>
             </li>
           </ul>
@@ -194,7 +203,18 @@ function Sidebar() {
             {/* Blocked Recruiter List  */}
             <li>
               <NavLink to="/dashboard/blocked-recruiters" className="nav-link">
-                <RiMoneyRupeeCircleFill className="icon" /> Blocked Recruiters
+                <TbLockHeart className="icon" /> Blocked Recruiters
+              </NavLink>
+            </li>
+
+            {/* Recruiter Report Abuse  */}
+            <li>
+              <NavLink
+                to="/dashboard/recruiter-report-abuse"
+                className="nav-link"
+              >
+                <TbLockHeart className="icon" />
+                Report Abuse
               </NavLink>
             </li>
           </ul>

@@ -57,6 +57,8 @@ import RecruiterPrivacyPolicy from "./pages/RecruiterPrivacyPolicy.jsx";
 import SubscribedRecruiterList from "./pages/SubscribedRecruiterList.jsx";
 import SeekerBlockList from "./pages/SeekerBlockList.jsx";
 import RecruiterBlockList from "./pages/RecruiterBlockList.jsx";
+import RecruiterReportAbuse from "./pages/RecruiterReportAbuse.jsx";
+import SeekerReportAbuse from "./pages/SeekerReportAbuse.jsx";
 
 const App = () => {
   return (
@@ -103,6 +105,8 @@ const App = () => {
               path="seeker-privacy-policy"
               element={<SeekerPrivacyPolicy />}
             />
+
+            <Route path="seeker-report-abuse" element={<SeekerReportAbuse />} />
 
             {/*--------Recruiter Terms & Condition-----------*/}
             <Route
@@ -222,6 +226,12 @@ const App = () => {
 
             {/* Bllocked Recruiter List  */}
             <Route path="blocked-recruiters" element={<RecruiterBlockList />} />
+
+            {/* Report Abuse recruiter  */}
+            <Route
+              path="recruiter-report-abuse"
+              element={<RecruiterReportAbuse />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>
