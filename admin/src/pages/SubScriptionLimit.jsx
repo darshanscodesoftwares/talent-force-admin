@@ -69,6 +69,7 @@ const SubScriptionLimit = () => {
                     <th>Total Job post</th>
                     <th>Contact Details</th>
                     <th>View Type</th>
+                    <th>Trial Days</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -98,6 +99,10 @@ const SubScriptionLimit = () => {
                       </td>
 
                       <td>{sub.limits?.views_type || "null"}</td>
+
+                      <td>
+                        {sub.limits.trial_days || "null"}
+                      </td>
 
                       <td className="subscription-actions">
                         <button

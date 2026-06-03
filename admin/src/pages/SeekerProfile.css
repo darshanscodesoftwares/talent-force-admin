@@ -191,6 +191,26 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* Custom Scrollbar */
+.seekerprofile-table-container::-webkit-scrollbar {
+  height: 5px;
+}
+
+.seekerprofile-table-container::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.seekerprofile-table-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.seekerprofile-table-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
 .seekerprofile-table {
   width: 100%;
   border-collapse: collapse;
@@ -274,6 +294,52 @@
 .seekerprofile-pagination button:disabled {
   background: #f3f3f3;
   color: #aaa;
+  cursor: not-allowed;
+}
+
+/* ===== Top Pagination Header ===== */
+.pagination-header-top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 12px 0;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #ef6b37;
+  font-weight: 600;
+}
+
+.pagination-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 50px;
+  color: #ef6b37;
+  transition: all 0.2s ease;
+  font-weight: 900;
+  line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  color: #df5c26;
+  transform: scale(1.2);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -407,6 +473,26 @@
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+}
+
+/* Custom Scrollbar */
+.search-results::-webkit-scrollbar {
+  width: 5px;
+}
+
+.search-results::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.search-results::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .search-results h3 {

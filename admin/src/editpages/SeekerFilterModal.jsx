@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./SeekerFilterModal.css";
 import axios from "axios";
+import CustomSelect from "../components/CustomSelect.jsx";
 
 export default function SeekerFilterModal({
   filters = {},
@@ -10,6 +11,8 @@ export default function SeekerFilterModal({
   const [specializations, setSpecializations] = useState([]);
   const [pincodes, setPincodes] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [taluks, setTaluks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // 🔹 Local state for modal selections
@@ -17,6 +20,10 @@ export default function SeekerFilterModal({
     specialization: filters.specialization || "",
     pincode: filters.pincode || "",
     status: filters.status || "",
+    school_name: filters.school_name || "",
+    phone: filters.phone || "",
+    district: filters.district || "",
+    taluk: filters.taluk || "",
   });
 
   // 🔹 Fetch unique filter values
@@ -25,7 +32,7 @@ export default function SeekerFilterModal({
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://hireezee.co.in/api/admin-user-details"
+          `${import.meta.env.VITE_API_BASE_URL}/api/admin-user-details`
         );
         const users = response.data?.users || [];
 
@@ -40,10 +47,18 @@ export default function SeekerFilterModal({
         const stats = [
           ...new Set(users.flatMap((u) => u.status || []).filter(Boolean)),
         ];
+        const dists = [
+          ...new Set(users.map((u) => u.address?.area).filter(Boolean)),
+        ];
+        const tlks = [
+          ...new Set(users.map((u) => u.address?.city).filter(Boolean)),
+        ];
 
         setSpecializations(specs);
         setPincodes(pins);
         setStatuses(stats);
+        setDistricts(dists);
+        setTaluks(tlks);
       } catch (err) {
         console.error("Error fetching users:", err);
         setSpecializations([]);
@@ -65,7 +80,15 @@ export default function SeekerFilterModal({
 
   // 🔹 Clear selections
   const handleClear = () => {
-    const emptyFilters = { specialization: "", pincode: "", status: "" };
+    const emptyFilters = {
+      specialization: "",
+      pincode: "",
+      status: "",
+      name: "",
+      phone: "",
+      district: "",
+      taluk: "",
+    };
     setLocalFilters(emptyFilters);
     setFilters(emptyFilters);
   };
@@ -83,72 +106,137 @@ export default function SeekerFilterModal({
         {/* Specialization */}
         <label>
           Specialization:
-          <select
+          <CustomSelect
             value={localFilters.specialization}
-            onChange={(e) =>
+            onChange={(value) =>
               setLocalFilters({
                 ...localFilters,
-                specialization: e.target.value,
+                specialization: value,
               })
             }
-            // size={7}
-          >
-            <option value="">All</option>
-            {loading ? (
-              <option disabled>Loading...</option>
-            ) : (
-              specializations.map((spec, i) => (
-                <option key={i} value={spec}>
-                  {spec}
-                </option>
-              ))
-            )}
-          </select>
+            options={[
+              { value: "", label: "All" },
+              ...specializations
+                .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+                .map((spec) => ({
+                  value: spec,
+                  label: spec,
+                })),
+            ]}
+            placeholder="Select specialization"
+          />
         </label>
 
         {/* Pincode */}
         <label>
           Pincode:
-          <select
+          <CustomSelect
             value={localFilters.pincode}
-            onChange={(e) =>
-              setLocalFilters({ ...localFilters, pincode: e.target.value })
+            onChange={(value) =>
+              setLocalFilters({ ...localFilters, pincode: value })
             }
-          >
-            <option value="">All</option>
-            {loading ? (
-              <option disabled>Loading...</option>
-            ) : (
-              pincodes.map((pin, i) => (
-                <option key={i} value={pin}>
-                  {pin}
-                </option>
-              ))
-            )}
-          </select>
+            options={[
+              { value: "", label: "All" },
+              ...pincodes.map((pin) => ({
+                value: pin,
+                label: pin,
+              })),
+            ]}
+            placeholder="Select pincode"
+          />
         </label>
 
         {/* Status */}
         <label>
           Status:
-          <select
+          <CustomSelect
             value={localFilters.status}
-            onChange={(e) =>
-              setLocalFilters({ ...localFilters, status: e.target.value })
+            onChange={(value) =>
+              setLocalFilters({ ...localFilters, status: value })
             }
-          >
-            <option value="">All</option>
-            {loading ? (
-              <option disabled>Loading...</option>
-            ) : (
-              statuses.map((st, i) => (
-                <option key={i} value={st}>
-                  {st}
-                </option>
-              ))
-            )}
-          </select>
+            options={[
+              { value: "", label: "All" },
+              ...statuses.map((st) => ({
+                value: st,
+                label: st,
+              })),
+            ]}
+            placeholder="Select status"
+          />
         </label>
+
+        {/* District */}
+        <label>
+          District:
+          <CustomSelect
+            value={localFilters.district}
+            onChange={(value) =>
+              setLocalFilters({ ...localFilters, district: value })
+            }
+            options={[
+              { value: "", label: "All" },
+              ...districts
+                .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+                .map((dist) => ({
+                  value: dist,
+                  label: dist,
+                })),
+            ]}
+            placeholder="Select district"
+          />
+        </label>
+
+        {/* Taluk */}
+        <label>
+          Taluk:
+          <CustomSelect
+            value={localFilters.taluk}
+            onChange={(value) =>
+              setLocalFilters({ ...localFilters, taluk: value })
+            }
+            options={[
+              { value: "", label: "All" },
+              ...taluks
+                .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+                .map((tlk) => ({
+                  value: tlk,
+                  label: tlk,
+                })),
+            ]}
+            placeholder="Select taluk"
+          />
+        </label>
+
+        <div className="recruiter-search-field-group">
+          <label className="recruiter-search-label">Seeker Name</label>
+          <input
+            type="text"
+            className="recruiter-search-input"
+            placeholder="Search Name"
+            value={localFilters.name}
+            onChange={(e) =>
+              setLocalFilters({
+                ...localFilters,
+                name: e.target.value,
+              })
+            }
+          />
+        </div>
+        <div className="recruiter-search-field-group">
+          <label className="recruiter-search-label">Phone Number</label>
+          <input
+            type="text"
+            className="recruiter-search-input"
+            placeholder="Phone Number"
+            value={localFilters.phone}
+            onChange={(e) =>
+              setLocalFilters({
+                ...localFilters,
+                phone: e.target.value,
+              })
+            }
+          />
+        </div>
 
         {/* Actions */}
         <div className="seeker-filter-modal-actions">

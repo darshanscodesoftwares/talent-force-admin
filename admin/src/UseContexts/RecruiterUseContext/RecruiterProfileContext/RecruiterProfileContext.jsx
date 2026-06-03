@@ -24,7 +24,7 @@ export const RecruiterProfileProvider = ({ children }) => {
       const data = res.data?.recruiters || [];
 
       const formatted = data.map((item) => {
-        const plan = item.current_plan?.plan_name || "Free";
+        const plan = item.current_plan?.plan_name || "Trial";
 
         return {
           id: item.recruiter_id,

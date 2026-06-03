@@ -33,7 +33,7 @@ export default function RecruiterProfile() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const pagesToShow = 7;
-  const recruitersPerPage = 25;
+  const recruitersPerPage = 50;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -115,22 +115,97 @@ export default function RecruiterProfile() {
     }
   }, [location.search]);
 
-  // Scroll to top (safe)
+  // Save scroll position before navigation
+  const saveScrollPosition = () => {
+    let scrollY = 0;
+
+    if (document.documentElement.scrollTop > 0) {
+      scrollY = document.documentElement.scrollTop;
+    } else if (document.body.scrollTop > 0) {
+      scrollY = document.body.scrollTop;
+    } else if (window.scrollY > 0) {
+      scrollY = window.scrollY;
+    }
+
+    const allElements = document.querySelectorAll("*");
+    allElements.forEach((el) => {
+      const style = window.getComputedStyle(el);
+      if (
+        (style.overflowY === "auto" || style.overflowY === "scroll") &&
+        el.scrollHeight > el.clientHeight
+      ) {
+        if (el.scrollTop > 0) {
+          scrollY = el.scrollTop;
+        }
+      }
+    });
+
+    sessionStorage.setItem("recruiterProfileScrollY", scrollY.toString());
+    sessionStorage.setItem("recruiterProfilePage", currentPage.toString());
+    sessionStorage.setItem("recruiterProfileFilters", JSON.stringify(appliedFilters));
+  };
+
+  // Restore scroll position when returning
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    const savedScrollY = sessionStorage.getItem("recruiterProfileScrollY");
+    const savedPage = sessionStorage.getItem("recruiterProfilePage");
+    const savedFilters = sessionStorage.getItem("recruiterProfileFilters");
+
+    if (savedScrollY || savedPage || savedFilters) {
+      if (savedFilters) {
+        try {
+          const parsedFilters = JSON.parse(savedFilters);
+          setAppliedFilters(parsedFilters);
+        } catch (e) {
+          // Silently fail if filters can't be parsed
+        }
+      }
+
+      if (savedPage && parseInt(savedPage) !== currentPage) {
+        setCurrentPage(parseInt(savedPage));
+      }
+
+      if (savedScrollY) {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            const targetScroll = parseInt(savedScrollY);
+
+            window.scrollTo(0, targetScroll);
+            document.documentElement.scrollTop = targetScroll;
+            document.body.scrollTop = targetScroll;
+
+            const allElements = document.querySelectorAll("*");
+            allElements.forEach((el) => {
+              const style = window.getComputedStyle(el);
+              if (
+                (style.overflowY === "auto" || style.overflowY === "scroll") &&
+                el.scrollHeight > el.clientHeight
+              ) {
+                el.scrollTop = targetScroll;
+              }
+            });
+
+            sessionStorage.removeItem("recruiterProfileScrollY");
+            sessionStorage.removeItem("recruiterProfilePage");
+            sessionStorage.removeItem("recruiterProfileFilters");
+          }, 50);
+        });
+      }
+    }
+  }, [location.pathname]);
 
   const handleDownload = () => {
-    const selectedData = recruiters.filter((r) =>
+    // If no recruiters selected, download all filtered recruiters (bulk download)
+    const dataToExport = selectedRecruiters.length === 0 ? filteredRecruiters : recruiters.filter((r) =>
       selectedRecruiters.includes(r.id)
     );
 
-    if (selectedData.length === 0) {
-      toast.warning("Please select at least one recruiter");
+    if (dataToExport.length === 0) {
+      toast.warning("No recruiters to download.");
       return;
     }
 
-    const excelData = selectedData.map((r) => ({
+    const excelData = dataToExport.map((r) => ({
       School: r.schoolName || "N/A",
       Email: r.schoolEmail || "N/A",
       Phone: r.phoneNumber || "N/A",
@@ -145,11 +220,13 @@ export default function RecruiterProfile() {
     const workbook = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(workbook, worksheet, "Recruiters");
-    XLSX.writeFile(workbook, "Recruiters_List.xlsx");
+    const fileName = selectedRecruiters.length === 0 ? "all_recruiters.xlsx" : "selected_recruiters.xlsx";
+    XLSX.writeFile(workbook, fileName);
 
-    toast.success(
-      `Downloaded ${selectedData.length} recruiter(s) successfully`
-    );
+    const message = selectedRecruiters.length === 0
+      ? `Downloaded all ${dataToExport.length} recruiters successfully`
+      : `Downloaded ${dataToExport.length} recruiter(s) successfully`;
+    toast.success(message);
   };
 
   const handleSoftDelete = async (id) => {
@@ -345,7 +422,8 @@ export default function RecruiterProfile() {
                       // onClick={() =>
                       //   navigate(`/dashboard/recruiter-profile/${recruiter.id}`)
                       // }
-                      onClick={() =>
+                      onClick={() => {
+                        saveScrollPosition();
                         navigate(
                           `/dashboard/recruiter-profile/${recruiter.id}`,
                           {
@@ -353,8 +431,8 @@ export default function RecruiterProfile() {
                               from: `/dashboard/recruiter-profile?page=${currentPage}`,
                             },
                           }
-                        )
-                      }
+                        );
+                      }}
                     >
                       <td>
                         <input
@@ -421,7 +499,7 @@ export default function RecruiterProfile() {
 
                           if (!plan) return <span>N/A</span>;
 
-                          return plan.toLowerCase() === "free" ? (
+                          return plan.toLowerCase() === "trial" ? (
                             <span className="recruiterprofile-membership basic">
                               {plan}
                             </span>

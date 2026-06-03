@@ -29,6 +29,10 @@ export const SeekerProfileProvider = ({ children }) => {
           phone: user.profile?.phone || "",
           email: user.profile?.email || "",
           pincode: user.address?.pincode || "",
+          state: user.address?.state || "",
+          area: user.address?.area || "",
+          //taluk
+          city: user.address?.city || "",
           specialization: user.course?.specialization || "",
           status: user.status?.[0] || "",
           profile_img: user.profile?.profile_img || "",

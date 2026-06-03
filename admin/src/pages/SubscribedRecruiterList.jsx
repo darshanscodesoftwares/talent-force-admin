@@ -1,18 +1,29 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { SubscribedContext } from "../UseContexts/RecruiterUseContext/SubscribedContext/SubscribedRecruiterContext";
+import { RecruiterSubscriptionContext } from "../UseContexts/GeneralUseContext/RecruiterSubscriptionContext/RecruiterSubscriptionContext.jsx";
 import "./SubscribedRecruiterList.css";
 import { FaAngleDown, FaAngleUp, FaUserCheck } from "react-icons/fa6";
+import { MdAutorenew } from "react-icons/md";
 import * as XLSX from "xlsx";
-
 import { toast } from "react-toastify";
+import ExtendSubscriptionModal from "../editpages/ExtendSubscriptionModal.jsx";
 
 const SubscribedRecruiterList = () => {
   const { loading, subscribed } = useContext(SubscribedContext);
+  const { extendSubscription } = useContext(RecruiterSubscriptionContext);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRecruiter, setSelectedRecruiter] = useState(null);
+  const [recruitersList, setRecruitersList] = useState(subscribed);
 
   const [selectedRecruiters, setSelectedRecruiters] = useState([]);
+
+  // Sync recruitersList with subscribed data from context
+  useEffect(() => {
+    setRecruitersList(subscribed);
+  }, [subscribed]);
 
   const [searchFilters, setSearchFilters] = useState({
     schoolName: "",
@@ -44,7 +55,33 @@ const SubscribedRecruiterList = () => {
     setCurrentPage(1);
   };
 
-  const filteredRecruiters = subscribed.filter((rec) => {
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-IN", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const getDaysRemaining = (endDate) => {
+    if (!endDate) return 0;
+    const end = new Date(endDate);
+    const today = new Date();
+    const diffTime = end - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const getSubscriptionStatus = (endDate) => {
+    const daysRemaining = getDaysRemaining(endDate);
+    if (daysRemaining > 30) return "active";
+    if (daysRemaining > 0) return "expiring";
+    return "expired";
+  };
+
+  const filteredRecruiters = recruitersList.filter((rec) => {
     const schoolMatch =
       appliedFilters.schoolName === "" ||
       rec.school_name
@@ -54,8 +91,8 @@ const SubscribedRecruiterList = () => {
     const phoneMatch =
       appliedFilters.phoneNumber === "" ||
       rec.school_phone
-        ?.toLowerCase()
-        .includes(appliedFilters.phoneNumber.toLowerCase());
+        ?.toString()
+        .includes(appliedFilters.phoneNumber);
 
     return schoolMatch && phoneMatch;
   });
@@ -72,6 +109,28 @@ const SubscribedRecruiterList = () => {
 
   const currentRecruiters = filteredRecruiters.slice(indexOfFirst, indexOfLast);
 
+  const handleExtendSuccess = (recruiterId) => {
+    // Update the recruiter's is_extended status immediately
+    setRecruitersList((prevList) =>
+      prevList.map((rec) =>
+        rec.recruiter_id === recruiterId ? { ...rec, is_extended: true } : rec
+      )
+    );
+  };
+
+  const handleExtendClick = (recruiter) => {
+    // Transform recruiter data to match ExtendSubscriptionModal format
+    const transformedRecruiter = {
+      id: recruiter.recruiter_id,
+      schoolName: recruiter.school_name,
+      schoolEmail: recruiter.school_email,
+      phoneNumber: recruiter.school_phone,
+      current_plan: recruiter.plan,
+    };
+    setSelectedRecruiter(transformedRecruiter);
+    setIsModalOpen(true);
+  };
+
   const handleDownload = () => {
     // ✅ Force user to select first
     if (selectedRecruiters.length === 0) {
@@ -87,8 +146,7 @@ const SubscribedRecruiterList = () => {
       School: r.school_name || "N/A",
       Email: r.school_email || "N/A",
       Phone: r.school_phone || "N/A",
-      Pincode: r.pincode || "N/A",
-      Membership: r.plan?.plan_name || "N/A",
+      Plan: r.plan?.plan_name || "N/A",
       Status: r.plan?.status || "N/A",
     }));
 
@@ -182,19 +240,18 @@ const SubscribedRecruiterList = () => {
                         />
                       </th>
 
-                      <th>School</th>
-                      <th>Email</th>
+                      <th>School Name</th>
                       <th>Phone</th>
-                      <th>Pincode</th>
-                      <th>Membership</th>
+                      <th>Plan</th>
                       <th>Status</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
 
                   <tbody>
                     {filteredRecruiters.length === 0 ? (
                       <tr>
-                        <td colSpan="7">No subscribed recruiters found</td>
+                        <td colSpan="6">No subscribed recruiters found</td>
                       </tr>
                     ) : (
                       currentRecruiters.map((rec) => (
@@ -206,9 +263,7 @@ const SubscribedRecruiterList = () => {
                           <td>
                             <input
                               type="checkbox"
-                              checked={selectedRecruiters.includes(
-                                rec.recruiter_id
-                              )}
+                              checked={selectedRecruiters.includes(rec.recruiter_id)}
                               onChange={() => handleSelectOne(rec.recruiter_id)}
                             />
                           </td>
@@ -223,29 +278,41 @@ const SubscribedRecruiterList = () => {
                                   className="school-logo"
                                 />
                               )}
-
                               <div className="recruiter-school-info">
-                                <div className="school-name">
-                                  {rec.school_name || "N/A"}
+                                {rec.is_extended && (
+                                  <span className="extended-badge">✓ Extended</span>
+                                )}
+                                <div className="school-name-with-email">
+                                  <span className="school-name">{rec.school_name || "N/A"}</span>
+                                  <span className="school-email-small">{rec.school_email || "N/A"}</span>
                                 </div>
                               </div>
                             </div>
                           </td>
 
-                          {/* Email */}
-                          <td>{rec.school_email || "N/A"}</td>
-
                           {/* Phone */}
                           <td>{rec.school_phone || "N/A"}</td>
 
-                          {/* Pincode */}
-                          <td>{rec.pincode || "N/A"}</td>
-
-                          {/* Membership */}
-                          <td>{rec.plan?.plan_name || "N/A"}</td>
+                          {/* Plan */}
+                          <td>
+                            <span className="plan-badge">
+                              {rec.plan?.plan_name || "N/A"}
+                            </span>
+                          </td>
 
                           {/* Status */}
                           <td>{rec.plan?.status || "N/A"}</td>
+
+                          {/* Action */}
+                          <td>
+                            <button
+                              className="extend-btn"
+                              onClick={() => handleExtendClick(rec)}
+                              title="Extend subscription"
+                            >
+                              <MdAutorenew /> Extend
+                            </button>
+                          </td>
                         </tr>
                       ))
                     )}
@@ -288,6 +355,7 @@ const SubscribedRecruiterList = () => {
                     }
                   />
                 </div>
+
                 <div className="recruiter-search-field-group">
                   <label className="recruiter-search-label">Phone Number</label>
                   <input
@@ -324,6 +392,19 @@ const SubscribedRecruiterList = () => {
             </div>
           </div>
         )}
+
+      {/* Extend Modal */}
+      {isModalOpen && selectedRecruiter && (
+        <ExtendSubscriptionModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedRecruiter(null);
+          }}
+          onExtendSuccess={handleExtendSuccess}
+          recruiter={selectedRecruiter}
+        />
+      )}
       </div>
     </>
   );

@@ -7,6 +7,7 @@ const SubScriptionLimitModel = ({ isOpen, onClose, onSave, subscription }) => {
   const [totalJobpost, setTotalJobpost] = useState("");
   const [contactDetails, setContactDetails] = useState("");
   const [viewsType, setViewsType] = useState("");
+  const [trialDays, setTrialDays] = useState("");
 
   if (!isOpen) return null;
 
@@ -32,6 +33,15 @@ const SubScriptionLimitModel = ({ isOpen, onClose, onSave, subscription }) => {
       setViewsType(subscription.limits.views_type ?? "null");
 
       setContactDetails(String(subscription.limits.show_contact_details));
+
+      // Trial Days - Only for Free plan
+      if (subscription.name === "Trial") {
+        setTrialDays(
+          subscription.limits.trial_days === null
+            ? "null"
+            : subscription.limits.trial_days
+        );
+      }
     }
   }, [subscription]);
 
@@ -56,6 +66,11 @@ const SubScriptionLimitModel = ({ isOpen, onClose, onSave, subscription }) => {
 
         // ✅ VERY IMPORTANT
         views_type: subscription?.limits?.views_type,
+
+        // Trial Days - Only for Free plan
+        ...(subscription.name === "Trial" && {
+          trial_days: trialDays === "null" ? null : Number(trialDays),
+        }),
       },
     };
 
@@ -103,6 +118,16 @@ const SubScriptionLimitModel = ({ isOpen, onClose, onSave, subscription }) => {
                 cursor: "not-allowed",
               }}
             />
+
+            {subscription.name === "Trial" && (
+              <>
+                <label>Trial Days</label>
+                <input
+                  value={trialDays}
+                  onChange={(e) => setTrialDays(e.target.value)}
+                />
+              </>
+            )}
 
             <div className="subscriptionmodal-actions">
               <button

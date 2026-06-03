@@ -77,7 +77,7 @@ export default function JobPostFilter() {
                         )}
                       </button> */}
 
-                      {!["Job Role", "Location", "Pincode", "Number Of Opening"].includes(
+                      {!["Location", "Pincode", "Number Of Opening"].includes(
                         filter.specifications
                       ) && (
                           <button

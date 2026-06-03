@@ -111,6 +111,23 @@ export default function GeneralInformation() {
           </div>
         </div>
 
+        {/* Address */}
+        <div className="generalinfo-row">
+          <div className="generalinfo-field">
+            <label>State</label>
+            <input type="text" value={profile.state || ""} readOnly />
+          </div>
+          <div className="generalinfo-field">
+            <label>District</label>
+            <input type="text" value={profile.area || ""} readOnly />
+          </div>
+
+          <div className="generalinfo-field">
+            <label>Taluk</label>
+            <input type="text" value={profile.city || ""} readOnly />
+          </div>
+        </div>
+
         {/* Resume */}
         <div className="generalinfo-row-resume">
           <div className="generalinfo-field-resume">

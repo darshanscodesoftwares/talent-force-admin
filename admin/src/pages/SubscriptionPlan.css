@@ -202,6 +202,7 @@
   font-size: 13px;
   cursor: pointer;
   border: none;
+
   transition: background 0.3s ease, transform 0.2s ease;
 }
 

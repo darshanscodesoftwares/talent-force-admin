@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { FaFileInvoiceDollar, FaFilter } from "react-icons/fa";
+import { FaFileInvoiceDollar, FaFilter, FaChartLine } from "react-icons/fa";
 import { IoPeopleSharp } from "react-icons/io5";
 import { SiHomeassistantcommunitystore } from "react-icons/si";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
@@ -11,6 +11,8 @@ import { RiEqualizer2Fill } from "react-icons/ri";
 import { HiMiniBriefcase } from "react-icons/hi2";
 import { FaUserGraduate } from "react-icons/fa6";
 import { SlLogout } from "react-icons/sl";
+import { SiRazorpay } from "react-icons/si";
+
 import "./Sidebar.css";
 
 import adminLogo from "../assets/adminlogo.png";
@@ -22,6 +24,7 @@ import { MdPrivacyTip } from "react-icons/md";
 
 import { RiMoneyRupeeCircleFill } from "react-icons/ri";
 import { TbLockHeart } from "react-icons/tb";
+import { RxLink1 } from "react-icons/rx";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -32,18 +35,21 @@ function Sidebar() {
     setLoading(true);
 
     try {
-      const response = await fetch("https://hireezee.co.in/api/admin-logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // If your backend expects auth headers, include:
-          // "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
-        },
-        body: JSON.stringify({
-          email: "talentforceapp@gmail.com",
-          password: "Talentapp@2025",
-        }),
-      });
+      const response = await fetch(
+        "https://api.hireezee.co.in/api/admin-logout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // If your backend expects auth headers, include:
+            // "Authorization": `Bearer ${localStorage.getItem("authToken")}`,
+          },
+          body: JSON.stringify({
+            email: "talentforceapp@gmail.com",
+            password: "Talentapp@2025",
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -85,6 +91,51 @@ function Sidebar() {
                 <FaFileInvoiceDollar className="icon" /> Subscription Plans
               </NavLink>
             </li>
+            {/*------------- Subscribed Recruiters --------------*/}
+            <li>
+              <NavLink
+                to="/dashboard/subscribed-recruiter"
+                className="nav-link"
+              >
+                <RiMoneyRupeeCircleFill className="icon" /> Subscribed
+                Recruiters
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/dashboard/survey-question" className="nav-link">
+                <FaFilter className="icon" /> Survey Questions
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/dashboard/survey-analytics" className="nav-link">
+                <FaChartLine className="icon" /> Survey Analytics
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/dashboard/referral-statistics" className="nav-link">
+                <RxLink1 className="icon" /> Referral Statistics
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/dashboard/provide-partner" className="nav-link">
+                <HiMiniBriefcase className="icon" /> Partner Program
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/dashboard/partner-referral-statistics" className="nav-link">
+                <FaChartLine className="icon" /> Partner Referral Statistics
+              </NavLink>
+            </li>
+
+            {/* Razorpay Invoice Details  */}
+            {/* <li>
+              <NavLink
+                to="/dashboard/razorpay-invoice-details"
+                className="nav-link"
+              >
+                <SiRazorpay className="icon" /> Invoice Details
+              </NavLink>
+            </li> */}
           </ul>
         </div>
 
@@ -190,16 +241,7 @@ function Sidebar() {
                 <MdPrivacyTip className="icon" /> Privacy & Policy
               </NavLink>
             </li>
-            {/*------------- Subscribed Recruiters --------------*/}
-            <li>
-              <NavLink
-                to="/dashboard/subscribed-recruiter"
-                className="nav-link"
-              >
-                <RiMoneyRupeeCircleFill className="icon" /> Subscribed
-                Recruiters
-              </NavLink>
-            </li>
+
             {/* Blocked Recruiter List  */}
             <li>
               <NavLink to="/dashboard/blocked-recruiters" className="nav-link">

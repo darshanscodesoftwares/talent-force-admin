@@ -18,13 +18,17 @@ export default function SeekerProfile() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const pagesToShow = 7;
-  const seekersPerPage = 25;
+  const seekersPerPage = 50;
   const [selectedSeekers, setSelectedSeekers] = useState([]);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [filters, setFilters] = useState({
     specialization: "",
     pincode: "",
     status: "",
+    name: "",
+    phone: "",
+    district: "",
+    taluk: "",
   });
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,7 +46,7 @@ export default function SeekerProfile() {
         const token =
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s";
         const response = await axios.get(
-          "https://hireezee.co.in/api/admin-users-count-list",
+          "https://api.hireezee.co.in/api/admin-users-count-list",
           { headers: { Authorization: token } }
         );
 
@@ -79,7 +83,15 @@ export default function SeekerProfile() {
       (!filters.specialization ||
         s.specialization === filters.specialization) &&
       (!filters.pincode || s.pincode === filters.pincode) &&
-      (!filters.status || s.status === filters.status)
+      (!filters.status || s.status === filters.status) &&
+      (!filters.district || s.area === filters.district) &&
+      (!filters.taluk || s.city === filters.taluk) &&
+      // ✅ Name search
+      (!filters.name ||
+        (s.name &&
+          s.name.toLowerCase().includes(filters.name.toLowerCase()))) &&
+      // ✅ Phone filter (partial match)
+      (!filters.phone || (s.phone && s.phone.includes(filters.phone)))
     );
   });
 
@@ -126,20 +138,21 @@ export default function SeekerProfile() {
   };
 
   const handleDownload = () => {
-    if (selectedSeekers.length === 0) {
-      toast.warning("Select at least one seeker.");
+    // If no seekers selected, download all filtered seekers (bulk download)
+    const dataToExport = selectedSeekers.length === 0 ? filteredSeekers : seekers.filter((s) => selectedSeekers.includes(s.id));
+
+    if (dataToExport.length === 0) {
+      toast.warning("No seekers to download.");
       return;
     }
 
-    const exportData = seekers
-      .filter((s) => selectedSeekers.includes(s.id))
-      .map((s) => {
-        const row = {};
-        visibleColumns.forEach((colKey) => {
-          row[allColumns.find((c) => c.key === colKey).label] = s[colKey];
-        });
-        return row;
+    const exportData = dataToExport.map((s) => {
+      const row = {};
+      visibleColumns.forEach((colKey) => {
+        row[allColumns.find((c) => c.key === colKey).label] = s[colKey];
       });
+      return row;
+    });
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
@@ -148,12 +161,17 @@ export default function SeekerProfile() {
       bookType: "xlsx",
       type: "array",
     });
+
+    const fileName = selectedSeekers.length === 0 ? "all_seekers.xlsx" : "selected_seekers.xlsx";
     saveAs(
       new Blob([excelBuffer], { type: "application/octet-stream" }),
-      "selected_seekers.xlsx"
+      fileName
     );
 
-    toast.success("Excel downloaded successfully!");
+    const message = selectedSeekers.length === 0
+      ? `Downloaded all ${dataToExport.length} seekers successfully!`
+      : "Selected seekers downloaded successfully!";
+    toast.success(message);
   };
 
   useEffect(() => {
@@ -164,6 +182,107 @@ export default function SeekerProfile() {
       setCurrentPage(pageFromUrl);
     }
   }, [location.search]);
+
+  // 🔹 Save scroll position and state before navigating to seeker details
+  const saveScrollPosition = () => {
+    // Check different scroll sources
+    let scrollY = 0;
+    let scrollSource = "none";
+
+    // Priority 1: document.documentElement.scrollTop (HTML scroll)
+    if (document.documentElement.scrollTop > 0) {
+      scrollY = document.documentElement.scrollTop;
+      scrollSource = "documentElement";
+    }
+    // Priority 2: document.body.scrollTop (Body scroll)
+    else if (document.body.scrollTop > 0) {
+      scrollY = document.body.scrollTop;
+      scrollSource = "body";
+    }
+    // Priority 3: window.scrollY (Window scroll)
+    else if (window.scrollY > 0) {
+      scrollY = window.scrollY;
+      scrollSource = "window";
+    }
+    const container = document.querySelector(".seekerprofile-container");
+
+    // Find ALL scrollable elements
+    const allElements = document.querySelectorAll("*");
+    allElements.forEach((el) => {
+      const style = window.getComputedStyle(el);
+      if (
+        (style.overflowY === "auto" || style.overflowY === "scroll") &&
+        el.scrollHeight > el.clientHeight
+      ) {
+        if (el.scrollTop > 0) {
+          scrollY = el.scrollTop;
+          scrollSource = el.className || el.tagName;
+        }
+      }
+    });
+
+    sessionStorage.setItem("seekerProfileScrollY", scrollY.toString());
+    sessionStorage.setItem("seekerProfilePage", currentPage.toString());
+    sessionStorage.setItem("seekerProfileFilters", JSON.stringify(filters));
+  };
+
+  // 🔹 Restore scroll position when returning to seeker list
+  useEffect(() => {
+    const savedScrollY = sessionStorage.getItem("seekerProfileScrollY");
+    const savedPage = sessionStorage.getItem("seekerProfilePage");
+    const savedFilters = sessionStorage.getItem("seekerProfileFilters");
+
+    // Only restore if we have saved data
+    if (savedScrollY || savedPage || savedFilters) {
+
+      // Restore filters if they exist
+      if (savedFilters) {
+        try {
+          const parsedFilters = JSON.parse(savedFilters);
+          setFilters(parsedFilters);
+        } catch (e) {
+          // Silently fail if filters can't be parsed
+        }
+      }
+
+      // Restore page if it exists and is different from current page
+      if (savedPage && parseInt(savedPage) !== currentPage) {
+        setCurrentPage(parseInt(savedPage));
+      }
+
+      // Restore scroll position after data renders
+      if (savedScrollY) {
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            const targetScroll = parseInt(savedScrollY);
+
+            // Try all scroll methods to restore
+            window.scrollTo(0, targetScroll);
+            document.documentElement.scrollTop = targetScroll;
+            document.body.scrollTop = targetScroll;
+
+            // Find and restore ALL scrollable elements
+            const allElements = document.querySelectorAll("*");
+            allElements.forEach((el) => {
+              const style = window.getComputedStyle(el);
+              if (
+                (style.overflowY === "auto" || style.overflowY === "scroll") &&
+                el.scrollHeight > el.clientHeight
+              ) {
+                el.scrollTop = targetScroll;
+              }
+            });
+
+            // Clear saved position after restoring
+            sessionStorage.removeItem("seekerProfileScrollY");
+            sessionStorage.removeItem("seekerProfilePage");
+            sessionStorage.removeItem("seekerProfileFilters");
+          }, 50);
+        });
+      }
+    }
+  }, [location.pathname]); // Restore when navigating back to this page
 
   const handleSoftDelete = async (id) => {
     await softdelete(id);
@@ -240,45 +359,6 @@ export default function SeekerProfile() {
       </div>
 
       {/* ===== PAGINATION  ===== */}
-      {/* <div className="seekerprofile-pagination bottom">
-        <button
-          disabled={currentPage === 1}
-          onClick={() => {
-            const prev = currentPage - 1;
-            setCurrentPage(prev);
-            navigate(`?page=${prev}`, { replace: true });
-          }}
-        >
-          Prev
-        </button>
-
-        {Array.from({ length: maxRight - maxLeft + 1 }, (_, i) => {
-          const page = i + maxLeft;
-          return (
-            <button
-              key={page}
-              className={currentPage === page ? "active" : ""}
-              onClick={() => {
-                setCurrentPage(page);
-                navigate(`?page=${page}`, { replace: true });
-              }}
-            >
-              {page}
-            </button>
-          );
-        })}
-
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => {
-            const next = currentPage + 1;
-            setCurrentPage(next);
-            navigate(`?page=${next}`, { replace: true });
-          }}
-        >
-          Next
-        </button>
-      </div> */}
 
       <div className="seekerprofile-pagination bottom">
         <span className="pagination-range">
@@ -332,13 +412,14 @@ export default function SeekerProfile() {
               <tr
                 key={seeker.id}
                 className="seekerprofile-row"
-                onClick={() =>
+                onClick={() => {
+                  saveScrollPosition();
                   navigate(`/dashboard/seeker-profile/${seeker.id}`, {
                     state: {
                       from: `/dashboard/seeker-profile?page=${currentPage}`,
                     },
-                  })
-                }
+                  });
+                }}
               >
                 <td
                   onClick={(e) => {
@@ -352,41 +433,6 @@ export default function SeekerProfile() {
                     readOnly
                   />
                 </td>
-                {/* {allColumns
-                  .filter((c) => visibleColumns.includes(c.key))
-                  .map((col) => (
-                    <td key={col.key}>
-                      {col.key === "name" ? (
-                        <div className="seeker-user-cell">
-                          {seeker.profile_img ? (
-                            <img
-                              src={seeker.profile_img}
-                              alt={seeker.name}
-                              className="seekerprofile-avatar"
-                            />
-                          ) : (
-                            <FaUserCircle className="seekerprofile-avatar-icon" />
-                          )}
-
-                          <div className="seeker-user-info">
-                            <div className="seeker-name">{seeker.name}</div>
-
-                            <span className="user-type">
-                              {seeker.user_type}
-                            </span>
-                            <span className="login-date">
-                              {seeker.login_date}
-                            </span>
-                            <span className="login-time">
-                              {seeker.login_time}
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        seeker[col.key] || ""
-                      )}
-                    </td>
-                  ))} */}
 
                 {allColumns
                   .filter((c) => visibleColumns.includes(c.key))

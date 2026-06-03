@@ -21,13 +21,16 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://hireezee.co.in/api/admin-login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "https://api.hireezee.co.in/api/admin-login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await response.json();
 

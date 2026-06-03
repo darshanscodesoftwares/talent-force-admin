@@ -48,6 +48,7 @@ import JobPostCompartmentLevel from "./filterpages/JobPostCompartmentLevel.jsx";
 import JobPostEducationQualification from "./filterpages/JobPostEducationQualification.jsx";
 import WorkTypeFilter from "./filterpages/WorkTypeFilter.jsx";
 import JobPostEndDateFilter from "./filterpages/JobPostEndDateFilter.jsx";
+import JobPostJobRoleFilter from "./filterpages/JobPostJobRole.jsx";
 import AddRecruiterBanner from "./editpages/AddRecruiterBanner.jsx";
 import EditRecruiterBanner from "./editpages/EditRecruiterBanner.jsx";
 import SeekerTermsCondition from "./pages/SeekerTermsCondition.jsx";
@@ -59,6 +60,12 @@ import SeekerBlockList from "./pages/SeekerBlockList.jsx";
 import RecruiterBlockList from "./pages/RecruiterBlockList.jsx";
 import RecruiterReportAbuse from "./pages/RecruiterReportAbuse.jsx";
 import SeekerReportAbuse from "./pages/SeekerReportAbuse.jsx";
+import RazorPayInvoiceDetails from "./pages/RazorPayInvoiceDetails.jsx";
+import SurveyQuestion from "./pages/SurveyQuestion.jsx";
+import SurveyAnalytics from "./pages/SurveyAnalytics.jsx";
+import ReferralStatistics from "./pages/ReferralStatistics.jsx";
+import ProvidePartner from "./pages/ProvidePartner.jsx";
+import PartnerReferralStatistics from "./pages/PartnerReferralStatistics.jsx";
 
 const App = () => {
   return (
@@ -125,6 +132,11 @@ const App = () => {
             <Route path="seeker-block-list" element={<SeekerBlockList />} />
 
             <Route path="subscription-plan" element={<SubscriptionPlan />} />
+            <Route path="survey-question" element={<SurveyQuestion />} />
+            <Route path="survey-analytics" element={<SurveyAnalytics />} />
+            <Route path="referral-statistics" element={<ReferralStatistics />} />
+            <Route path="provide-partner" element={<ProvidePartner />} />
+            <Route path="partner-referral-statistics" element={<PartnerReferralStatistics />} />
             <Route path="education-filter" element={<Education />} />
 
             {/* edit pages */}
@@ -217,6 +229,10 @@ const App = () => {
               path="job-post-filter/enddate"
               element={<JobPostEndDateFilter />}
             />
+            <Route
+              path="job-post-filter/jobrole"
+              element={<JobPostJobRoleFilter />}
+            />
 
             {/* Subscribed List  */}
             <Route
@@ -231,6 +247,11 @@ const App = () => {
             <Route
               path="recruiter-report-abuse"
               element={<RecruiterReportAbuse />}
+            />
+
+            <Route
+              path="razorpay-invoice-details"
+              element={<RazorPayInvoiceDetails />}
             />
           </Route>
         </Routes>

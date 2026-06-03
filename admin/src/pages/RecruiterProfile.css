@@ -106,6 +106,26 @@
   height: 15px;
 }
 
+/* Custom Scrollbar for Top Scroll */
+.top-scroll::-webkit-scrollbar {
+  height: 5px;
+}
+
+.top-scroll::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.top-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.top-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
 .top-scroll-inner {
   width: 1500px; /* must match table width */
   height: 1px;
@@ -113,6 +133,26 @@
 
 .recruiterprofile-table-container {
   overflow-x: auto;
+}
+
+/* Custom Scrollbar */
+.recruiterprofile-table-container::-webkit-scrollbar {
+  height: 5px;
+}
+
+.recruiterprofile-table-container::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.recruiterprofile-table-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.recruiterprofile-table-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .recruiterprofile-table {
@@ -141,6 +181,10 @@
 
 .recruiterprofile-table tr:hover {
   background: #f9f9f9;
+}
+
+.recruiterprofile-row {
+  cursor: pointer;
 }
 
 /* Status badge */
@@ -322,11 +366,11 @@
 .recruiter-search-field-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 }
 
 .recruiter-search-field-group:last-child {
-  margin-bottom: 0;
+  margin-bottom: 16px;
 }
 
 .recruiter-search-label {
@@ -334,6 +378,11 @@
   font-weight: 500;
   color: #444;
   margin-bottom: 8px;
+  margin-top: 12px;
+}
+
+.recruiter-search-field-group:first-child .recruiter-search-label {
+  margin-top: 0;
 }
 
 .recruiter-search-input {
