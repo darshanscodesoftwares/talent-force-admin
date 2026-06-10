@@ -1,6 +1,6 @@
 import { IoIosPeople } from "react-icons/io";
 
-import { FaSchool } from "react-icons/fa";
+import { FaSchool, FaWhatsapp } from "react-icons/fa";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import "./RecruiterProfile.css";
 import { useState, useEffect, useContext, useRef } from "react";
@@ -483,7 +483,19 @@ export default function RecruiterProfile() {
                       <td>{recruiter.schoolEmail}</td>
 
                       {/* Phone */}
-                      <td>{recruiter.phoneNumber}</td>
+                      <td>
+                        <a
+                          href={`https://wa.me/${recruiter.phoneNumber?.replace(/[^0-9]/g, '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="whatsapp-phone-link"
+                          onClick={(e) => e.stopPropagation()}
+                          title="Open WhatsApp"
+                        >
+                          <FaWhatsapp size={16} />
+                          {recruiter.phoneNumber || "N/A"}
+                        </a>
+                      </td>
 
                       {/* Pincode */}
                       {/* <td>{recruiter.job_posts?.[0]?.pincode?.pincode || "N/A"}</td>

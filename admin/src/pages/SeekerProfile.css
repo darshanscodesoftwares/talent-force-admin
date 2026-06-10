@@ -664,3 +664,34 @@
 .delete-btn-table:hover {
   background-color: #d9363e;
 }
+
+/* ===== WhatsApp Link ===== */
+.whatsapp-phone-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #25d366;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: #f0f7f4;
+  border: 1.5px solid #25d366;
+}
+
+.whatsapp-phone-link:hover {
+  background: #25d366;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  transform: translateY(-2px);
+}
+
+.whatsapp-phone-link:active {
+  transform: translateY(0);
+}
+
+.whatsapp-phone-link svg {
+  flex-shrink: 0;
+}

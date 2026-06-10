@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { IoIosPeople } from "react-icons/io";
 import { FaUserClock, FaUserCheck, FaDeleteLeft } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import SeekerFilterModal from "../editpages/SeekerFilterModal.jsx";
 import { SeekerProfileLoader } from "../Loader/Loader.jsx";
@@ -475,6 +476,18 @@ export default function SeekerProfile() {
                             </span>
                           </div>
                         </div>
+                      ) : col.key === "phone" ? (
+                        <a
+                          href={`https://wa.me/${seeker.phone?.replace(/[^0-9]/g, '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="whatsapp-phone-link"
+                          onClick={(e) => e.stopPropagation()}
+                          title="Open WhatsApp"
+                        >
+                          <FaWhatsapp size={16} />
+                          {seeker.phone || "N/A"}
+                        </a>
                       ) : (
                         seeker[col.key] || ""
                       )}
