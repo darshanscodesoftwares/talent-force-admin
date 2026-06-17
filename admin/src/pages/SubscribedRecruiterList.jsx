@@ -132,17 +132,17 @@ const SubscribedRecruiterList = () => {
   };
 
   const handleDownload = () => {
-    // ✅ Force user to select first
-    if (selectedRecruiters.length === 0) {
-      toast.warning("Please select at least one recruiter");
+    // If no recruiters selected, download all filtered recruiters (bulk download)
+    const dataToExport = selectedRecruiters.length === 0
+      ? filteredRecruiters
+      : filteredRecruiters.filter((r) => selectedRecruiters.includes(r.recruiter_id));
+
+    if (dataToExport.length === 0) {
+      toast.warning("No recruiters to download.");
       return;
     }
 
-    const selectedData = filteredRecruiters.filter((r) =>
-      selectedRecruiters.includes(r.recruiter_id)
-    );
-
-    const excelData = selectedData.map((r) => ({
+    const excelData = dataToExport.map((r) => ({
       School: r.school_name || "N/A",
       Email: r.school_email || "N/A",
       Phone: r.school_phone || "N/A",
@@ -154,9 +154,13 @@ const SubscribedRecruiterList = () => {
     const workbook = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(workbook, worksheet, "Recruiters");
-    XLSX.writeFile(workbook, "Subscribed_Recruiters.xlsx");
+    const fileName = selectedRecruiters.length === 0 ? "all_subscribed_recruiters.xlsx" : "selected_subscribed_recruiters.xlsx";
+    XLSX.writeFile(workbook, fileName);
 
-    toast.success(`Downloaded ${selectedData.length} recruiter(s)`);
+    const message = selectedRecruiters.length === 0
+      ? `Downloaded all ${dataToExport.length} recruiters successfully`
+      : `Downloaded ${dataToExport.length} recruiter(s) successfully`;
+    toast.success(message);
   };
 
   const handleSelectOne = (id) => {
