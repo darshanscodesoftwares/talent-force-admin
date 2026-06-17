@@ -32,6 +32,7 @@ export const DashboardGraphProvider = ({ children }) => {
           ...item,
           seeker: Number(item.seeker) || 0,
           recruiter: Number(item.recruiter) || 0,
+          mismatch_count: Number(item.mismatch_count) || 0,
         }));
 
         setGraphData(formatted);

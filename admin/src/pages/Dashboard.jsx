@@ -305,6 +305,12 @@ const Dashboard = () => {
                   fill="#3dca5eff"
                   radius={[20, 20, 20, 20]}
                 />
+                <Bar
+                  dataKey="mismatch_count"
+                  name="Mismatch Count"
+                  fill="#7c8c9d"
+                  radius={[20, 20, 20, 20]}
+                />
               </BarChart>
             </ResponsiveContainer>
           )}

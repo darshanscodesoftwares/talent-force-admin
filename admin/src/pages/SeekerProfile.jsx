@@ -47,7 +47,7 @@ export default function SeekerProfile() {
         const token =
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJwaG9uZSI6IjYzODQ1ODIwNjAiLCJpYXQiOjE3NTQ1NjYwNDgsImV4cCI6MTc4NjEwMjA0OH0.3iSWyeNJxfoYxU9QsQIuBIjd9xbO0OaE-CoWhbtPM4s";
         const response = await axios.get(
-          "https://api.hireezee.co.in/api/admin-users-count-list",
+          `${import.meta.env.VITE_API_BASE_URL}/api/admin-users-count-list`,
           { headers: { Authorization: token } }
         );
 
