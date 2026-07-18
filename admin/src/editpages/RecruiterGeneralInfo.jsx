@@ -2,7 +2,7 @@ import "./RecruiterGeneralInfo.css";
 import { FaSchool } from "react-icons/fa";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { MdClose } from "react-icons/md";
-import { MdEmail, MdPhone } from "react-icons/md";
+import { MdEmail, MdPhone, MdCheckCircle } from "react-icons/md";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useRecruiterJobPosts } from "../UseContexts/RecruiterUseContext/RecruiterProfileContext/RecruiterJobPostsContext.jsx";
 import RecruiterProfileLoader from "../Loader/Loader.jsx"; // optional loader
@@ -197,7 +197,13 @@ export default function RecruiterGeneralInfo() {
 
         <div className="recruitergeneralinfo-row">
           <div className="recruitergeneralinfo-field">
-            <label>Udise Number</label>
+            <label className="recruitergeneralinfo-label-row">
+              Udise Number
+              {formattedRecruiter?.isAdminVerified &&
+                school_profile?.udise_number && (
+                  <MdCheckCircle className="recruitergeneralinfo-verified-tick" />
+                )}
+            </label>
             <input
               type="text"
               value={school_profile?.udise_number || "N/A"}
@@ -216,7 +222,13 @@ export default function RecruiterGeneralInfo() {
 
         <div className="recruitergeneralinfo-row">
           <div className="recruitergeneralinfo-field">
-            <label>School Affiliation / Recognition Letter</label>
+            <label className="recruitergeneralinfo-label-row">
+              School Affiliation / Recognition Letter
+              {formattedRecruiter?.isAdminVerified &&
+                school_profile?.school_affiliation_letter && (
+                  <MdCheckCircle className="recruitergeneralinfo-verified-tick" />
+                )}
+            </label>
             {school_profile?.school_affiliation_letter ? (
               <a
                 href={school_profile.school_affiliation_letter}
@@ -249,7 +261,13 @@ export default function RecruiterGeneralInfo() {
             </button>
           </div>
           <div className="recruitergeneralinfo-field">
-            <label>Board Affiliation Certificate</label>
+            <label className="recruitergeneralinfo-label-row">
+              Board Affiliation Certificate
+              {formattedRecruiter?.isAdminVerified &&
+                school_profile?.board_affiliation_certificate && (
+                  <MdCheckCircle className="recruitergeneralinfo-verified-tick" />
+                )}
+            </label>
             {school_profile?.board_affiliation_certificate ? (
               <a
                 href={school_profile.board_affiliation_certificate}

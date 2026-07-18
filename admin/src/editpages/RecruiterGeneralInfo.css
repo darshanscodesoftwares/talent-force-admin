@@ -134,6 +134,24 @@
   color: #586473;
 }
 
+.recruitergeneralinfo-field label.recruitergeneralinfo-label-row {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: auto;
+  text-align: left;
+  gap: 6px;
+}
+
+.recruitergeneralinfo-verified-tick {
+  display: inline-block;
+  color: #16a34a;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
 .recruitergeneralinfo-field input {
   padding: 10px;
   border: 1px solid #ccc;
