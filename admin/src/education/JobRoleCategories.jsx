@@ -19,7 +19,7 @@ export default function JobRoleCategories() {
     loading,
     addJobRoleCategory,
     updateJobRoleCategory,
-    deleteJobRoleCategory,
+    // deleteJobRoleCategory,
   } = useContext(JobRoleCategoriesContext);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -40,9 +40,9 @@ export default function JobRoleCategories() {
   };
 
   // Delete
-  const handleDelete = async (id) => {
-    await deleteJobRoleCategory(id);
-  };
+  // const handleDelete = async (id) => {
+  //   await deleteJobRoleCategory(id);
+  // };
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -85,7 +85,7 @@ export default function JobRoleCategories() {
                     <th>Value</th>
                     <th>Status</th>
                     <th>Updated on</th>
-                    <th>Action</th>
+                    {/* <th>Action</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -98,7 +98,7 @@ export default function JobRoleCategories() {
                           ? new Date(item.updated_at).toLocaleDateString()
                           : "-"}
                       </td>
-                      <td className="jobrolecateg-actions">
+                      {/* <td className="jobrolecateg-actions">
                         <button
                           className="jobrolecateg-btn edit-btn"
                           onClick={() => {
@@ -114,7 +114,7 @@ export default function JobRoleCategories() {
                         >
                           <AiOutlineDelete />
                         </button>
-                      </td>
+                      </td> */}
                     </tr>
                   ))}
                 </tbody>
