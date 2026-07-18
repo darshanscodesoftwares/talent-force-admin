@@ -19,9 +19,14 @@ export default function ExtendSubscriptionModal({ isOpen, onClose, recruiter, on
     });
   };
 
+  const getCurrentEndDate = () => {
+    const endDate = recruiter.current_plan?.end_date;
+    return endDate ? new Date(endDate) : new Date();
+  };
+
   const calculateNewDate = (daysValue) => {
     if (!daysValue) return "Select days to extend";
-    const currentEnd = new Date(recruiter.current_plan?.end_date);
+    const currentEnd = getCurrentEndDate();
     const numDays = parseInt(daysValue) || 0;
     const newEnd = new Date(currentEnd.getTime() + numDays * 24 * 60 * 60 * 1000);
     return newEnd.toLocaleDateString("en-IN", {
@@ -33,7 +38,7 @@ export default function ExtendSubscriptionModal({ isOpen, onClose, recruiter, on
 
   const getNewEndDate = (daysValue) => {
     if (!daysValue) return null;
-    const currentEnd = new Date(recruiter.current_plan?.end_date);
+    const currentEnd = getCurrentEndDate();
     const numDays = parseInt(daysValue) || 0;
     return new Date(currentEnd.getTime() + numDays * 24 * 60 * 60 * 1000);
   };

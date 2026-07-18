@@ -97,6 +97,12 @@ export default function SeekerFilterModal({
     <div className="seeker-filter-modal-overlay">
       <div className="seeker-filter-modal-content">
         <div className="seeker-filter-modal-header">
+          <button
+            className="seeker-filter-header-clear-btn"
+            onClick={handleClear}
+          >
+            Clear
+          </button>
           <h2>Advanced Search Filters</h2>
           <button className="seeker-filter-close-btn" onClick={onClose}>
             ✖

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { SeekerProfileContext } from "../UseContexts/SeekerUseContext/SeekerProfileContent.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IoIosPeople } from "react-icons/io";
@@ -30,7 +30,17 @@ export default function SeekerProfile() {
     phone: "",
     district: "",
     taluk: "",
+    education: "",
   });
+  const tableScrollRef = useRef(null);
+  const topScrollRef = useRef(null);
+  // Suppresses the top<->table scroll-sync while a button-triggered smooth
+  // scroll is animating — see scrollTable() for why this is needed.
+  const autoScrollingRef = useRef(false);
+  const autoScrollTimerRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [tableInView, setTableInView] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -72,6 +82,7 @@ export default function SeekerProfile() {
     { key: "phone", label: "Phone" },
     { key: "pincode", label: "Pincode" },
     { key: "status", label: "Status" },
+    { key: "openToWork", label: "Seeking Status" },
     { key: "action", label: "Action" },
   ];
   const [visibleColumns, setVisibleColumns] = useState(
@@ -285,6 +296,110 @@ export default function SeekerProfile() {
     }
   }, [location.pathname]); // Restore when navigating back to this page
 
+  const scrollTable = (direction) => {
+    const el = tableScrollRef.current;
+    if (!el) return;
+
+    // Setting scrollLeft via JS fires an async "scroll" event, which lands
+    // after the synchronous syncing guard below has already reset — so
+    // without this flag, syncFromTop's table.scrollLeft assignment fires
+    // mid-animation and cancels this smooth scroll almost immediately
+    // (observed landing ~2px in, instead of at the end).
+    autoScrollingRef.current = true;
+    clearTimeout(autoScrollTimerRef.current);
+    autoScrollTimerRef.current = setTimeout(() => {
+      autoScrollingRef.current = false;
+    }, 1000);
+
+    if (direction === -1) {
+      el.scrollTo({ left: 0, behavior: "smooth" });
+      setCanScrollLeft(false);
+      setCanScrollRight(el.scrollWidth > el.clientWidth);
+    } else {
+      el.scrollTo({ left: el.scrollWidth, behavior: "smooth" });
+      setCanScrollLeft(true);
+      setCanScrollRight(false);
+    }
+  };
+
+  useEffect(() => {
+    const top = topScrollRef.current;
+    const table = tableScrollRef.current;
+
+    // The table (and these refs) only exist once loading finishes, so this
+    // effect must re-run when that happens instead of only on mount —
+    // otherwise the listeners never attach on a cold first load.
+    if (!top || !table) return;
+
+    let syncing = false;
+
+    const checkScroll = () => {
+      setCanScrollLeft(table.scrollLeft > 0);
+      setCanScrollRight(table.scrollLeft + table.clientWidth < table.scrollWidth - 1);
+    };
+
+    const syncFromTop = () => {
+      // Don't fight a button-triggered smooth scroll on the table — see
+      // scrollTable() for why.
+      if (syncing || autoScrollingRef.current) return;
+      syncing = true;
+      table.scrollLeft = top.scrollLeft;
+      syncing = false;
+      checkScroll();
+    };
+
+    const syncFromTable = () => {
+      if (syncing) return;
+      syncing = true;
+      top.scrollLeft = table.scrollLeft;
+      syncing = false;
+      checkScroll();
+    };
+
+    const clearAutoScrolling = () => {
+      autoScrollingRef.current = false;
+      clearTimeout(autoScrollTimerRef.current);
+    };
+
+    top.addEventListener("scroll", syncFromTop);
+    table.addEventListener("scroll", syncFromTable);
+    table.addEventListener("scrollend", clearAutoScrolling);
+
+    requestAnimationFrame(() => {
+      // Use the container's own scrollWidth (not the inner <table>'s) so
+      // this includes the padding-right reserved for the floating scroll
+      // button — otherwise the mini top-scrollbar falls short of the real
+      // end-of-scroll position.
+      if (top.firstChild) top.firstChild.style.width = table.scrollWidth + "px";
+      checkScroll();
+    });
+
+    return () => {
+      top.removeEventListener("scroll", syncFromTop);
+      table.removeEventListener("scroll", syncFromTable);
+      table.removeEventListener("scrollend", clearAutoScrolling);
+      clearTimeout(autoScrollTimerRef.current);
+    };
+    // The table only mounts once loading clears (see `if (loading) return
+    // <Loader />` below), so loading must be a dep or this can miss the
+    // render where refs first exist.
+  }, [loading, seekers, currentPage, visibleColumns]);
+
+  useEffect(() => {
+    const el = tableScrollRef.current;
+    if (!el) return;
+
+    // Ensure buttons are visible as soon as the table element exists
+    setTableInView(true);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setTableInView(entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loading]);
+
   const handleSoftDelete = async (id) => {
     await softdelete(id);
   };
@@ -389,115 +504,173 @@ export default function SeekerProfile() {
         </button>
       </div>
 
-      {/* Table */}
-      <div className="seekerprofile-table-container">
-        <table className="seekerprofile-table">
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={allSelected}
-                  onChange={handleSelectAll}
-                />
-              </th>
-              {allColumns
-                .filter((c) => visibleColumns.includes(c.key))
-                .map((col) => (
-                  <th key={col.key}>{col.label}</th>
-                ))}
-            </tr>
-          </thead>
-          <tbody>
-            {currentSeekers.map((seeker) => (
-              <tr
-                key={seeker.id}
-                className="seekerprofile-row"
-                onClick={() => {
-                  saveScrollPosition();
-                  navigate(`/dashboard/seeker-profile/${seeker.id}`, {
-                    state: {
-                      from: `/dashboard/seeker-profile?page=${currentPage}`,
-                    },
-                  });
-                }}
-              >
-                <td
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSelectOne(seeker.id);
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedSeekers.includes(seeker.id)}
-                    readOnly
-                  />
-                </td>
+      {/* Table wrapper — same format as recruiter */}
+      <div className="seeker-table-wrapper">
+        {/* Top Scroll bar */}
+        <div className="top-scroll" ref={topScrollRef}>
+          <div className="top-scroll-inner"></div>
+        </div>
 
-                {allColumns
-                  .filter((c) => visibleColumns.includes(c.key))
-                  .map((col) => (
-                    <td key={col.key}>
-                      {col.key === "action" ? (
-                        <button
-                          type="button"
-                          className="delete-btn-table"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSoftDelete(seeker.id);
-                          }}
-                        >
-                          Delete
-                        </button>
-                      ) : col.key === "name" ? (
-                        <div className="seeker-user-cell">
-                          {seeker.profile_img ? (
-                            <img
-                              src={seeker.profile_img}
-                              alt={seeker.name}
-                              className="seekerprofile-avatar"
-                            />
-                          ) : (
-                            <FaUserCircle className="seekerprofile-avatar-icon" />
-                          )}
+        {/* Table with side scroll buttons */}
+        <div className="table-with-scroll-btns">
+          <button
+            type="button"
+            className="scroll-nav-btn scroll-nav-left"
+            style={{ display: tableInView ? "flex" : "none" }}
+            onClick={() => scrollTable(-1)}
+            disabled={!canScrollLeft}
+            title="Scroll Left"
+          >
+            ❮
+          </button>
 
-                          <div className="seeker-user-info">
-                            <div className="seeker-name">{seeker.name}</div>
-
-                            <span className="user-type">
-                              {seeker.user_type}
-                            </span>
-                            <span className="login-date">
-                              {seeker.login_date}
-                            </span>
-                            <span className="login-time">
-                              {seeker.login_time}
-                            </span>
-                          </div>
-                        </div>
-                      ) : col.key === "phone" ? (
-                        <a
-                          href={`https://wa.me/${seeker.phone?.replace(/[^0-9]/g, '')}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="whatsapp-phone-link"
-                          onClick={(e) => e.stopPropagation()}
-                          title="Open WhatsApp"
-                        >
-                          <FaWhatsapp size={16} />
-                          {seeker.phone || "N/A"}
-                        </a>
-                      ) : (
-                        seeker[col.key] || ""
-                      )}
+          <div className="seekerprofile-table-container" ref={tableScrollRef}>
+            <table className="seekerprofile-table">
+              <thead>
+                <tr>
+                  <th>
+                    <input
+                      type="checkbox"
+                      checked={allSelected}
+                      onChange={handleSelectAll}
+                    />
+                  </th>
+                  {allColumns
+                    .filter((c) => visibleColumns.includes(c.key))
+                    .map((col) => (
+                      <th key={col.key}>{col.label}</th>
+                    ))}
+                </tr>
+              </thead>
+              <tbody>
+                {currentSeekers.map((seeker) => (
+                  <tr
+                    key={seeker.id}
+                    className="seekerprofile-row"
+                    onClick={() => {
+                      saveScrollPosition();
+                      navigate(`/dashboard/seeker-profile/${seeker.id}`, {
+                        state: {
+                          from: `/dashboard/seeker-profile?page=${currentPage}`,
+                        },
+                      });
+                    }}
+                  >
+                    <td
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectOne(seeker.id);
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedSeekers.includes(seeker.id)}
+                        readOnly
+                      />
                     </td>
-                  ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
+                    {allColumns
+                      .filter((c) => visibleColumns.includes(c.key))
+                      .map((col) => (
+                        <td key={col.key}>
+                          {col.key === "action" ? (
+                            <button
+                              type="button"
+                              className="delete-btn-table"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSoftDelete(seeker.id);
+                              }}
+                            >
+                              Delete
+                            </button>
+                          ) : col.key === "name" ? (
+                            <div className="seeker-user-cell">
+                              {seeker.profile_img ? (
+                                <img
+                                  src={seeker.profile_img}
+                                  alt={seeker.name}
+                                  className="seekerprofile-avatar"
+                                />
+                              ) : (
+                                <FaUserCircle className="seekerprofile-avatar-icon" />
+                              )}
+
+                              <div className="seeker-user-info">
+                                <div className="seeker-name">{seeker.name}</div>
+
+                                <span className="user-type">
+                                  {seeker.user_type}
+                                </span>
+                                <span className="login-date">
+                                  {seeker.login_date}
+                                </span>
+                                <span className="login-time">
+                                  {seeker.login_time}
+                                </span>
+                              </div>
+                            </div>
+                          ) : col.key === "phone" ? (
+                            <a
+                              href={`https://wa.me/${seeker.phone?.replace(/[^0-9]/g, '')}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="whatsapp-phone-link"
+                              onClick={(e) => e.stopPropagation()}
+                              title="Open WhatsApp"
+                            >
+                              <FaWhatsapp size={16} />
+                              {seeker.phone || "N/A"}
+                            </a>
+                          ) : col.key === "status" ? (
+                            <span
+                              className={
+                                seeker.aadhaarVerified
+                                  ? "seekerprofile-status verified"
+                                  : "seekerprofile-status unverified"
+                              }
+                            >
+                              {seeker.aadhaarVerified
+                                ? "Verified"
+                                : "Unverified"}
+                            </span>
+                          ) : col.key === "openToWork" ? (
+                            <span
+                              className={
+                                seeker.status === "open_to_work" ||
+                                seeker.status === "active"
+                                  ? "seekerprofile-status seeking"
+                                  : "seekerprofile-status not-seeking"
+                              }
+                            >
+                              {seeker.status === "open_to_work" ||
+                              seeker.status === "active"
+                                ? "Open to Work"
+                                : "Not Actively Seeking"}
+                            </span>
+                          ) : (
+                            seeker[col.key] || ""
+                          )}
+                        </td>
+                      ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <button
+            type="button"
+            className="scroll-nav-btn scroll-nav-right"
+            style={{ display: tableInView ? "flex" : "none" }}
+            onClick={() => scrollTable(1)}
+            disabled={!canScrollRight}
+            title="Scroll Right"
+          >
+            ❯
+          </button>
+        </div> {/* closes table-with-scroll-btns */}
+      </div> {/* closes seeker-table-wrapper */}
 
       {/* Search Modal */}
       {searchModalOpen && (

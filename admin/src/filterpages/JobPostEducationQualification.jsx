@@ -11,6 +11,7 @@ import JobPostEducationAddModal from "./JobPostEducationAddModal.jsx";
 // import JobPostEducationEditModal from "./JobPostEducationEditModal.jsx";
 
 import { EducationQualificationContext } from "../UseContexts/RecruiterUseContext/JobPostContext/EducationQualificationContext.jsx";
+import { JobRoleCategoriesContext } from "../UseContexts/SeekerUseContext/JobRoleCategoriesContext.jsx";
 
 export default function JobPostEducationQualification() {
   const navigate = useNavigate();
@@ -23,10 +24,23 @@ export default function JobPostEducationQualification() {
     deleteQualification,
   } = useContext(EducationQualificationContext);
 
+  const { jobRoleCategories } = useContext(JobRoleCategoriesContext);
+
+  const categoryLabel = (id) =>
+    jobRoleCategories.find((c) => String(c.id) === String(id))?.label || "-";
+
   const [hiddenRows, setHiddenRows] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editItem, setEditItem] = useState(null);
+
+  // Job Role Category filter — local to this page only
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const filteredQualifications = selectedCategoryId
+    ? (qualifications || []).filter(
+        (q) => String(q.job_role_category_id) === String(selectedCategoryId)
+      )
+    : qualifications || [];
 
   // ✅ Add
   const handleSaveAdd = async (newItem) => {
@@ -57,12 +71,30 @@ export default function JobPostEducationQualification() {
   // ✅ Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = Math.ceil(qualifications.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredQualifications.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = qualifications.slice(
+  const paginatedData = filteredQualifications.slice(
     startIndex,
     startIndex + itemsPerPage
   );
+
+  const getPageNumbers = () => {
+    if (totalPages <= 1) return totalPages === 1 ? [1] : [];
+    const delta = 1;
+    const range = [];
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
+      range.push(i);
+    }
+    if (currentPage - delta > 2) range.unshift("...");
+    if (currentPage + delta < totalPages - 1) range.push("...");
+    range.unshift(1);
+    range.push(totalPages);
+    return range;
+  };
 
   if (loading) return <div>Loading...</div>;
 
@@ -86,12 +118,32 @@ export default function JobPostEducationQualification() {
             </button>
           </div>
 
+          {/* Category Filter */}
+          <div className="subjectfilter-filter">
+            <label>Job Role Category:</label>
+            <select
+              value={selectedCategoryId}
+              onChange={(e) => {
+                setCurrentPage(1);
+                setSelectedCategoryId(e.target.value);
+              }}
+            >
+              <option value="">All Categories</option>
+              {jobRoleCategories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Table */}
           <div className="jobposteducation-table-container">
             <table className="jobposteducation-table">
               <thead>
                 <tr>
                   <th>Qualification</th>
+                  <th>Category</th>
                   <th>Posted on</th>
                   <th>Updated on</th>
                   <th>Action</th>
@@ -104,6 +156,7 @@ export default function JobPostEducationQualification() {
                     className={hiddenRows.includes(item.id) ? "hidden-row" : ""}
                   >
                     <td>{item.qualification}</td>
+                    <td>{categoryLabel(item.job_role_category_id)}</td>
                     <td>{item.postedOn || "-"}</td>
                     <td>{item.updatedOn || "-"}</td>
                     <td className="jobposteducation-actions">
@@ -148,15 +201,21 @@ export default function JobPostEducationQualification() {
               >
                 Prev
               </button>
-              {[...Array(totalPages)].map((_, index) => (
-                <button
-                  key={index + 1}
-                  className={currentPage === index + 1 ? "active" : ""}
-                  onClick={() => setCurrentPage(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              ))}
+              {getPageNumbers().map((p, idx) =>
+                p === "..." ? (
+                  <span key={`ellipsis-${idx}`} className="pagination-ellipsis">
+                    …
+                  </span>
+                ) : (
+                  <button
+                    key={p}
+                    className={currentPage === p ? "active" : ""}
+                    onClick={() => setCurrentPage(p)}
+                  >
+                    {p}
+                  </button>
+                )
+              )}
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(currentPage + 1)}
@@ -174,6 +233,7 @@ export default function JobPostEducationQualification() {
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSave={handleSaveAdd}
+          categories={jobRoleCategories}
         />
       )}
 

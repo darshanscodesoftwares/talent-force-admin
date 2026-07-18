@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import "./TeachingQualAddModal.css";
 
-export default function TeachingQualAddModal({ isOpen, onClose, onSave }) {
+export default function TeachingQualAddModal({
+  isOpen,
+  onClose,
+  onSave,
+  categories,
+  defaultCategoryId,
+}) {
   const [qualificationName, setQualificationName] = useState("");
+  const [categoryId, setCategoryId] = useState(defaultCategoryId || "");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!qualificationName.trim()) return;
+    if (!qualificationName.trim() || !categoryId) return;
 
-    // 👇 match API schema
+    // 👇 job_role_category_id is required — POST is scoped by it in the URL
     const newItem = {
       qualification_name: qualificationName,
+      job_role_category_id: categoryId,
     };
 
     onSave(newItem); // calls addTeachingQual from context
@@ -26,6 +34,18 @@ export default function TeachingQualAddModal({ isOpen, onClose, onSave }) {
         <h2>Add Teaching Qualification</h2>
 
         <form onSubmit={handleSubmit}>
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+          >
+            <option value="">Select Job Role Category</option>
+            {(categories || []).map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+
           <input
             type="text"
             placeholder="Enter Qualification"

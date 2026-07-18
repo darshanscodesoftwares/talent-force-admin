@@ -23,7 +23,11 @@ export const RecruiterProfileProvider = ({ children }) => {
       const res = await axios.get(API_URL);
       const data = res.data?.recruiters || [];
 
-      const formatted = data.map((item) => {
+      // Only show recruiters who have completed their school profile —
+      // phone+OTP-only signups (no school_profile yet) are excluded from this list.
+      const completedData = data.filter((item) => item.school_profile);
+
+      const formatted = completedData.map((item) => {
         const plan = item.current_plan?.plan_name || "Trial";
 
         return {
@@ -35,11 +39,14 @@ export const RecruiterProfileProvider = ({ children }) => {
           schoolEmail: item.school_profile?.school_email || "N/A",
           schoolPhone: item.school_profile?.school_phone_number || "N/A",
           schoolAddress: item.school_profile?.school_address || "N/A",
+          schoolPincode: item.school_profile?.school_pincode || null,
+          recruiterAddress: item.school_profile?.recruiter_address || null,
 
           // --- Recruiter Info ---
           phoneNumber: item.phone_number || "N/A",
           isLogin: item.is_login ? "Yes" : "No",
           isDetailsCompleted: item.is_school_details_completed ? "Yes" : "No",
+          isAdminVerified: !!item.is_admin_verified,
           signupDate: new Date(item.signup_date).toLocaleDateString(),
 
           // 🔥 NEW FIELDS
@@ -54,8 +61,12 @@ export const RecruiterProfileProvider = ({ children }) => {
           // --- Job Posts ---
           jobPosts: item.job_posts || [],
 
-          // First pincode (fallback)
-          pincode: item.job_posts?.[0]?.pincode?.pincode || "N/A",
+          // Pincode: school_pincode → recruiter_address → job post pincode
+          pincode:
+            item.school_profile?.school_pincode ||
+            item.school_profile?.recruiter_address?.pincode ||
+            item.job_posts?.[0]?.pincode?.pincode ||
+            "N/A",
 
           // --- Stats ---
           totalJobs: item.stats?.total_job_posts || 0,
@@ -160,6 +171,36 @@ export const RecruiterProfileProvider = ({ children }) => {
     }
   };
 
+  // ✅ Verify / unverify recruiter (gates job posting on the backend)
+  const toggleVerifyRecruiter = async (id, currentlyVerified) => {
+    const nextVerified = !currentlyVerified;
+
+    try {
+      setRecruiters((prev) =>
+        prev.map((r) =>
+          r.id === id ? { ...r, isAdminVerified: nextVerified } : r
+        )
+      );
+
+      await axios.put(
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/api/admin/recruiter-verify/${id}`,
+        { is_admin_verified: nextVerified }
+      );
+
+      toast.success(
+        nextVerified
+          ? "Recruiter verified successfully"
+          : "Recruiter marked as unverified"
+      );
+    } catch (error) {
+      console.error("Verify toggle failed:", error);
+      toast.error("Failed to update verification status");
+      fetchRecruiters();
+    }
+  };
+
   useEffect(() => {
     fetchRecruiters();
     // blockRecruitersList();
@@ -176,6 +217,7 @@ export const RecruiterProfileProvider = ({ children }) => {
         toggleBlockRecruiter,
         blockRecruitersList,
         blockedRecruiters,
+        toggleVerifyRecruiter,
       }}
     >
       {children}

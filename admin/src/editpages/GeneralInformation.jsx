@@ -14,7 +14,7 @@ export default function GeneralInformation() {
   const { id } = useParams(); // ✅ dynamic user id from URL
   const { users } = useContext(GeneralInformationContext);
 
-  const { seekers, loading, toggleBlockSeeker } =
+  const { seekers, loading, toggleBlockSeeker, toggleAadhaarVerified } =
     useContext(SeekerProfileContext);
 
   // 🔑 find the right profile based on dynamic id
@@ -97,6 +97,27 @@ export default function GeneralInformation() {
           <div className="generalinfo-field">
             <label>Phone Number</label>
             <input type="text" value={profile.phone} readOnly />
+          </div>
+        </div>
+
+        <div className="generalinfo-row">
+          <div className="generalinfo-field aadhaar-field">
+            <label>Aadhaar Number</label>
+            <div className="aadhaar-control">
+              <input type="text" value={profile.aadhaarNumber || ""} readOnly />
+              <button
+                type="button"
+                className={`aadhaar-verify-btn ${
+                  profile.aadhaarVerified ? "verified" : "unverified"
+                }`}
+                onClick={() =>
+                  toggleAadhaarVerified(profile.id, profile.aadhaarVerified)
+                }
+                disabled={!profile.aadhaarNumber}
+              >
+                {profile.aadhaarVerified ? "Verified" : "Unverified"}
+              </button>
+            </div>
           </div>
         </div>
 

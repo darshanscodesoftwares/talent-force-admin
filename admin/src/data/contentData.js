@@ -441,7 +441,6 @@ export const seekerFilterRoutes = {
   "Education Qualification": "/dashboard/seeker-search-filter/education",
   "Compartment / Level": "/dashboard/seeker-search-filter/compartment",
   "Location": "/dashboard/seeker-search-filter/location",
-  "Subject": "/dashboard/seeker-search-filter/subject",
   "Expected Salary": "/dashboard/seeker-search-filter/salary",
   "Languages": "/dashboard/seeker-search-filter/Languages",
 };
@@ -474,19 +473,13 @@ export const seekerSearchPages = [
     createdBy: "Admin",
   },
   {
-    id: 5,
-    specifications: "Subject",
-    postedOn: "13 April 2025",
-    createdBy: "Admin",
-  },
-  {
-    id: 6,
+    id: 8,
     specifications: "Expected Salary",
     postedOn: "13 April 2025",
     createdBy: "Admin",
   },
   {
-    id: 7,
+    id: 9,
     specifications: "Languages",
     postedOn: "13 April 2025",
     createdBy: "Admin",
@@ -779,6 +772,21 @@ export const educationFilter = [
     id: 2,
     filter: "Teaching Qualification",
     postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+  {
+    id: 3,
+    filter: "Specialization",
+    postedOn: "13 April 2025",
+    createdBy: "Admin",
+  },
+];
+
+export const jobRoleFilter = [
+  {
+    id: 1,
+    filter: "Job Categories",
+    postedOn: "2 July 2026",
     createdBy: "Admin",
   },
 ];

@@ -5,13 +5,26 @@ import { useNavigate } from "react-router-dom";
 import "./JobPostSubject.css";
 import JobPostJobRoleAddModal from "./JobPostJobRoleAddModal.jsx";
 import { JobRoleContext } from "../UseContexts/RecruiterUseContext/JobPostContext/JobRoleContext.jsx";
+import { JobRoleCategoriesContext } from "../UseContexts/SeekerUseContext/JobRoleCategoriesContext.jsx";
 
 export default function JobPostJobRoleFilter() {
   const navigate = useNavigate();
   const { jobRoles, loading, error, deleteJobRole } = useContext(JobRoleContext);
+  const { jobRoleCategories } = useContext(JobRoleCategoriesContext);
+
+  const categoryLabel = (id) =>
+    jobRoleCategories.find((c) => String(c.id) === String(id))?.label || "-";
 
   const [hiddenRows, setHiddenRows] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // Job Role Category filter — local to this page only
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const filteredJobRoles = selectedCategoryId
+    ? (jobRoles || []).filter(
+        (r) => String(r.job_role_category_id) === String(selectedCategoryId)
+      )
+    : jobRoles || [];
 
   // Save from Add Modal
   const handleSaveAdd = async (newItem) => {
@@ -31,10 +44,28 @@ export default function JobPostJobRoleFilter() {
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = Math.ceil((jobRoles?.length || 0) / itemsPerPage);
+  const totalPages = Math.ceil((filteredJobRoles?.length || 0) / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData =
-    jobRoles?.slice(startIndex, startIndex + itemsPerPage) || [];
+    filteredJobRoles?.slice(startIndex, startIndex + itemsPerPage) || [];
+
+  const getPageNumbers = () => {
+    if (totalPages <= 1) return totalPages === 1 ? [1] : [];
+    const delta = 1;
+    const range = [];
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
+      range.push(i);
+    }
+    if (currentPage - delta > 2) range.unshift("...");
+    if (currentPage + delta < totalPages - 1) range.push("...");
+    range.unshift(1);
+    range.push(totalPages);
+    return range;
+  };
 
   // Format Dates
   const formatDate = (dateString) => {
@@ -67,6 +98,25 @@ export default function JobPostJobRoleFilter() {
             </button>
           </div>
 
+          {/* Category Filter */}
+          <div className="subjectfilter-filter">
+            <label>Job Role Category:</label>
+            <select
+              value={selectedCategoryId}
+              onChange={(e) => {
+                setCurrentPage(1);
+                setSelectedCategoryId(e.target.value);
+              }}
+            >
+              <option value="">All Categories</option>
+              {jobRoleCategories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Loader / Error */}
           {loading && <p className="loading">Loading job roles...</p>}
           {error && <p className="error">{error}</p>}
@@ -78,6 +128,7 @@ export default function JobPostJobRoleFilter() {
                 <tr>
                   <th>S.No</th>
                   <th>Job Role</th>
+                  <th>Category</th>
                   <th>Posted on</th>
                   <th>Updated on</th>
                   <th>Action</th>
@@ -93,6 +144,7 @@ export default function JobPostJobRoleFilter() {
                   >
                     <td>{startIndex + index + 1}</td>
                     <td>{role.title}</td>
+                    <td>{categoryLabel(role.job_role_category_id)}</td>
                     <td>{formatDate(role.created_at)}</td>
                     <td>{formatDate(role.updated_at)}</td>
                     <td className="jobpostsubjectfilter-actions">
@@ -109,12 +161,12 @@ export default function JobPostJobRoleFilter() {
             </table>
 
             {/* Empty State */}
-            {!loading && jobRoles?.length === 0 && (
+            {!loading && filteredJobRoles?.length === 0 && (
               <p className="empty">No job roles found.</p>
             )}
 
             {/* Pagination */}
-            {jobRoles?.length > itemsPerPage && (
+            {filteredJobRoles?.length > itemsPerPage && (
               <div className="pagination">
                 <button
                   disabled={currentPage === 1}
@@ -122,15 +174,21 @@ export default function JobPostJobRoleFilter() {
                 >
                   Prev
                 </button>
-                {[...Array(totalPages)].map((_, index) => (
-                  <button
-                    key={index + 1}
-                    className={currentPage === index + 1 ? "active" : ""}
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+                {getPageNumbers().map((p, idx) =>
+                  p === "..." ? (
+                    <span key={`ellipsis-${idx}`} className="pagination-ellipsis">
+                      …
+                    </span>
+                  ) : (
+                    <button
+                      key={p}
+                      className={currentPage === p ? "active" : ""}
+                      onClick={() => setCurrentPage(p)}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(currentPage + 1)}
@@ -149,6 +207,7 @@ export default function JobPostJobRoleFilter() {
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSave={handleSaveAdd}
+          categories={jobRoleCategories}
         />
       )}
     </div>

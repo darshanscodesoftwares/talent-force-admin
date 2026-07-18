@@ -7,7 +7,61 @@
   top: 0;
   left: 0;
   overflow-y: auto;
+  transition: width 0.2s ease;
 }
+
+.sidebar-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #9097a7;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: #334155;
+  color: #fff;
+}
+
+.sidebar.collapsed {
+  width: 72px;
+}
+
+.sidebar.collapsed .sidebar-toggle-btn {
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.sidebar.collapsed .sidebar-logo {
+  display: none;
+}
+
+.sidebar.collapsed nav {
+  display: block;
+  padding-top: 34px;
+}
+
+.sidebar.collapsed .section-title {
+  display: none;
+}
+
+.sidebar.collapsed .nav-link,
+.sidebar.collapsed .logout-btn {
+  justify-content: center;
+  padding: 12px 0;
+  gap: 0;
+  font-size: 0;
+}
+
 
 .sidebar-section {
   margin-bottom: 7px;
@@ -39,28 +93,20 @@
   color: #9097a7;
   text-decoration: none;
   font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: background 0.3s, color 0.3s;
-}
-
-.nav-link.active {
-  background-color: transparent;
-  color: inherit;
 }
 
 .nav-link .icon {
   font-size: 20px;
+  flex-shrink: 0;
 }
 
 .nav-link .icon-b {
   font-size: 23px;
-}
-
-.nav-link.active .icon-b {
-  color: #f07e21;
-}
-
-.nav-link.active .icon {
-  color: #f07e21;
+  flex-shrink: 0;
 }
 
 .nav-link:hover {
@@ -68,21 +114,20 @@
   color: #fff;
 }
 
-.nav-link.active {
-  color: #fff;
-  background-color: transparent;
-  position: relative;
+.nav-link:hover .icon,
+.nav-link:hover .icon-b {
+  color: #f07e21;
 }
 
-.nav-link.active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 4px;
-  height: 100%;
-  background-color: #f07e21;
-  border-radius: 0 4px 4px 0;
+.nav-link.active {
+  background-color: transparent;
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-link.active .icon,
+.nav-link.active .icon-b {
+  color: #f07e21;
 }
 
 .sidebar-logo {
@@ -103,6 +148,9 @@
   color: #9097a7;
   text-decoration: none;
   font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
   width: 100%;

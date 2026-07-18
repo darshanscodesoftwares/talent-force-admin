@@ -504,13 +504,13 @@
   justify-content: center;
 }
 
-.edit-btn {
-  color: #007bff;
+.action-btn.edit-btn {
+  background-color: #ffeee6;
+  color: #e89e2f;
 }
 
-.edit-btn:hover {
-  background: #e7f3ff;
-  color: #0056b3;
+.action-btn.edit-btn:hover {
+  background-color: #ffe0d1;
 }
 
 .delete-btn {

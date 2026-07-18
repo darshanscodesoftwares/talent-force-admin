@@ -189,6 +189,9 @@
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  /* Keeps the last column clear of the floating scroll-nav-right button
+     (36px wide, 16px from the viewport edge) when scrolled to the end. */
+  padding-right: 72px;
 }
 
 /* Custom Scrollbar */
@@ -258,6 +261,25 @@
 .seekerprofile-status.not-seeking {
   color: rgba(203, 27, 27, 0.85);
   font-weight: 500;
+}
+
+.seekerprofile-status.verified,
+.seekerprofile-status.unverified {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.seekerprofile-status.verified {
+  background: #e6f7ed;
+  color: #1e8e3e;
+}
+
+.seekerprofile-status.unverified {
+  background: #fdecea;
+  color: #d93025;
 }
 
 /* ===== Pagination Enhancements ===== */
@@ -648,6 +670,85 @@
 
 .seekerprofile-pagination button:disabled {
   opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ===== Seeker Table Wrapper (same format as recruiter) ===== */
+.seeker-table-wrapper {
+  width: 100%;
+}
+
+.seeker-table-wrapper .top-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 15px;
+}
+
+.seeker-table-wrapper .top-scroll::-webkit-scrollbar {
+  height: 5px;
+}
+
+.seeker-table-wrapper .top-scroll::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.seeker-table-wrapper .top-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.seeker-table-wrapper .top-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.seeker-table-wrapper .top-scroll-inner {
+  width: 1500px;
+  height: 1px;
+}
+
+/* ===== Horizontal Scroll Navigation (Fixed) ===== */
+.table-with-scroll-btns {
+  position: relative;
+}
+
+.scroll-nav-btn {
+  position: fixed;
+  top: 50vh;
+  transform: translateY(-50%);
+  z-index: 200;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  color: #ef6a37;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.scroll-nav-left {
+  left: 252px; /* sidebar 240px + 12px gap */
+}
+
+.scroll-nav-right {
+  right: 16px;
+}
+
+.scroll-nav-btn:hover:not(:disabled) {
+  background: #ef6a37;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(239, 106, 55, 0.4);
+}
+
+.scroll-nav-btn:disabled {
+  opacity: 0.2;
   cursor: not-allowed;
 }
 

@@ -8,6 +8,7 @@
   grid-template-columns: 1fr 2fr;
   gap: 30px;
   margin-bottom: 30px;
+  align-items: start;
 }
 
 .small-cards {
@@ -392,6 +393,19 @@
   font-size: 15px;
   color: #333;
   letter-spacing: 0.5px;
+}
+
+/* Column holding the graph and the cards below it */
+.graph-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Recruiter device cards under the graph */
+.graph-extra-cards {
+  display: flex;
+  gap: 20px;
 }
 
 /* No Data Overlay */

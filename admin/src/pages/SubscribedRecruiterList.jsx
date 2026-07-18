@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from "react";
 import { SubscribedContext } from "../UseContexts/RecruiterUseContext/SubscribedContext/SubscribedRecruiterContext";
 import { RecruiterSubscriptionContext } from "../UseContexts/GeneralUseContext/RecruiterSubscriptionContext/RecruiterSubscriptionContext.jsx";
+import { useSubscriptionPlans } from "../UseContexts/GeneralUseContext/SubscriptionPlansContext/SubscriptionPlanContext.jsx";
+import CustomSelect from "../components/CustomSelect.jsx";
 import "./SubscribedRecruiterList.css";
 import { FaAngleDown, FaAngleUp, FaUserCheck } from "react-icons/fa6";
 import { MdAutorenew } from "react-icons/md";
@@ -11,6 +13,7 @@ import ExtendSubscriptionModal from "../editpages/ExtendSubscriptionModal.jsx";
 const SubscribedRecruiterList = () => {
   const { loading, subscribed } = useContext(SubscribedContext);
   const { extendSubscription } = useContext(RecruiterSubscriptionContext);
+  const { subscriptions } = useSubscriptionPlans();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -28,11 +31,13 @@ const SubscribedRecruiterList = () => {
   const [searchFilters, setSearchFilters] = useState({
     schoolName: "",
     phoneNumber: "",
+    membership: "",
   });
 
   const [appliedFilters, setAppliedFilters] = useState({
     schoolName: "",
     phoneNumber: "",
+    membership: "",
   });
 
   const handleApplySearch = () => {
@@ -45,11 +50,13 @@ const SubscribedRecruiterList = () => {
     setSearchFilters({
       schoolName: "",
       phoneNumber: "",
+      membership: "",
     });
 
     setAppliedFilters({
       schoolName: "",
       phoneNumber: "",
+      membership: "",
     });
 
     setCurrentPage(1);
@@ -90,11 +97,13 @@ const SubscribedRecruiterList = () => {
 
     const phoneMatch =
       appliedFilters.phoneNumber === "" ||
-      rec.school_phone
-        ?.toString()
-        .includes(appliedFilters.phoneNumber);
+      rec.school_phone?.toString().includes(appliedFilters.phoneNumber);
 
-    return schoolMatch && phoneMatch;
+    const membershipMatch =
+      appliedFilters.membership === "" ||
+      rec.plan?.plan_name?.toLowerCase() === appliedFilters.membership.toLowerCase();
+
+    return schoolMatch && phoneMatch && membershipMatch;
   });
 
   const recruitersPerPage = 15;
@@ -373,6 +382,24 @@ const SubscribedRecruiterList = () => {
                         phoneNumber: e.target.value,
                       }))
                     }
+                  />
+                </div>
+
+                <div className="recruiter-search-field-group">
+                  <label className="recruiter-search-label">Membership</label>
+                  <CustomSelect
+                    value={searchFilters.membership}
+                    onChange={(val) =>
+                      setSearchFilters((prev) => ({ ...prev, membership: val }))
+                    }
+                    options={[
+                      { value: "", label: "All" },
+                      ...subscriptions.map((s) => ({
+                        value: s.name,
+                        label: s.name,
+                      })),
+                    ]}
+                    placeholder="All Plans"
                   />
                 </div>
 

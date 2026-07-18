@@ -1,4 +1,4 @@
-.teachingqualif-modal-overlay {
+.jobrolecateg-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 2000;
 }
 
-.teachingqualif-modal-content {
+.jobrolecateg-modal-content {
   background: white;
   padding: 25px;
   border-radius: 12px;
@@ -20,33 +20,40 @@
   animation: fadeDown 0.3s ease;
 }
 
-.teachingqualif-modal-content h2 {
+.jobrolecateg-modal-content h2 {
   margin-bottom: 15px;
   font-size: 18px;
   color: #444;
 }
 
-.teachingqualif-modal-content form {
+.jobrolecateg-modal-content form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.teachingqualif-modal-content input,
-.teachingqualif-modal-content select {
+.jobrolecateg-modal-content input[type="text"] {
   padding: 10px 14px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
 }
 
-.teachingqualif-modal-actions {
+.jobrolecateg-active-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #444;
+}
+
+.jobrolecateg-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
-.teachingqualif-modal-actions .save-btn {
+.jobrolecateg-modal-actions .save-btn {
   background: #ef6a37;
   color: white;
   border: none;
@@ -55,7 +62,7 @@
   cursor: pointer;
 }
 
-.teachingqualif-modal-actions .cancel-btn {
+.jobrolecateg-modal-actions .cancel-btn {
   background: #ddd;
   border: none;
   padding: 8px 16px;

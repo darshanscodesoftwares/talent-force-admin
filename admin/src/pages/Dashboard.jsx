@@ -9,7 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { FaUserCircle, FaSchool } from "react-icons/fa";
+import { FaUserCircle, FaSchool, FaAndroid, FaApple } from "react-icons/fa";
 import { HiMiniBriefcase } from "react-icons/hi2";
 
 import { MdPeopleAlt } from "react-icons/md";
@@ -216,6 +216,40 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* Android Seeker Devices */}
+          {/* <div className="card-2 seeker-users">
+            <div className="card-body2">
+              <div className="card-icon2">
+                <FaAndroid />
+              </div>
+              <div className="font-num2">
+                <h4>Seeker Android Users</h4>
+                <p>
+                  <span className="amount2">
+                    {metrics?.seeker_android_device_count ?? "0"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div> */}
+
+          {/* iOS Seeker Devices */}
+          {/* <div className="card-2 seeker-users">
+            <div className="card-body2">
+              <div className="card-icon2">
+                <FaApple />
+              </div>
+              <div className="font-num2">
+                <h4>Seeker iOS Users</h4>
+                <p>
+                  <span className="amount2">
+                    {metrics?.seeker_ios_device_count ?? "0"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div> */}
+
           {/* Recruiter New Users */}
           <div className="card-2">
             <div className="card-body2">
@@ -249,9 +283,11 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+
         </div>
 
         {/* --- GRAPH SECTION --- */}
+        <div className="graph-column">
         <div className="graph-box">
           <h3>User Active - {selectedYear}</h3>
 
@@ -317,40 +353,80 @@ const Dashboard = () => {
 
           {/* --- Year Selector --- */}
           <div className="year-selector">
-            <button
-              className={`year-nav-btn prev ${
-                selectedYear > 2024 ? "enabled" : ""
-              }`}
-              onClick={() => {
-                const newYear = selectedYear - 1;
-                if (newYear >= 2024) {
-                  setSelectedYear(newYear);
-                  fetchGraphData(newYear);
-                }
-              }}
-              disabled={selectedYear <= 2024}
-            >
-              ← {selectedYear - 1}
-            </button>
+            {(() => {
+              const currentYear = new Date().getFullYear();
+              const minYear = 2024;
+              return (
+                <>
+                  <button
+                    className={`year-nav-btn prev ${selectedYear > minYear ? "enabled" : ""}`}
+                    onClick={() => {
+                      const newYear = selectedYear - 1;
+                      if (newYear >= minYear) {
+                        setSelectedYear(newYear);
+                        fetchGraphData(newYear);
+                      }
+                    }}
+                    disabled={selectedYear <= minYear}
+                  >
+                    ← {selectedYear - 1}
+                  </button>
 
-            <span className="year-current">{selectedYear}</span>
+                  <span className="year-current">{selectedYear}</span>
 
-            <button
-              className={`year-nav-btn next ${
-                selectedYear < 2025 ? "enabled" : ""
-              }`}
-              onClick={() => {
-                const newYear = selectedYear + 1;
-                if (newYear <= 2025) {
-                  setSelectedYear(newYear);
-                  fetchGraphData(newYear);
-                }
-              }}
-              disabled={selectedYear >= 2025}
-            >
-              {selectedYear + 1} →
-            </button>
+                  <button
+                    className={`year-nav-btn next ${selectedYear < currentYear ? "enabled" : ""}`}
+                    onClick={() => {
+                      const newYear = selectedYear + 1;
+                      if (newYear <= currentYear) {
+                        setSelectedYear(newYear);
+                        fetchGraphData(newYear);
+                      }
+                    }}
+                    disabled={selectedYear >= currentYear}
+                  >
+                    {selectedYear + 1} →
+                  </button>
+                </>
+              );
+            })()}
           </div>
+        </div>
+
+        {/* --- Recruiter Device Cards --- */}
+        {/* <div className="graph-extra-cards">
+          <div className="card-2">
+            <div className="card-body2">
+              <div className="card-icon2">
+                <FaAndroid />
+              </div>
+              <div className="font-num2">
+                <h4>Recruiter Android Users</h4>
+                <p>
+                  <span className="amount2">
+                    {metrics?.recruiter_android_device_count ?? "0"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="card-2">
+            <div className="card-body2">
+              <div className="card-icon2">
+                <FaApple />
+              </div>
+              <div className="font-num2">
+                <h4>Recruiter iOS Users</h4>
+                <p>
+                  <span className="amount2">
+                    {metrics?.recruiter_ios_device_count ?? "0"}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> */}
         </div>
       </div>
 
@@ -494,10 +570,13 @@ const Dashboard = () => {
                     <td>{seeker.phone || "N/A"}</td>
                     <td>{seeker.pincode || "N/A"}</td>
                     <td>
-                      {seeker.status === "Seeking" ? (
-                        <span className="status seeking">Seeking</span>
+                      {seeker.status === "open_to_work" ||
+                      seeker.status === "active" ? (
+                        <span className="status seeking">Open to Work</span>
                       ) : (
-                        <span className="status not-seeking">Not Seeking</span>
+                        <span className="status not-seeking">
+                          Not Actively Seeking
+                        </span>
                       )}
                     </td>
                   </tr>

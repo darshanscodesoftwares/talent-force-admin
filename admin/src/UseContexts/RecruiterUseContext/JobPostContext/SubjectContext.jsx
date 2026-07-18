@@ -32,7 +32,7 @@ const SubjectProvider = ({ children }) => {
     }
   };
 
-  // ✅ Add new subject (POST)
+  // ✅ Add new subject (POST) — unscoped, used by Job Post Subject filter
   const addSubject = async (newSubject) => {
     try {
       await axios.post(API_URL, newSubject);
@@ -44,6 +44,24 @@ const SubjectProvider = ({ children }) => {
         err.response?.data || err.message
       );
       toast.error("Failed to add subject");
+      throw err;
+    }
+  };
+
+  // ✅ Add new subject scoped to a Job Role Category (POST /job-categories/:id) — used by Specialization
+  const addSubjectForJobRoleCategory = async (jobRoleCategoryId, newSubject) => {
+    try {
+      await axios.post(`${API_URL}/${jobRoleCategoryId}`, newSubject);
+      await fetchSubjects();
+      toast.success("Specialization added successfully");
+    } catch (err) {
+      console.error(
+        "Failed to add specialization:",
+        err.response?.data || err.message
+      );
+      toast.error(
+        err.response?.data?.message || "Failed to add specialization"
+      );
       throw err;
     }
   };
@@ -93,6 +111,7 @@ const SubjectProvider = ({ children }) => {
         error,
         fetchSubjects,
         addSubject,
+        addSubjectForJobRoleCategory,
         deleteSubject,
 
         reorderSubjects,

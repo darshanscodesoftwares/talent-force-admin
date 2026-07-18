@@ -2,6 +2,10 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import "./Header.css";
 
+const titleOverrides = {
+  subject: "Specialization",
+};
+
 function Header() {
   const location = useLocation();
 
@@ -12,11 +16,14 @@ function Header() {
   let currentTitle = "Talent Force Admin";
 
   if (pathParts.length > 0) {
-    // Take the last segment and make it readable
     const lastSegment = pathParts[pathParts.length - 1];
-    currentTitle = lastSegment
-      .replace(/-/g, " ") // replace dashes with spaces
-      .replace(/\b\w/g, (char) => char.toUpperCase()); // capitalize
+    if (titleOverrides[lastSegment]) {
+      currentTitle = titleOverrides[lastSegment];
+    } else {
+      currentTitle = lastSegment
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+    }
   }
 
   return (

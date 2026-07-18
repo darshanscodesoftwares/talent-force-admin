@@ -10,11 +10,14 @@ const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/admin/course/teaching-
 export const TeachingQualificationProvider = ({ children }) => {
   const [teachingQual, setTeachingQual] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
-  // fetch
-  const fetchTeachingQual = async () => {
+  // fetch (all, or scoped to a Job Role Category when selected)
+  const fetchTeachingQual = async (categoryId = selectedCategoryId) => {
     try {
-      const res = await axios.get(API_URL);
+      setLoading(true);
+      const url = categoryId ? `${API_URL}/${categoryId}` : API_URL;
+      const res = await axios.get(url);
       setTeachingQual(res.data.results || []);
     } catch (err) {
       console.error("Failed to fetch teaching qualifications:", err);
@@ -24,15 +27,15 @@ export const TeachingQualificationProvider = ({ children }) => {
     }
   };
 
-  // add
-  const addTeachingQual = async (newItem) => {
+  // add (job_role_category_id goes in the URL, e.g. /teaching-qualification/4)
+  const addTeachingQual = async ({ job_role_category_id, ...rest }) => {
     try {
-      await axios.post(API_URL, newItem);
+      await axios.post(`${API_URL}/${job_role_category_id}`, rest);
       await fetchTeachingQual();
       toast.success("Qualification added successfully");
     } catch (err) {
       console.error("Failed to add qualification:", err);
-      toast.error("Failed to add qualification");
+      toast.error(err.response?.data?.message || "Failed to add qualification");
     }
   };
 
@@ -44,7 +47,7 @@ export const TeachingQualificationProvider = ({ children }) => {
       toast.success("Qualification updated successfully");
     } catch (err) {
       console.error("Failed to update qualification:", err);
-      toast.error("Failed to update qualification");
+      toast.error(err.response?.data?.message || "Failed to update qualification");
     }
   };
 
@@ -61,14 +64,16 @@ export const TeachingQualificationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchTeachingQual();
-  }, []);
+    fetchTeachingQual(selectedCategoryId);
+  }, [selectedCategoryId]);
 
   return (
     <TeachingQualificationContext.Provider
       value={{
         teachingQual,
         loading,
+        selectedCategoryId,
+        setSelectedCategoryId,
         addTeachingQual,
         updateTeachingQual,
         deleteTeachingQual,

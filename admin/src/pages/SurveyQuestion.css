@@ -134,12 +134,12 @@
 }
 
 .survey-btn.edit-btn {
-  background-color: #dbeafe;
-  color: #1e40af;
+  background-color: #ffeee6;
+  color: #e89e2f;
 }
 
 .survey-btn.edit-btn:hover {
-  background-color: #bfdbfe;
+  background-color: #ffe0d1;
 }
 
 .survey-btn.delete-btn {

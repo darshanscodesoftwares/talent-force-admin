@@ -133,6 +133,9 @@
 
 .recruiterprofile-table-container {
   overflow-x: auto;
+  /* Keeps the last column clear of the floating scroll-nav-right button
+     (36px wide, 16px from the viewport edge) when scrolled to the end. */
+  padding-right: 72px;
 }
 
 /* Custom Scrollbar */
@@ -233,12 +236,60 @@
   font-weight: 300;
 }
 
+.recruiterprofile-jobcount-cell {
+  text-align: center;
+  font-weight: 600;
+  color: #495057;
+}
+
+.recruiterprofile-status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.recruiterprofile-status.verified {
+  background: #e6f7ed;
+  color: #1e8e3e;
+}
+
+.recruiterprofile-status.unverified {
+  background: #fdecea;
+  color: #d93025;
+}
+
 .recruiterprofile-membership.advanced {
   color: #f07e21;
 }
 
 .recruiterprofile-membership.basic {
   color: #444;
+}
+
+.extend-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #ef6b37;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.extend-btn:hover {
+  background: #df5c26;
+  box-shadow: 0 2px 8px rgba(239, 107, 55, 0.2);
+}
+
+.extend-btn:active {
+  transform: scale(0.98);
 }
 
 .icon-school {
@@ -268,6 +319,18 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.extended-badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  background: #dcfce7;
+  color: #16a34a;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .school-name {
@@ -351,6 +414,46 @@
   color: #333;
 }
 
+.recruiter-modal-header-clear-btn {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  color: #444;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.recruiter-modal-header-clear-btn:hover {
+  background: #f9fafb;
+  border-color: #ef6a37;
+  color: #ef6a37;
+}
+
+/* Scoped to the Advanced Search modal only — puts Clear, title, and close
+   on one row without touching the shared .recruiter-modal-close-btn/-title
+   classes used by other modals (e.g. SubscribedRecruiterList.jsx) */
+.recruiter-search-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.recruiter-search-modal-header .recruiter-modal-title {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.recruiter-search-modal-header .recruiter-modal-close-btn {
+  position: static;
+}
+
 .recruiter-modal-title {
   margin: 0 0 20px 0;
   font-size: 20px;
@@ -363,6 +466,17 @@
 }
 
 /* ===== ADVANCED SEARCH FIELDS ===== */
+.recruiter-search-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 0;
+}
+
+.recruiter-search-row .recruiter-search-field-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
 .recruiter-search-field-group {
   display: flex;
   flex-direction: column;
@@ -399,11 +513,17 @@
 }
 
 /* ===== ADVANCED SEARCH ACTION BUTTONS ===== */
+/* Sticky so Clear/Apply stay reachable without scrolling past all filters */
 .recruiter-search-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 24px;
+  position: sticky;
+  bottom: -30px;
+  margin: 24px -30px -30px -30px;
+  padding: 12px 30px 30px;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
 }
 
 .recruiter-search-btn-clear,
@@ -472,6 +592,51 @@
 
 .recruiterprofile-pagination button:disabled {
   opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ===== Horizontal Scroll Navigation (Fixed) ===== */
+.table-with-scroll-btns {
+  position: relative;
+}
+
+.scroll-nav-btn {
+  position: fixed;
+  top: 50vh;
+  transform: translateY(-50%);
+  z-index: 200;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  color: #ef6a37;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.scroll-nav-left {
+  left: 252px; /* sidebar 240px + 12px gap */
+}
+
+.scroll-nav-right {
+  right: 16px;
+}
+
+.scroll-nav-btn:hover:not(:disabled) {
+  background: #ef6a37;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(239, 106, 55, 0.4);
+}
+
+.scroll-nav-btn:disabled {
+  opacity: 0.2;
   cursor: not-allowed;
 }
 

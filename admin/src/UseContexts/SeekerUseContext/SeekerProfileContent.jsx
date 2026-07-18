@@ -1,6 +1,7 @@
 // src/contexts/SeekerProfileContext.jsx
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const SeekerProfileContext = createContext();
 
@@ -29,6 +30,8 @@ export const SeekerProfileProvider = ({ children }) => {
           name: user.profile?.name || "",
           phone: user.profile?.phone || "",
           email: user.profile?.email || "",
+          aadhaarNumber: user.profile?.aadhaar_number || "",
+          aadhaarVerified: Boolean(user.profile?.aadhaar_verified),
           pincode: user.address?.pincode || "",
           state: user.address?.state || "",
           area: user.address?.area || "",
@@ -43,7 +46,6 @@ export const SeekerProfileProvider = ({ children }) => {
           teachingQualification: user.course?.teaching_qualification || "",
 
           resume: user.profile?.resume_path || "",
-
           // 🔥 ADD THESE
           user_type: user.user_type || "",
           login_date: user.login_date || "",
@@ -89,6 +91,33 @@ export const SeekerProfileProvider = ({ children }) => {
     } catch (error) {
       console.error("Delete failed:", error);
       fetchSeekers(); // rollback
+    }
+  };
+
+  const toggleAadhaarVerified = async (id, currentStatus) => {
+    const aadhaar_verified = !currentStatus;
+
+    try {
+      setSeekers((prev) =>
+        prev.map((s) =>
+          s.id === id ? { ...s, aadhaarVerified: aadhaar_verified } : s
+        )
+      );
+
+      await axios.put(
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin/seeker-aadhaar-verify/${id}`,
+        { aadhaar_verified }
+      );
+
+      toast.success(
+        aadhaar_verified
+          ? "Aadhaar verified successfully"
+          : "Aadhaar marked as unverified"
+      );
+    } catch (error) {
+      console.error("Aadhaar verify update failed:", error);
+      toast.error("Failed to update Aadhaar verification status");
+      fetchSeekers();
     }
   };
 
@@ -206,6 +235,7 @@ export const SeekerProfileProvider = ({ children }) => {
         editSeeker,
         getSeekerById,
         softdelete,
+        toggleAadhaarVerified,
 
         toggleBlockSeeker,
         blockedUsers,

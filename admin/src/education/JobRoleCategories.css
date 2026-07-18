@@ -1,56 +1,18 @@
 /* ====== Section ====== */
-.highestedu-rec {
+.jobrolecateg-rec {
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
-.pagination {
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.pagination button {
-  padding: 8px 14px;
-  border: 1px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.pagination button:hover {
-  background: #f4f4f4;
-}
-
-.pagination button.active {
-  background: #ef6a37;
-  color: #fff;
-  border-color: #ef6a37;
-}
-
-.pagination button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.pagination-ellipsis {
-  padding: 0 4px;
-  color: #888;
-  align-self: center;
-}
-
-.highestedu-section {
+.jobrolecateg-section {
   background: white;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.highestedu-title {
+.jobrolecateg-title {
   margin-bottom: 15px;
   font-size: 16px;
   font-weight: 300;
@@ -61,14 +23,14 @@
   cursor: pointer;
 }
 
-.highestedu-title-button {
+.jobrolecateg-title-button {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 /* ====== Add Button ====== */
-.highestedu-add-btn {
+.jobrolecateg-add-btn {
   background: #ef6a37;
   color: white;
   border: none;
@@ -79,43 +41,43 @@
   transition: background 0.3s ease;
 }
 
-.highestedu-add-btn:hover {
+.jobrolecateg-add-btn:hover {
   background: #d95b28;
 }
 
 /* ====== Table ====== */
-.highestedu-table-container {
+.jobrolecateg-table-container {
   overflow-x: auto;
   position: relative;
 }
 
-.highestedu-table {
+.jobrolecateg-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-.highestedu-table th,
-.highestedu-table td {
+.jobrolecateg-table th,
+.jobrolecateg-table td {
   padding: 17px 26px;
   color: #7c8c9d;
   text-align: left;
   border-bottom: 1px solid #eeeeeeca;
 }
 
-.highestedu-table th {
+.jobrolecateg-table th {
   background: #becbdb19;
   color: #444;
   font-weight: 500;
 }
 
 /* ====== Actions ====== */
-.highestedu-actions {
+.jobrolecateg-actions {
   white-space: nowrap;
 }
 
 /* ====== Action buttons ====== */
-.highestedu-btn {
+.jobrolecateg-btn {
   padding: 10px 14px;
   margin: 0 4px;
   border-radius: 6px;
@@ -125,44 +87,28 @@
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.highestedu-btn:hover {
+.jobrolecateg-btn:hover {
   transform: translateY(-2px);
 }
 
-.highestedu-btn.view-btn {
-  background-color: #e6f0ff;
-  color: #3d6dff;
-  font-size: large;
-}
-
-.highestedu-btn.edit-btn {
+.jobrolecateg-btn.edit-btn {
   background-color: #ffeee6;
   color: #e89e2f;
   font-size: large;
 }
 
-.highestedu-btn.delete-btn {
+.jobrolecateg-btn.delete-btn {
   background-color: #ffeee6;
   color: #df4646;
   font-size: large;
 }
 
-.highestedu-btn.view-btn:hover {
-  background-color: #c4ddfe;
-}
-
-.highestedu-btn.edit-btn:hover {
+.jobrolecateg-btn.edit-btn:hover {
   background-color: #ffe0d1;
 }
 
-.highestedu-btn.delete-btn:hover {
+.jobrolecateg-btn.delete-btn:hover {
   background-color: #ffd9c8;
-}
-
-/* ====== Hidden Row ====== */
-.hidden-row {
-  opacity: 0.3;
-  transition: opacity 0.3s ease;
 }
 
 /* ====== Pagination ====== */

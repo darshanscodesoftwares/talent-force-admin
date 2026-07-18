@@ -149,7 +149,7 @@
   font-size: large;
 }
 
-.edit-btn {
+.homebanner-btn.edit-btn {
   background-color: #ffeee6;
   color: #e89e2f;
 }
@@ -163,7 +163,7 @@
   background-color: #c4ddfe;
 }
 
-.edit-btn:hover {
+.homebanner-btn.edit-btn:hover {
   background-color: #ffe0d1;
 }
 

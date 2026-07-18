@@ -27,6 +27,12 @@
   background: #ffffff;
   box-sizing: border-box;
   overflow: hidden;     /* 👈 no scroll on wrapper */
+  transition: margin-left 0.2s ease;
+}
+
+/* Content shifts less when sidebar is collapsed to icon-only */
+.main-layout.sidebar-collapsed .content {
+  margin-left: 72px;
 }
 
 /* Push the outlet area between header + footer */

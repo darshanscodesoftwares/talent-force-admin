@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import Select from "react-select";
-import { FaUserCircle, FaChartLine, FaCopy, FaCheck, FaBriefcase, FaUsers, FaLink } from "react-icons/fa";
+import { FaUserCircle, FaChartLine, FaCopy, FaCheck, FaBriefcase, FaUsers, FaLink, FaSchool } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "./PartnerReferralStatistics.css";
 import { PartnerReferralStatisticsContext } from "../UseContexts/PartnerUseContext/PartnerReferralStatisticsContext";
@@ -106,6 +106,7 @@ const PartnerReferralStatistics = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPartner, setSelectedPartner] = useState(null);
+  const [modalView, setModalView] = useState("seekers"); // "seekers" | "recruiters"
   const [copiedCode, setCopiedCode] = useState(null);
 
   // Fetch statistics on component mount
@@ -168,6 +169,18 @@ const PartnerReferralStatistics = () => {
             <p className="stat-label">Total Referred Seekers</p>
             <h3 className="stat-value">
               {statistics.reduce((sum, partner) => sum + partner.total_seekers_referred, 0)}
+            </h3>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon recruiters-icon">
+            <FaSchool />
+          </div>
+          <div className="stat-content">
+            <p className="stat-label">Total Referred Recruiters</p>
+            <h3 className="stat-value">
+              {statistics.reduce((sum, partner) => sum + (partner.total_recruiters_referred || 0), 0)}
             </h3>
           </div>
         </div>
@@ -260,7 +273,8 @@ const PartnerReferralStatistics = () => {
                   <th>Phone</th>
                   <th>City</th>
                   <th>Referral Code</th>
-                  <th>Total Referred</th>
+                  <th>Seeker Referrals</th>
+                  <th>Recruiter Referrals</th>
                   <th>Created Date</th>
                   <th>Action</th>
                 </tr>
@@ -297,16 +311,34 @@ const PartnerReferralStatistics = () => {
                         {partner.total_seekers_referred}
                       </span>
                     </td>
+                    <td className="referred-cell">
+                      <span className="referred-badge">
+                        {partner.total_recruiters_referred || 0}
+                      </span>
+                    </td>
                     <td className="date-cell">
                       {new Date(partner.partner_created_at).toLocaleDateString()}
                     </td>
                     <td className="action-cell">
                       <button
                         className="view-btn"
-                        onClick={() => setSelectedPartner(partner)}
+                        onClick={() => {
+                          setSelectedPartner(partner);
+                          setModalView("seekers");
+                        }}
                         disabled={partner.total_seekers_referred === 0}
                       >
                         View Seekers
+                      </button>
+                      <button
+                        className="view-btn"
+                        onClick={() => {
+                          setSelectedPartner(partner);
+                          setModalView("recruiters");
+                        }}
+                        disabled={!partner.total_recruiters_referred}
+                      >
+                        View Recruiter
                       </button>
                     </td>
                   </tr>
@@ -317,12 +349,15 @@ const PartnerReferralStatistics = () => {
         )}
       </div>
 
-      {/* Referred Seekers Modal */}
+      {/* Referred Seekers / Recruiters Modal */}
       {selectedPartner && (
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <h3>{selectedPartner.partner_name} - Referred Seekers</h3>
+              <h3>
+                {selectedPartner.partner_name} -{" "}
+                {modalView === "seekers" ? "Referred Seekers" : "Referred Recruiters"}
+              </h3>
               <button
                 className="close-btn"
                 onClick={() => setSelectedPartner(null)}
@@ -331,40 +366,84 @@ const PartnerReferralStatistics = () => {
               </button>
             </div>
 
-            {selectedPartner.seekers && selectedPartner.seekers.length > 0 ? (
+            {modalView === "seekers" ? (
+              selectedPartner.seekers && selectedPartner.seekers.length > 0 ? (
+                <div className="seekers-table-wrapper">
+                  <table className="seekers-table">
+                    <thead>
+                      <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Referred Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedPartner.seekers.map((seeker, index) => (
+                        <tr key={seeker.user_id}>
+                          <td className="seeker-number">{index + 1}</td>
+                          <td className="seeker-name">
+                            <div className="seeker-info">
+                              {seeker.profile_img_url ? (
+                                <img
+                                  src={seeker.profile_img_url}
+                                  alt={seeker.name}
+                                  className="seeker-avatar"
+                                />
+                              ) : (
+                                <FaUserCircle className="seeker-avatar-icon" />
+                              )}
+                              <span>{seeker.name}</span>
+                            </div>
+                          </td>
+                          <td className="seeker-email">{seeker.email}</td>
+                          <td className="seeker-phone">{seeker.phone}</td>
+                          <td className="seeker-date">
+                            {new Date(seeker.referred_at).toLocaleDateString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <p className="no-seekers">No seekers referred yet</p>
+              )
+            ) : selectedPartner.recruiters && selectedPartner.recruiters.length > 0 ? (
               <div className="seekers-table-wrapper">
                 <table className="seekers-table">
                   <thead>
                     <tr>
                       <th>No.</th>
-                      <th>Name</th>
+                      <th>School Name</th>
                       <th>Email</th>
                       <th>Phone</th>
                       <th>Referred Date</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {selectedPartner.seekers.map((seeker, index) => (
-                      <tr key={seeker.user_id}>
+                    {selectedPartner.recruiters.map((recruiter, index) => (
+                      <tr key={recruiter.recruiter_id}>
                         <td className="seeker-number">{index + 1}</td>
                         <td className="seeker-name">
                           <div className="seeker-info">
-                            {seeker.profile_img_url ? (
+                            {recruiter.school_image_url ? (
                               <img
-                                src={seeker.profile_img_url}
-                                alt={seeker.name}
+                                src={recruiter.school_image_url}
+                                alt={recruiter.school_name}
                                 className="seeker-avatar"
                               />
                             ) : (
                               <FaUserCircle className="seeker-avatar-icon" />
                             )}
-                            <span>{seeker.name}</span>
+                            <span>{recruiter.school_name || "N/A"}</span>
                           </div>
                         </td>
-                        <td className="seeker-email">{seeker.email}</td>
-                        <td className="seeker-phone">{seeker.phone}</td>
+                        <td className="seeker-email">{recruiter.school_email || "N/A"}</td>
+                        <td className="seeker-phone">{recruiter.phone}</td>
                         <td className="seeker-date">
-                          {new Date(seeker.referred_at).toLocaleDateString()}
+                          {new Date(recruiter.referred_at).toLocaleDateString()}
                         </td>
                       </tr>
                     ))}
@@ -372,7 +451,7 @@ const PartnerReferralStatistics = () => {
                 </table>
               </div>
             ) : (
-              <p className="no-seekers">No seekers referred yet</p>
+              <p className="no-seekers">No recruiters referred yet</p>
             )}
           </div>
         </div>

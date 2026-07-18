@@ -97,6 +97,64 @@
   border-color: #ef6a37;
 }
 
+.aadhaar-field {
+  max-width: 440px;
+}
+
+.aadhaar-control {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+
+.aadhaar-control input {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.aadhaar-verify-btn {
+  border: none;
+  border-radius: 8px;
+  width: 118px;
+  height: 40px;
+  padding: 0 16px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 0 0 118px;
+  line-height: 1;
+  text-align: center;
+}
+
+.aadhaar-verify-btn.verified {
+  background: #16a34a;
+}
+
+.aadhaar-verify-btn.unverified {
+  background: #ef4444;
+}
+
+.aadhaar-verify-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+@media (max-width: 520px) {
+  .aadhaar-control {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .aadhaar-verify-btn {
+    width: 100%;
+    flex-basis: auto;
+  }
+}
+
 /* Resume */
 .generalinfo-row-resume {
   display: flex;

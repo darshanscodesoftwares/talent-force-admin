@@ -3,8 +3,9 @@ import React, { useState, useContext } from "react";
 import "./JobPostEducationAddModal.css";
 import { EducationQualificationContext } from "../UseContexts/RecruiterUseContext/JobPostContext/EducationQualificationContext";
 
-export default function JobPostEducationAddModal({ isOpen, onClose }) {
+export default function JobPostEducationAddModal({ isOpen, onClose, categories }) {
   const [qualificationName, setQualificationName] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [loading, setLoading] = useState(false);
   const { addQualification } = useContext(EducationQualificationContext);
 
@@ -15,11 +16,13 @@ export default function JobPostEducationAddModal({ isOpen, onClose }) {
     setLoading(true);
     const newItem = {
       education_qualification_list: qualificationName,
+      job_role_category_id: categoryId || null,
     };
 
     try {
       await addQualification(newItem); // handled in context with toast + fetch
       setQualificationName(""); // reset input
+      setCategoryId("");
       onClose(); // close modal
     } catch (err) {
       console.error("Error adding qualification:", err);
@@ -36,6 +39,19 @@ export default function JobPostEducationAddModal({ isOpen, onClose }) {
         <h3>Add Education Qualification</h3>
 
         <form onSubmit={handleSubmit}>
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            disabled={loading}
+          >
+            <option value="">Select Job Role Category (optional)</option>
+            {(categories || []).map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+
           <input
             type="text"
             placeholder="Enter Qualification"

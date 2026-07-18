@@ -36,8 +36,9 @@
   flex-direction: column;
 }
 
-.subject-modal-content input {
-  margin: 20px;
+.subject-modal-content input,
+.subject-modal-content select {
+  margin: 20px 20px 0;
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -45,7 +46,12 @@
   outline: none;
 }
 
-.subject-modal-content input:focus {
+.subject-modal-content input:last-of-type {
+  margin-bottom: 20px;
+}
+
+.subject-modal-content input:focus,
+.subject-modal-content select:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }

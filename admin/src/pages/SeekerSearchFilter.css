@@ -89,9 +89,9 @@
   font-size: large;
 }
 
-.edit-btn {
-  background-color: #ffeee6;
-  color: #e89e2f;
+.seekerfilter-btn.edit-btn {
+  background-color: #FFEEE6;
+  color: #E89E2F;
   font-size: large;
 }
 
@@ -105,7 +105,7 @@
   background-color: #c4ddfe;
 }
 
-.edit-btn:hover {
+.seekerfilter-btn.edit-btn:hover {
   background-color: #ffe0d1;
 }
 

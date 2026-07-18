@@ -20,7 +20,7 @@ export default function RecruiterGeneralInfo() {
   // const { toggleBlockRecruiter, blockRecruitersList } = useContext(
   //   RecruiterProfileContext
   // );
-  const { toggleBlockRecruiter, recruiters: formattedRecruiters } = useContext(
+  const { toggleBlockRecruiter, toggleVerifyRecruiter, recruiters: formattedRecruiters } = useContext(
     RecruiterProfileContext
   );
 
@@ -162,6 +162,105 @@ export default function RecruiterGeneralInfo() {
           </div>
         </div>
 
+        <div className="recruitergeneralinfo-row">
+          <div className="recruitergeneralinfo-field">
+            <label>State</label>
+            <input
+              type="text"
+              value={school_profile?.recruiter_address?.state || "N/A"}
+              readOnly
+            />
+          </div>
+          <div className="recruitergeneralinfo-field">
+            <label>District</label>
+            <input
+              type="text"
+              value={school_profile?.recruiter_address?.city || "N/A"}
+              readOnly
+            />
+          </div>
+          <div className="recruitergeneralinfo-field">
+            <label>Taluk</label>
+            <input
+              type="text"
+              value={school_profile?.recruiter_address?.area || "N/A"}
+              readOnly
+            />
+          </div>
+        </div>
+
+        <div className="recruitergeneralinfo-row">
+          <div className="recruitergeneralinfo-field">
+            <label>Udise Number</label>
+            <input
+              type="text"
+              value={school_profile?.udise_number || "N/A"}
+              readOnly
+            />
+          </div>
+          <div className="recruitergeneralinfo-field">
+            <label>Principal / Correspondent / HR Name</label>
+            <input
+              type="text"
+              value={school_profile?.principal_correspondent_hr_name || "N/A"}
+              readOnly
+            />
+          </div>
+        </div>
+
+        <div className="recruitergeneralinfo-row">
+          <div className="recruitergeneralinfo-field">
+            <label>School Affiliation / Recognition Letter</label>
+            {school_profile?.school_affiliation_letter ? (
+              <a
+                href={school_profile.school_affiliation_letter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="recruitergeneralinfo-doc-link"
+              >
+                View Document
+              </a>
+            ) : (
+              <div className="recruitergeneralinfo-doc-link recruitergeneralinfo-doc-link-empty">
+                N/A
+              </div>
+            )}
+            <button
+              type="button"
+              className={
+                formattedRecruiter?.isAdminVerified
+                  ? "verify-btn recruitergeneralinfo-verify-btn"
+                  : "verify-btn verify-btn-unverify recruitergeneralinfo-verify-btn"
+              }
+              onClick={() =>
+                toggleVerifyRecruiter(
+                  formattedRecruiter?.id,
+                  formattedRecruiter?.isAdminVerified
+                )
+              }
+            >
+              {formattedRecruiter?.isAdminVerified ? "Verified" : "Unverified"}
+            </button>
+          </div>
+          <div className="recruitergeneralinfo-field">
+            <label>Board Affiliation Certificate</label>
+            {school_profile?.board_affiliation_certificate ? (
+              <a
+                href={school_profile.board_affiliation_certificate}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="recruitergeneralinfo-doc-link"
+              >
+                View Document
+              </a>
+            ) : (
+              <div className="recruitergeneralinfo-doc-link recruitergeneralinfo-doc-link-empty">
+                N/A
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Detail Cards */}
         <div className="detailCard-wrap">
           <div className="detail-card" onClick={() => handleStatCardClick("total_job_posts")} style={{ cursor: "pointer" }}>
@@ -205,6 +304,7 @@ export default function RecruiterGeneralInfo() {
               <tr>
                 <th>Job Name</th>
                 <th>Subject</th>
+                <th>PinCode</th>
                 <th>Posted Date</th>
                 <th>Applicants</th>
                 <th>Selected</th>
@@ -222,6 +322,8 @@ export default function RecruiterGeneralInfo() {
                   >
                     <td>{job.job_role}</td>
                     <td>{job.subject}</td>
+                 
+                    <td>{job.pincode?.pincode || "N/A"}</td>
                     <td>{job.post_date}</td>
                     <td>{job.applicants_count}</td>
                     <td>{job.selected_count}</td>

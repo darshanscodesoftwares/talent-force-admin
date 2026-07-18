@@ -11,6 +11,7 @@ import TeachingQualAddModal from "./TeachingQualAddModal.jsx";
 import TeachingQualEditModal from "./TeachingQualEditModal.jsx";
 
 import { TeachingQualificationContext } from "../UseContexts/SeekerUseContext/TeachingQualificationContext.jsx";
+import { JobRoleCategoriesContext } from "../UseContexts/SeekerUseContext/JobRoleCategoriesContext.jsx";
 
 export default function TeachingQualification() {
   const navigate = useNavigate();
@@ -19,15 +20,22 @@ export default function TeachingQualification() {
   const {
     teachingQual,
     loading,
+    selectedCategoryId,
+    setSelectedCategoryId,
     addTeachingQual,
     updateTeachingQual,
     deleteTeachingQual,
   } = useContext(TeachingQualificationContext);
 
+  const { jobRoleCategories } = useContext(JobRoleCategoriesContext);
+
   const [hiddenRows, setHiddenRows] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editItem, setEditItem] = useState(null);
+
+  const categoryLabel = (id) =>
+    jobRoleCategories.find((c) => String(c.id) === String(id))?.label || "-";
 
   // ✅ Add
   const handleSaveAdd = async (newItem) => {
@@ -65,6 +73,24 @@ export default function TeachingQualification() {
     startIndex + itemsPerPage
   );
 
+  const getPageNumbers = () => {
+    if (totalPages <= 1) return totalPages === 1 ? [1] : [];
+    const delta = 1;
+    const range = [];
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
+      range.push(i);
+    }
+    if (currentPage - delta > 2) range.unshift("...");
+    if (currentPage + delta < totalPages - 1) range.push("...");
+    range.unshift(1);
+    range.push(totalPages);
+    return range;
+  };
+
   return (
     <div className="teachingqualif-container">
       <div className="teachingqualif-rec">
@@ -85,6 +111,25 @@ export default function TeachingQualification() {
             </button>
           </div>
 
+          {/* Category Filter */}
+          <div className="teachingqualif-filter">
+            <label>Job Role Category:</label>
+            <select
+              value={selectedCategoryId || ""}
+              onChange={(e) => {
+                setCurrentPage(1);
+                setSelectedCategoryId(e.target.value || null);
+              }}
+            >
+              <option value="">All Categories</option>
+              {jobRoleCategories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Loading */}
           {loading ? (
             <p>Loading...</p>
@@ -94,6 +139,7 @@ export default function TeachingQualification() {
                 <thead>
                   <tr>
                     <th>Qualification</th>
+                    <th>Category</th>
                     <th>Posted on</th>
                     <th>Updated on</th>
                     <th>Action</th>
@@ -109,6 +155,7 @@ export default function TeachingQualification() {
                     >
                       {/* match API schema */}
                       <td>{item.qualification_name}</td>
+                      <td>{categoryLabel(item.job_role_category_id)}</td>
                       <td>{item.postedOn || "-"}</td>
                       <td>{item.updatedOn || "-"}</td>
                       <td className="teachingqualif-actions">
@@ -151,15 +198,21 @@ export default function TeachingQualification() {
                 >
                   Prev
                 </button>
-                {[...Array(totalPages)].map((_, index) => (
-                  <button
-                    key={index + 1}
-                    className={currentPage === index + 1 ? "active" : ""}
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+                {getPageNumbers().map((p, idx) =>
+                  p === "..." ? (
+                    <span key={`ellipsis-${idx}`} className="pagination-ellipsis">
+                      …
+                    </span>
+                  ) : (
+                    <button
+                      key={p}
+                      className={currentPage === p ? "active" : ""}
+                      onClick={() => setCurrentPage(p)}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(currentPage + 1)}
@@ -178,6 +231,8 @@ export default function TeachingQualification() {
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSave={handleSaveAdd}
+          categories={jobRoleCategories}
+          defaultCategoryId={selectedCategoryId}
         />
       )}
 
@@ -190,7 +245,8 @@ export default function TeachingQualification() {
             setEditItem(null);
           }}
           onSave={handleSaveEdit}
-          value={editItem} 
+          value={editItem}
+          categories={jobRoleCategories}
         />
       )}
     </div>

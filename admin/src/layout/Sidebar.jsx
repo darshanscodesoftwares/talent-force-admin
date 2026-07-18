@@ -25,8 +25,9 @@ import { MdPrivacyTip } from "react-icons/md";
 import { RiMoneyRupeeCircleFill } from "react-icons/ri";
 import { TbLockHeart } from "react-icons/tb";
 import { RxLink1 } from "react-icons/rx";
+import { IoClose, IoMenu } from "react-icons/io5";
 
-function Sidebar() {
+function Sidebar({ collapsed, onToggle }) {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -73,8 +74,17 @@ function Sidebar() {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${collapsed ? " collapsed" : ""}`}>
       <nav>
+        <button
+          type="button"
+          className="sidebar-toggle-btn"
+          onClick={onToggle}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? <IoMenu /> : <IoClose />}
+        </button>
+
         <img src={adminLogo} alt="template Logo" className="sidebar-logo" />
 
         {/* GENERAL */}

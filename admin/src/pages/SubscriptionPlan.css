@@ -210,14 +210,14 @@
   transform: translateY(-2px);
 }
 
-.edit-btn {
+.subscription-btn.edit-btn {
   background-color: #ffeee6;
   border-radius: 7px;
   font-size: large;
   color: #e89e2f;
 }
 
-.edit-btn:hover {
+.subscription-btn.edit-btn:hover {
   background-color: #ffe0d1;
 }
 

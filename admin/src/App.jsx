@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // auth
 import Login from "/src/auth/Login";
+import ProtectedRoute from "/src/auth/ProtectedRoute";
 
 // layout
 import MainLayout from "/src/layout/MainLayout";
@@ -22,6 +23,7 @@ import Education from "./pages/Education.jsx";
 // education
 import HighestEducation from "./education/HighestEducation.jsx";
 import TeachingQualification from "./education/TeachingQualification.jsx";
+import JobRoleCategories from "./education/JobRoleCategories.jsx";
 
 // editpages
 import AddBanner from "/src/editpages/AddBanner";
@@ -88,7 +90,14 @@ const App = () => {
           <Route path="/" element={<Login />} />
 
           {/* Protected routes */}
-          <Route path="/dashboard" element={<MainLayout />}>
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <MainLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Dashboard />} />
 
             {/* main pages */}
@@ -158,6 +167,10 @@ const App = () => {
             <Route
               path="teaching-qualification"
               element={<TeachingQualification />}
+            />
+            <Route
+              path="job-role-categories"
+              element={<JobRoleCategories />}
             />
 
             {/* seeker filters */}
@@ -253,6 +266,7 @@ const App = () => {
               path="razorpay-invoice-details"
               element={<RazorPayInvoiceDetails />}
             />
+
           </Route>
         </Routes>
       </BrowserRouter>

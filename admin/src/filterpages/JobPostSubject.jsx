@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./JobPostSubject.css";
 import JobPostSubjectAddModal from "./JobPostSubjectAddModal.jsx";
 import { SubjectContext } from "../UseContexts/RecruiterUseContext/JobPostContext/SubjectContext.jsx";
+import { JobRoleCategoriesContext } from "../UseContexts/SeekerUseContext/JobRoleCategoriesContext.jsx";
 
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
@@ -20,8 +21,22 @@ export default function JobPostSubjectFilter() {
     reorderSubjects,
   } = useContext(SubjectContext);
 
+  const { jobRoleCategories } = useContext(JobRoleCategoriesContext);
+
+  const categoryLabel = (id) =>
+    jobRoleCategories.find((c) => String(c.id) === String(id))?.label || "-";
+
   const [hiddenRows, setHiddenRows] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // Job Role Category filter — local to this page only, so it doesn't
+  // leak into the Specialization filter page that shares this context.
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const filteredSubjects = selectedCategoryId
+    ? (subjects || []).filter(
+        (s) => String(s.job_role_category_id) === String(selectedCategoryId)
+      )
+    : subjects || [];
 
   // ✅ Save from Add Modal
   const handleSaveAdd = async (newItem) => {
@@ -42,10 +57,28 @@ export default function JobPostSubjectFilter() {
   // ✅ Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = Math.ceil((subjects?.length || 0) / itemsPerPage);
+  const totalPages = Math.ceil((filteredSubjects?.length || 0) / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData =
-    subjects?.slice(startIndex, startIndex + itemsPerPage) || [];
+    filteredSubjects?.slice(startIndex, startIndex + itemsPerPage) || [];
+
+  const getPageNumbers = () => {
+    if (totalPages <= 1) return totalPages === 1 ? [1] : [];
+    const delta = 1;
+    const range = [];
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
+      range.push(i);
+    }
+    if (currentPage - delta > 2) range.unshift("...");
+    if (currentPage + delta < totalPages - 1) range.push("...");
+    range.unshift(1);
+    range.push(totalPages);
+    return range;
+  };
 
   // ✅ Toggle Hide Row
   const toggleHideRow = (id) => {
@@ -103,6 +136,25 @@ export default function JobPostSubjectFilter() {
             </button>
           </div>
 
+          {/* Category Filter */}
+          <div className="subjectfilter-filter">
+            <label>Job Role Category:</label>
+            <select
+              value={selectedCategoryId}
+              onChange={(e) => {
+                setCurrentPage(1);
+                setSelectedCategoryId(e.target.value);
+              }}
+            >
+              <option value="">All Categories</option>
+              {jobRoleCategories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* 🔹 Loader / Error */}
           {loading && <p className="loading">Loading subjects...</p>}
           {error && <p className="error">⚠️ {error}</p>}
@@ -114,99 +166,108 @@ export default function JobPostSubjectFilter() {
                 <tr>
                   <th>S.No</th>
                   <th>Subject</th>
+                  <th>Category</th>
                   <th>Posted on</th>
                   <th>Updated on</th>
                   <th>Action</th>
                 </tr>
               </thead>
-              {/* <tbody>
-                {paginatedData.map((subject) => (
-                  <tr
-                    key={subject.id}
-                    className={
-                      hiddenRows.includes(subject.id) ? "hidden-row" : ""
-                    }
-                  >
-                    <td>{subject.category_name}</td>
-                    <td>{formatDate(subject.created_at)}</td>
-                    <td>{formatDate(subject.updated_at)}</td>
-                    <td className="jobpostsubjectfilter-actions">
-                      <button
-                        className="jobpostsubjectfilter-btn delete-btn"
-                        onClick={() => handleDelete(subject.id)}
-                      >
-                        <AiOutlineDelete />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody> */}
 
-              <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="subjects">
-                  {(provided) => (
-                    <tbody ref={provided.innerRef} {...provided.droppableProps}>
-                      {paginatedData.map((subject, index) => (
-                        <Draggable
-                          key={subject.id}
-                          draggableId={subject.id.toString()}
-                          index={index}
+              {selectedCategoryId ? (
+                // Filtered view: reordering (order_index) spans the full
+                // unfiltered list, so drag-and-drop is disabled here.
+                <tbody>
+                  {paginatedData.map((subject, index) => (
+                    <tr
+                      key={subject.id}
+                      className={
+                        hiddenRows.includes(subject.id) ? "hidden-row" : ""
+                      }
+                    >
+                      <td>{startIndex + index + 1}</td>
+                      <td>{subject.category_name}</td>
+                      <td>{categoryLabel(subject.job_role_category_id)}</td>
+                      <td>{formatDate(subject.created_at)}</td>
+                      <td>{formatDate(subject.updated_at)}</td>
+                      <td className="jobpostsubjectfilter-actions">
+                        <button
+                          className="jobpostsubjectfilter-btn delete-btn"
+                          onClick={() => handleDelete(subject.id)}
                         >
-                          {(provided, snapshot) => (
-                            <tr
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              className={
-                                hiddenRows.includes(subject.id)
-                                  ? "hidden-row"
-                                  : ""
-                              }
-                              style={{
-                                ...provided.draggableProps.style,
-                                background: snapshot.isDragging
-                                  ? "#f0f9ff"
-                                  : "white",
-                              }}
-                            >
-                              {/* ✅ DRAG HANDLE COLUMN */}
-                              <td
-                                {...provided.dragHandleProps}
-                                style={{ cursor: "grab" }}
+                          <AiOutlineDelete />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <Droppable droppableId="subjects">
+                    {(provided) => (
+                      <tbody ref={provided.innerRef} {...provided.droppableProps}>
+                        {paginatedData.map((subject, index) => (
+                          <Draggable
+                            key={subject.id}
+                            draggableId={subject.id.toString()}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <tr
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                className={
+                                  hiddenRows.includes(subject.id)
+                                    ? "hidden-row"
+                                    : ""
+                                }
+                                style={{
+                                  ...provided.draggableProps.style,
+                                  background: snapshot.isDragging
+                                    ? "#f0f9ff"
+                                    : "white",
+                                }}
                               >
-                                {startIndex + index + 1}
-                              </td>
-
-                              {/* ✅ YOUR EXISTING COLUMNS — UNCHANGED */}
-                              <td>{subject.category_name}</td>
-                              <td>{formatDate(subject.created_at)}</td>
-                              <td>{formatDate(subject.updated_at)}</td>
-
-                              <td className="jobpostsubjectfilter-actions">
-                                <button
-                                  className="jobpostsubjectfilter-btn delete-btn"
-                                  onClick={() => handleDelete(subject.id)}
+                                {/* ✅ DRAG HANDLE COLUMN */}
+                                <td
+                                  {...provided.dragHandleProps}
+                                  style={{ cursor: "grab" }}
                                 >
-                                  <AiOutlineDelete />
-                                </button>
-                              </td>
-                            </tr>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </tbody>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                                  {startIndex + index + 1}
+                                </td>
+
+                                {/* ✅ YOUR EXISTING COLUMNS — UNCHANGED */}
+                                <td>{subject.category_name}</td>
+                                <td>{categoryLabel(subject.job_role_category_id)}</td>
+                                <td>{formatDate(subject.created_at)}</td>
+                                <td>{formatDate(subject.updated_at)}</td>
+
+                                <td className="jobpostsubjectfilter-actions">
+                                  <button
+                                    className="jobpostsubjectfilter-btn delete-btn"
+                                    onClick={() => handleDelete(subject.id)}
+                                  >
+                                    <AiOutlineDelete />
+                                  </button>
+                                </td>
+                              </tr>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </tbody>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              )}
             </table>
 
             {/* 🔹 Empty State */}
-            {!loading && subjects?.length === 0 && (
+            {!loading && filteredSubjects?.length === 0 && (
               <p className="empty">No subjects found.</p>
             )}
 
             {/* 🔹 Pagination */}
-            {subjects?.length > itemsPerPage && (
+            {filteredSubjects?.length > itemsPerPage && (
               <div className="pagination">
                 <button
                   disabled={currentPage === 1}
@@ -214,15 +275,21 @@ export default function JobPostSubjectFilter() {
                 >
                   Prev
                 </button>
-                {[...Array(totalPages)].map((_, index) => (
-                  <button
-                    key={index + 1}
-                    className={currentPage === index + 1 ? "active" : ""}
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+                {getPageNumbers().map((p, idx) =>
+                  p === "..." ? (
+                    <span key={`ellipsis-${idx}`} className="pagination-ellipsis">
+                      …
+                    </span>
+                  ) : (
+                    <button
+                      key={p}
+                      className={currentPage === p ? "active" : ""}
+                      onClick={() => setCurrentPage(p)}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
                 <button
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(currentPage + 1)}
@@ -241,6 +308,7 @@ export default function JobPostSubjectFilter() {
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           onSave={handleSaveAdd}
+          categories={jobRoleCategories}
         />
       )}
     </div>

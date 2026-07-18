@@ -31,6 +31,35 @@
   margin: 0;
 }
 
+/* Seeker / Recruiter Tabs */
+.referral-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.referral-tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.referral-tab-btn:hover {
+  color: #ef6b37;
+}
+
+.referral-tab-btn.active {
+  color: #ef6b37;
+  border-bottom-color: #ef6b37;
+}
+
 /* Stats Cards */
 .stats-cards {
   display: grid;
@@ -314,11 +343,14 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #e9ecef;
+  background: #fff;
 }
 
 .avatar-icon {
   font-size: 42px;
   color: #999;
+  background: #f8f9fa;
+  border-radius: 50%;
 }
 
 .name-cell {
@@ -470,6 +502,7 @@
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #e9ecef;
+  background: #fff;
 }
 
 .modal-referrer-info {
@@ -604,6 +637,8 @@
 .avatar-icon-large {
   font-size: 60px;
   color: #999;
+  background: #f8f9fa;
+  border-radius: 50%;
 }
 
 .modal-footer {

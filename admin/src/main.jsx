@@ -9,6 +9,7 @@ import WorkTypeProvider from "./UseContexts/RecruiterUseContext/JobPostContext/W
 import EndDateProvider from "./UseContexts/RecruiterUseContext/JobPostContext/EndDateContext";
 import HighestEducationProvider from "./UseContexts/SeekerUseContext/HighestEducationContext";
 import TeachingQualificationProvider from "./UseContexts/SeekerUseContext/TeachingQualificationContext";
+import JobRoleCategoriesProvider from "./UseContexts/SeekerUseContext/JobRoleCategoriesContext";
 import CompartmentLevelProvider from "./UseContexts/RecruiterUseContext/JobPostContext/CompartmentContext";
 import EducationQualificationProvider from "./UseContexts/RecruiterUseContext/JobPostContext/EducationQualificationContext";
 import SeekerEduQualificationProvider from "./UseContexts/SeekerUseContext/SeekerEduQualificationContext";
@@ -68,6 +69,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                                             <EducationQualificationProvider>
                                               <CompartmentLevelProvider>
                                                 <TeachingQualificationProvider>
+                                                <JobRoleCategoriesProvider>
                                                   <HighestEducationProvider>
                                                     <EndDateProvider>
                                                       <WorkTypeProvider>
@@ -81,6 +83,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                                                       </WorkTypeProvider>
                                                     </EndDateProvider>
                                                   </HighestEducationProvider>
+                                                </JobRoleCategoriesProvider>
                                                 </TeachingQualificationProvider>
                                               </CompartmentLevelProvider>
                                             </EducationQualificationProvider>

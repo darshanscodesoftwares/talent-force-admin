@@ -64,6 +64,27 @@
   color: #dc2626;
 }
 
+.seeker-filter-header-clear-btn {
+  position: absolute;
+  top: -6px;
+  left: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  color: #ef6b37;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1100;
+}
+
+.seeker-filter-header-clear-btn:hover {
+  background: #fff3e0;
+  border-color: #ef6b37;
+}
+
 /* Form Groups */
 label {
   display: flex;
@@ -180,13 +201,16 @@ input[type="text"]::placeholder {
   color: #9ca3af;
 }
 
-/* Action Buttons */
+/* Action Buttons — sticky so Clear/Apply stay reachable without scrolling past all filters */
 .seeker-filter-modal-actions {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  margin-top: 8px;
-  padding-top: 10px;
+  position: sticky;
+  bottom: -20px;
+  margin: 8px -20px -20px -20px;
+  padding: 10px 20px 20px;
+  background: #fff;
   border-top: 1px solid #e5e7eb;
 }
 

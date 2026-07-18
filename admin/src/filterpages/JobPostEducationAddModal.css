@@ -36,8 +36,9 @@
   flex-direction: column;
 }
 
-.modal-content-education input {
-  margin: 20px;
+.modal-content-education input,
+.modal-content-education select {
+  margin: 20px 20px 0;
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -45,7 +46,13 @@
   outline: none;
 }
 
-.modal-content-education input:focus {
+.modal-content-education input:last-of-type,
+.modal-content-education select:last-of-type {
+  margin-bottom: 20px;
+}
+
+.modal-content-education input:focus,
+.modal-content-education select:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }

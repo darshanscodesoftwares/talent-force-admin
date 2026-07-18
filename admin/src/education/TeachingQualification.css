@@ -45,6 +45,26 @@
   background: #d95b28;
 }
 
+/* ====== Category Filter ====== */
+.teachingqualif-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+
+.teachingqualif-filter label {
+  font-size: 14px;
+  color: #444;
+}
+
+.teachingqualif-filter select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
 /* ====== Table ====== */
 .teachingqualif-table-container {
   overflow-x: auto;
@@ -151,6 +171,12 @@
 .pagination button.active {
   background: #ef6a37;
   color: white;
+}
+
+.pagination-ellipsis {
+  padding: 0 4px;
+  color: #888;
+  align-self: center;
 }
 
 .pagination button:disabled {

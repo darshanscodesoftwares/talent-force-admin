@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "./TeachingQualEditModal.css";
 
-export default function TeachingQualEditModal({ isOpen, onClose, onSave, value }) {
+export default function TeachingQualEditModal({
+  isOpen,
+  onClose,
+  onSave,
+  value,
+  categories,
+}) {
   const [qualificationName, setQualificationName] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
   // ✅ Populate input when modal opens
   useEffect(() => {
     if (value) {
       setQualificationName(value.qualification_name || "");
+      setCategoryId(value.job_role_category_id || "");
     }
   }, [value]);
 
@@ -19,6 +27,7 @@ export default function TeachingQualEditModal({ isOpen, onClose, onSave, value }
     onSave({
       id: value.id, // explicitly keep ID
       qualification_name: qualificationName,
+      job_role_category_id: categoryId || null,
     });
 
     onClose(); // close modal after save
@@ -32,6 +41,18 @@ export default function TeachingQualEditModal({ isOpen, onClose, onSave, value }
         <h2>Edit Teaching Qualification</h2>
 
         <form onSubmit={handleSubmit}>
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+          >
+            <option value="">Select Job Role Category (optional)</option>
+            {(categories || []).map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+
           <input
             type="text"
             placeholder="Enter Qualification"

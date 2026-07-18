@@ -39,6 +39,26 @@
   color: #f26422c5;
 }
 
+/* ====== Category Filter ====== */
+.subjectfilter-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.subjectfilter-filter label {
+  font-size: 14px;
+  color: #444;
+}
+
+.subjectfilter-filter select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
 .subjectfilter-add-btn {
   background: #ef6b37d7;
   color: #fff;
@@ -143,9 +163,15 @@
 }
 
 .pagination .active {
-  background: #007bff;
+  background: #ef6a37;
   color: #fff;
-  border-color: #007bff;
+  border-color: #ef6a37;
+}
+
+.pagination-ellipsis {
+  padding: 0 4px;
+  color: #888;
+  align-self: center;
 }
 
 .hidden-row {

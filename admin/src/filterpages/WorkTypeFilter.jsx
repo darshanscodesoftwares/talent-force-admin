@@ -49,6 +49,31 @@ export default function WorkTypeFilter() {
     });
   };
 
+  // ✅ Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+  const totalPages = Math.ceil(workTypes.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = workTypes.slice(startIndex, startIndex + itemsPerPage);
+
+  const getPageNumbers = () => {
+    if (totalPages <= 1) return totalPages === 1 ? [1] : [];
+    const delta = 1;
+    const range = [];
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
+      range.push(i);
+    }
+    if (currentPage - delta > 2) range.unshift("...");
+    if (currentPage + delta < totalPages - 1) range.push("...");
+    range.unshift(1);
+    range.push(totalPages);
+    return range;
+  };
+
   return (
     <div className="worktypefilter-container">
       <div className="worktypefilter-rec">
@@ -85,7 +110,7 @@ export default function WorkTypeFilter() {
                   </tr>
                 </thead>
                 <tbody>
-                  {workTypes.map((workType) => (
+                  {paginatedData.map((workType) => (
                     <tr
                       key={workType.id}
                       className={
@@ -117,6 +142,39 @@ export default function WorkTypeFilter() {
                   ))}
                 </tbody>
               </table>
+
+              {/* Pagination */}
+              {workTypes.length > itemsPerPage && (
+                <div className="pagination">
+                  <button
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                  >
+                    Prev
+                  </button>
+                  {getPageNumbers().map((p, idx) =>
+                    p === "..." ? (
+                      <span key={`ellipsis-${idx}`} className="pagination-ellipsis">
+                        …
+                      </span>
+                    ) : (
+                      <button
+                        key={p}
+                        className={currentPage === p ? "active" : ""}
+                        onClick={() => setCurrentPage(p)}
+                      >
+                        {p}
+                      </button>
+                    )
+                  )}
+                  <button
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

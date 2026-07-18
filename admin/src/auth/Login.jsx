@@ -40,10 +40,8 @@ const Login = () => {
           autoClose: 500,
         });
 
-        // Optionally store token
-        if (data.token) {
-          localStorage.setItem("authToken", data.token);
-        }
+        // Store session marker (backend does not issue a real token)
+        localStorage.setItem("authToken", data.token || data.data?.id || "admin-session");
 
         // Delay a bit before navigating
         setTimeout(() => navigate("/dashboard"), 1800);

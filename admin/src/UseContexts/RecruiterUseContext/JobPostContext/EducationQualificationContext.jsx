@@ -19,6 +19,7 @@ const fetchQualifications = async () => {
     const formatted = (res.data.data || []).map((item) => ({
       id: item.id,
       qualification: item.education_qualification_list, // field used in table
+      job_role_category_id: item.job_role_category_id,
       postedOn: new Date(item.created_at).toLocaleDateString(),
       createdBy: "Admin", // or use item.created_by if API provides
     }));

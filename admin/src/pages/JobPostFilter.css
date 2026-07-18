@@ -89,9 +89,9 @@
   font-size: large;
 }
 
-.edit-btn {
+.jobpostfilter-btn.edit-btn {
   background-color: #ffeee6;
-  color: #e89e2f;
+  color: #E89E2F;
   font-size: large;
 }
 
@@ -105,7 +105,7 @@
   background-color: #c4ddfe;
 }
 
-.edit-btn:hover {
+.jobpostfilter-btn.edit-btn:hover {
   background-color: #ffe0d1;
 }
 

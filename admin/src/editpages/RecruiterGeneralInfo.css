@@ -30,6 +30,11 @@
   font-size: 20px;
 }
 
+.recruitergeneralinfo-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
 .block-btn {
   background: #ef4444;
   color: white;
@@ -43,9 +48,55 @@
   background: #dc2626;
 }
 
+.verify-btn {
+  background: #16a34a;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.verify-btn:hover {
+  background: #15803d;
+}
+
+.recruitergeneralinfo-verify-btn {
+  margin-top: 18px;
+  width: auto;
+  align-self: flex-start;
+  padding: 8px 24px;
+  height: 40px;
+}
+
+.verify-btn-unverify {
+  background: #ef4444;
+}
+.verify-btn-unverify:hover {
+  background: #dc2626;
+}
+
 .recruitergeneralinfo-icon {
   /* text-align: center; */
   margin-bottom: 20px;
+}
+
+.profile-pincode-badge {
+  display: inline-block;
+  margin-top: 8px;
+  background: #fff3e0;
+  color: #e65100;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #ffcc80;
+}
+
+.profile-address-text {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #666;
 }
 
 .profile-icon {
@@ -87,6 +138,27 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
+}
+
+.recruitergeneralinfo-doc-link {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  text-align: center;
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: 500;
+  background: #fff;
+}
+
+.recruitergeneralinfo-doc-link:hover {
+  background: #f3f4f6;
+}
+
+.recruitergeneralinfo-doc-link-empty {
+  color: #999;
+  font-weight: 400;
+  cursor: default;
 }
 
 .detail-card {

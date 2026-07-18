@@ -93,18 +93,18 @@
   gap: 8px;
 }
 
-.edit-btn {
-  background: #ef6a37;
+.terms-actions .edit-btn {
+  background: #ffeee6;
   border: none;
-  color: white;
+  color: #e89e2f;
   font-size: 12px;
   padding: 5px 10px;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.edit-btn:hover {
-  background: #ef6a37;
+.terms-actions .edit-btn:hover {
+  background: #ffe0d1;
 }
 
 .term-content {

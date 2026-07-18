@@ -4,7 +4,37 @@ import { toast } from "react-toastify";
 import "./ReferralStatistics.css";
 import { FaLink, FaChartLine, FaUserCircle } from "react-icons/fa";
 
+const MODES = {
+  seeker: {
+    label: "Seeker Referrals",
+    endpoint: "/api/admin-referral-statistics",
+    nameLabel: "Name",
+    searchPlaceholder: "Search by referrer name, email, or code...",
+    referralsColumnLabel: "SEEKER Referrals",
+    referredListKey: "referred_seekers",
+    referredNameLabel: "Seeker Name",
+    referredEmptyMessage: "No referred seekers yet",
+    viewButtonTitle: "View referred seekers",
+    loadingMessage: "Loading referral statistics...",
+    errorMessage: "Failed to load referral statistics",
+  },
+  recruiter: {
+    label: "Recruiter Referrals",
+    endpoint: "/api/admin-recruiter-referral-statistics",
+    nameLabel: "School Name",
+    searchPlaceholder: "Search by school name, email, or code...",
+    referralsColumnLabel: "RECRUITER Referrals",
+    referredListKey: "referred_recruiters",
+    referredNameLabel: "School Name",
+    referredEmptyMessage: "No referred recruiters yet",
+    viewButtonTitle: "View referred recruiters",
+    loadingMessage: "Loading recruiter referral statistics...",
+    errorMessage: "Failed to load recruiter referral statistics",
+  },
+};
+
 const ReferralStatistics = () => {
+  const [mode, setMode] = useState("seeker");
   const [statistics, setStatistics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,17 +44,23 @@ const ReferralStatistics = () => {
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const ITEMS_PER_PAGE = 10;
+  const config = MODES[mode];
 
   useEffect(() => {
-    fetchReferralStatistics();
-  }, []);
+    setStatistics(null);
+    setPagination(null);
+    setSearchTerm("");
+    setSelectedReferrer(null);
+    fetchReferralStatistics(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
 
   const fetchReferralStatistics = async (page = 1) => {
     try {
       setLoading(true);
       const offset = (page - 1) * ITEMS_PER_PAGE;
       const response = await axios.get(
-        `${API_BASE_URL}/api/admin-referral-statistics?limit=${ITEMS_PER_PAGE}&offset=${offset}`
+        `${API_BASE_URL}${config.endpoint}?limit=${ITEMS_PER_PAGE}&offset=${offset}`
       );
 
       if (response.data.status === "Success") {
@@ -34,7 +70,7 @@ const ReferralStatistics = () => {
       }
     } catch (error) {
       console.error("Error fetching referral statistics:", error);
-      toast.error("Failed to load referral statistics");
+      toast.error(config.errorMessage);
     } finally {
       setLoading(false);
     }
@@ -89,13 +125,9 @@ const ReferralStatistics = () => {
     });
   };
 
-  if (loading) {
-    return (
-      <div className="referral-container">
-        <p className="loading">Loading referral statistics...</p>
-      </div>
-    );
-  }
+  const referredList = selectedReferrer
+    ? selectedReferrer[config.referredListKey] || []
+    : [];
 
   return (
     <div className="referral-container">
@@ -105,133 +137,152 @@ const ReferralStatistics = () => {
         <p className="subtitle">Track who referred whom in your network</p>
       </div>
 
-      {/* Stats Cards */}
-      {statistics && (
-        <div className="stats-cards">
-          <div className="stat-card">
-            <div className="stat-icon">
-              <FaLink />
-            </div>
-            <div className="stat-content">
-              <p className="stat-label">Total Referrals</p>
-              <p className="stat-value">{statistics.total_referrals}</p>
-            </div>
-          </div>
-
-          <div className="stat-card">
-            <div className="stat-icon">
-              <FaChartLine />
-            </div>
-            <div className="stat-content">
-              <p className="stat-label">Conversion Rate</p>
-              <p className="stat-value">{calculateConversionRate()}%</p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Search Section */}
-      <div className="search-section">
-        <input
-          type="text"
-          placeholder="Search by referrer name, email, or code..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        <p className="search-count">
-          {filteredReferrers.length} of{" "}
-          {statistics?.referral_network.length || 0}
-        </p>
+      {/* Seeker / Recruiter Tabs */}
+      <div className="referral-tabs">
+        {Object.keys(MODES).map((key) => (
+          <button
+            key={key}
+            className={`referral-tab-btn ${mode === key ? "active" : ""}`}
+            onClick={() => setMode(key)}
+          >
+            {MODES[key].label}
+          </button>
+        ))}
       </div>
 
-      {/* Pagination Controls */}
-      {statistics && (
-        <div className="pagination-section">
-          <span className="pagination-range">
-            {pagination ? getDisplayRange() : "Loading..."}
-          </span>
-          <div className="pagination-buttons">
-            <button
-              className="pagination-btn"
-              onClick={handlePreviousPage}
-              disabled={!pagination || currentPage === 1}
-              title="Previous page"
-            >
-              ❮
-            </button>
-            <button
-              className="pagination-btn"
-              onClick={handleNextPage}
-              disabled={!pagination || currentPage === pagination.total_pages}
-              title="Next page"
-            >
-              ❯
-            </button>
-          </div>
-        </div>
-      )}
+      {loading ? (
+        <p className="loading">{config.loadingMessage}</p>
+      ) : (
+        <>
+          {/* Stats Cards */}
+          {statistics && (
+            <div className="stats-cards">
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <FaLink />
+                </div>
+                <div className="stat-content">
+                  <p className="stat-label">Total Referrals</p>
+                  <p className="stat-value">{statistics.total_referrals}</p>
+                </div>
+              </div>
 
-      {/* Referral Table */}
-      <div className="referral-table-section">
-        <h2>Referral Details</h2>
-        {filteredReferrers.length === 0 ? (
-          <p className="empty-state">No referrers found</p>
-        ) : (
-          <div className="referral-table-wrapper">
-            <table className="referral-table">
-              <thead>
-                <tr>
-                  <th>No.</th>
-                  <th></th>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>Referral Code</th>
-                  <th>SEEKER Referrals</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredReferrers.map((referrer, index) => (
-                  <tr key={referrer.referrer_id} className="referrer-row">
-                    <td className="number-cell">{index + 1}</td>
-                    <td className="avatar-cell">
-                      {referrer.referrer_profile_img ? (
-                        <img
-                          src={referrer.referrer_profile_img}
-                          alt={referrer.referrer_name}
-                          className="avatar"
-                        />
-                      ) : (
-                        <FaUserCircle className="avatar-icon" />
-                      )}
-                    </td>
-                    <td className="name-cell referrer-name">
-                      {referrer.referrer_name}
-                    </td>
-                    <td className="phone-cell">{referrer.referrer_phone}</td>
-                    <td className="code-cell">
-                      <code className="code-badge">
-                        {referrer.referrer_code}
-                      </code>
-                    </td>
-                    <td className="count-cell">{referrer.total_referred}</td>
-                    <td className="action-cell">
-                      <button
-                        className="view-btn"
-                        onClick={() => setSelectedReferrer(referrer)}
-                        title="View referred seekers"
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <FaChartLine />
+                </div>
+                <div className="stat-content">
+                  <p className="stat-label">Conversion Rate</p>
+                  <p className="stat-value">{calculateConversionRate()}%</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Search Section */}
+          <div className="search-section">
+            <input
+              type="text"
+              placeholder={config.searchPlaceholder}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <p className="search-count">
+              {filteredReferrers.length} of{" "}
+              {statistics?.referral_network.length || 0}
+            </p>
           </div>
-        )}
-      </div>
+
+          {/* Pagination Controls */}
+          {statistics && (
+            <div className="pagination-section">
+              <span className="pagination-range">
+                {pagination ? getDisplayRange() : "Loading..."}
+              </span>
+              <div className="pagination-buttons">
+                <button
+                  className="pagination-btn"
+                  onClick={handlePreviousPage}
+                  disabled={!pagination || currentPage === 1}
+                  title="Previous page"
+                >
+                  ❮
+                </button>
+                <button
+                  className="pagination-btn"
+                  onClick={handleNextPage}
+                  disabled={!pagination || currentPage === pagination.total_pages}
+                  title="Next page"
+                >
+                  ❯
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Referral Table */}
+          <div className="referral-table-section">
+            <h2>Referral Details</h2>
+            {filteredReferrers.length === 0 ? (
+              <p className="empty-state">No referrers found</p>
+            ) : (
+              <div className="referral-table-wrapper">
+                <table className="referral-table">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th></th>
+                      <th>{config.nameLabel}</th>
+                      <th>Phone</th>
+                      <th>Referral Code</th>
+                      <th>{config.referralsColumnLabel}</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredReferrers.map((referrer, index) => (
+                      <tr key={referrer.referrer_id} className="referrer-row">
+                        <td className="number-cell">{index + 1}</td>
+                        <td className="avatar-cell">
+                          {referrer.referrer_profile_img ? (
+                            <img
+                              src={referrer.referrer_profile_img}
+                              alt={referrer.referrer_name}
+                              className="avatar"
+                            />
+                          ) : (
+                            <FaUserCircle className="avatar-icon" />
+                          )}
+                        </td>
+                        <td className="name-cell referrer-name">
+                          {referrer.referrer_name}
+                        </td>
+                        <td className="phone-cell">{referrer.referrer_phone}</td>
+                        <td className="code-cell">
+                          <code className="code-badge">
+                            {referrer.referrer_code}
+                          </code>
+                        </td>
+                        <td className="count-cell">{referrer.total_referred}</td>
+                        <td className="action-cell">
+                          <button
+                            className="view-btn"
+                            onClick={() => setSelectedReferrer(referrer)}
+                            title={config.viewButtonTitle}
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
       {/* Referrer Details Modal */}
       {selectedReferrer && (
@@ -271,10 +322,10 @@ const ReferralStatistics = () => {
             </div>
             <div className="modal-body">
               <h4 className="seekers-title">
-                Referred Seekers ({selectedReferrer.referred_seekers.length})
+                {config.referredNameLabel === "School Name" ? "Referred Recruiters" : "Referred Seekers"} ({referredList.length})
               </h4>
-              {selectedReferrer.referred_seekers.length === 0 ? (
-                <p className="empty-message">No referred seekers yet</p>
+              {referredList.length === 0 ? (
+                <p className="empty-message">{config.referredEmptyMessage}</p>
               ) : (
                 <div className="seekers-table-container">
                   <table className="seekers-modal-table">
@@ -282,43 +333,47 @@ const ReferralStatistics = () => {
                       <tr>
                         <th>No.</th>
                         <th></th>
-                        <th>Seeker Name</th>
+                        <th>{config.referredNameLabel}</th>
                         <th>Phone</th>
                         <th>Code</th>
                         <th>Joined Date</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedReferrer.referred_seekers.map((seeker, index) => (
-                        <tr key={seeker.seeker_id}>
-                          <td className="number-cell">{index + 1}</td>
-                          <td className="avatar-cell">
-                            {seeker.seeker_profile_img ? (
-                              <img
-                                src={seeker.seeker_profile_img}
-                                alt={seeker.seeker_name}
-                                className="avatar"
-                              />
-                            ) : (
-                              <FaUserCircle className="avatar-icon" />
-                            )}
-                          </td>
-                          <td className="seeker-name">{seeker.seeker_name}</td>
-                          <td className="seeker-phone">
-                            {seeker.referrer_phone}
-                          </td>
-                          <td className="seeker-code">
-                            <code className="code-badge">
-                              {seeker.seeker_code}
-                            </code>
-                          </td>
-                          <td className="seeker-date">
-                            <span className="date-badge">
-                              {formatDate(seeker.referred_date)}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
+                      {referredList.map((item, index) => {
+                        const id = item.seeker_id ?? item.recruiter_id;
+                        const name = item.seeker_name ?? item.recruiter_name;
+                        const code = item.seeker_code ?? item.recruiter_code;
+                        const profileImg =
+                          item.seeker_profile_img ?? item.recruiter_profile_img;
+
+                        return (
+                          <tr key={id}>
+                            <td className="number-cell">{index + 1}</td>
+                            <td className="avatar-cell">
+                              {profileImg ? (
+                                <img
+                                  src={profileImg}
+                                  alt={name}
+                                  className="avatar"
+                                />
+                              ) : (
+                                <FaUserCircle className="avatar-icon" />
+                              )}
+                            </td>
+                            <td className="seeker-name">{name}</td>
+                            <td className="seeker-phone">{item.referrer_phone}</td>
+                            <td className="seeker-code">
+                              <code className="code-badge">{code}</code>
+                            </td>
+                            <td className="seeker-date">
+                              <span className="date-badge">
+                                {formatDate(item.referred_date)}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
