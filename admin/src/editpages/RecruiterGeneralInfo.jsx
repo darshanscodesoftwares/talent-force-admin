@@ -20,9 +20,11 @@ export default function RecruiterGeneralInfo() {
   // const { toggleBlockRecruiter, blockRecruitersList } = useContext(
   //   RecruiterProfileContext
   // );
-  const { toggleBlockRecruiter, toggleVerifyRecruiter, recruiters: formattedRecruiters } = useContext(
-    RecruiterProfileContext
-  );
+  const {
+    toggleBlockRecruiter,
+    toggleVerifyRecruiter,
+    recruiters: formattedRecruiters,
+  } = useContext(RecruiterProfileContext);
 
   if (loading) return <RecruiterProfileLoader />;
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
@@ -57,11 +59,15 @@ export default function RecruiterGeneralInfo() {
     if (filterType === "total_job_posts" && job_posts.length > 0) {
       selectedJobData = job_posts[0];
     } else if (filterType === "open_job_posts") {
-      selectedJobData = job_posts.find(job => job.current_status === "Active") || job_posts[0];
+      selectedJobData =
+        job_posts.find((job) => job.current_status === "Active") ||
+        job_posts[0];
     } else if (filterType === "total_applications") {
-      selectedJobData = job_posts.find(job => job.applicants_count > 0) || job_posts[0];
+      selectedJobData =
+        job_posts.find((job) => job.applicants_count > 0) || job_posts[0];
     } else if (filterType === "selected_candidates") {
-      selectedJobData = job_posts.find(job => job.selected_count > 0) || job_posts[0];
+      selectedJobData =
+        job_posts.find((job) => job.selected_count > 0) || job_posts[0];
     } else if (filterType === "recommend_invite_ai" && job_posts.length > 0) {
       selectedJobData = job_posts[0];
     }
@@ -263,31 +269,51 @@ export default function RecruiterGeneralInfo() {
 
         {/* Detail Cards */}
         <div className="detailCard-wrap">
-          <div className="detail-card" onClick={() => handleStatCardClick("total_job_posts")} style={{ cursor: "pointer" }}>
+          <div
+            className="detail-card"
+            onClick={() => handleStatCardClick("total_job_posts")}
+            style={{ cursor: "pointer" }}
+          >
             <h2>{stats?.total_job_posts || 0}</h2>
             <span>Total</span>
             <span>Job Posts</span>
           </div>
 
-          <div className="detail-card" onClick={() => handleStatCardClick("open_job_posts")} style={{ cursor: "pointer" }}>
+          <div
+            className="detail-card"
+            onClick={() => handleStatCardClick("open_job_posts")}
+            style={{ cursor: "pointer" }}
+          >
             <h2>{stats?.open_job_posts || 0}</h2>
             <span>Open</span>
             <span>Job Posts</span>
           </div>
 
-          <div className="detail-card" onClick={() => handleStatCardClick("total_applications")} style={{ cursor: "pointer" }}>
+          <div
+            className="detail-card"
+            onClick={() => handleStatCardClick("total_applications")}
+            style={{ cursor: "pointer" }}
+          >
             <h2>{stats?.total_applications || 0}</h2>
             <span>Total</span>
             <span>Applicants</span>
           </div>
 
-          <div className="detail-card" onClick={() => handleStatCardClick("selected_candidates")} style={{ cursor: "pointer" }}>
+          <div
+            className="detail-card"
+            onClick={() => handleStatCardClick("selected_candidates")}
+            style={{ cursor: "pointer" }}
+          >
             <h2>{stats?.selected_candidates || 0}</h2>
             <span>Selected</span>
             <span>Candidates</span>
           </div>
 
-          <div className="detail-card" onClick={() => handleStatCardClick("recommend_invite_ai")} style={{ cursor: "pointer" }}>
+          <div
+            className="detail-card"
+            onClick={() => handleStatCardClick("recommend_invite_ai")}
+            style={{ cursor: "pointer" }}
+          >
             <h2>{job_posts?.length || 0}</h2>
             <span>Recommend</span>
             <span>Invite-AI</span>
@@ -322,7 +348,7 @@ export default function RecruiterGeneralInfo() {
                   >
                     <td>{job.job_role}</td>
                     <td>{job.subject}</td>
-                 
+
                     <td>{job.pincode?.pincode || "N/A"}</td>
                     <td>{job.post_date}</td>
                     <td>{job.applicants_count}</td>
@@ -369,10 +395,20 @@ export default function RecruiterGeneralInfo() {
             <div className="modal-body">
               <div className="applicants-section">
                 <h3>Applied Users ({selectedJob.applicants_count})</h3>
-                {selectedJob.applied_users && selectedJob.applied_users.length > 0 ? (
+                {selectedJob.applied_users &&
+                selectedJob.applied_users.length > 0 ? (
                   <div className="applicants-list">
                     {selectedJob.applied_users.map((applicant) => (
-                      <div key={applicant.application_id} className="applicant-card" onClick={() => navigate(`/dashboard/seeker-profile/${applicant.user_id}`)} style={{ cursor: "pointer" }}>
+                      <div
+                        key={applicant.application_id}
+                        className="applicant-card"
+                        onClick={() =>
+                          navigate(
+                            `/dashboard/seeker-profile/${applicant.user_id}`
+                          )
+                        }
+                        style={{ cursor: "pointer" }}
+                      >
                         <div className="applicant-profile">
                           {applicant.profile_img ? (
                             <img
@@ -397,9 +433,13 @@ export default function RecruiterGeneralInfo() {
                               <MdPhone className="contact-icon" />
                               {applicant.phone}
                             </p>
-                            <p className="applied-date">Applied: {applicant.applied_date}</p>
+                            <p className="applied-date">
+                              Applied: {applicant.applied_date}
+                            </p>
                           </div>
-                          <span className={`status-badge ${applicant.status?.toLowerCase()}`}>
+                          <span
+                            className={`status-badge ${applicant.status?.toLowerCase()}`}
+                          >
                             {applicant.status}
                           </span>
                         </div>
