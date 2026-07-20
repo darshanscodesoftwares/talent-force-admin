@@ -57,6 +57,7 @@ function Sidebar({ collapsed, onToggle }) {
       if (response.ok) {
         toast.success(data.message || "Logged out successfully!");
         localStorage.removeItem("authToken");
+        localStorage.removeItem("authTokenIssuedAt");
 
         setTimeout(() => {
           setShowLogoutModal(false);

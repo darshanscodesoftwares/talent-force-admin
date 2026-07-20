@@ -42,6 +42,8 @@ const Login = () => {
 
         // Store session marker (backend does not issue a real token)
         localStorage.setItem("authToken", data.token || data.data?.id || "admin-session");
+        // Track when the session started, so it can be auto-expired after 1 hour
+        localStorage.setItem("authTokenIssuedAt", String(Date.now()));
 
         // Delay a bit before navigating
         setTimeout(() => navigate("/dashboard"), 1800);
