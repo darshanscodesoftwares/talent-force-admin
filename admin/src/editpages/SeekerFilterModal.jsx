@@ -15,6 +15,21 @@ export default function SeekerFilterModal({
   const [taluks, setTaluks] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // 🔹 Capitalize first letter (e.g. "receptionist" -> "Receptionist")
+  const capitalizeFirst = (value) =>
+    value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+
+  // 🔹 Dedup values that only differ by case/whitespace (e.g. "Receptionist" vs "receptionist")
+  const dedupeCaseInsensitive = (values) => {
+    const seen = new Map();
+    values.forEach((value) => {
+      const trimmed = capitalizeFirst(value.trim());
+      const key = trimmed.toLowerCase();
+      if (!seen.has(key)) seen.set(key, trimmed);
+    });
+    return [...seen.values()];
+  };
+
   // 🔹 Local state for modal selections
   const [localFilters, setLocalFilters] = useState({
     specialization: filters.specialization || "",
@@ -36,23 +51,21 @@ export default function SeekerFilterModal({
         );
         const users = response.data?.users || [];
 
-        const specs = [
-          ...new Set(
-            users.map((u) => u.course?.specialization).filter(Boolean)
-          ),
-        ];
+        const specs = dedupeCaseInsensitive(
+          users.map((u) => u.course?.specialization).filter(Boolean)
+        );
         const pins = [
           ...new Set(users.map((u) => u.address?.pincode).filter(Boolean)),
         ];
         const stats = [
           ...new Set(users.flatMap((u) => u.status || []).filter(Boolean)),
         ];
-        const dists = [
-          ...new Set(users.map((u) => u.address?.area).filter(Boolean)),
-        ];
-        const tlks = [
-          ...new Set(users.map((u) => u.address?.city).filter(Boolean)),
-        ];
+        const dists = dedupeCaseInsensitive(
+          users.map((u) => u.address?.area).filter(Boolean)
+        );
+        const tlks = dedupeCaseInsensitive(
+          users.map((u) => u.address?.city).filter(Boolean)
+        );
 
         setSpecializations(specs);
         setPincodes(pins);

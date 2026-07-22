@@ -12,7 +12,7 @@ export default function CustomSelect({ value, onChange, options, placeholder = "
   const selectedLabel = options.find((opt) => opt.value === value)?.label || placeholder;
 
   const filteredOptions = options.filter((opt) =>
-    opt.label.toLowerCase().includes(searchTerm.toLowerCase())
+    opt.label.toLowerCase().startsWith(searchTerm.toLowerCase())
   );
 
   const updatePosition = () => {
