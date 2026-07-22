@@ -14,6 +14,7 @@ import CompartmentLevelProvider from "./UseContexts/RecruiterUseContext/JobPostC
 import EducationQualificationProvider from "./UseContexts/RecruiterUseContext/JobPostContext/EducationQualificationContext";
 import SeekerEduQualificationProvider from "./UseContexts/SeekerUseContext/SeekerEduQualificationContext";
 import ExperienceProvider from "./UseContexts/SeekerUseContext/ExperienceContext";
+import QualificationSpecificationProvider from "./UseContexts/SeekerUseContext/QualificationSpecificationContext";
 import ExpectedSalaryProvider from "./UseContexts/SeekerUseContext/ExpectedSalaryContext";
 import SeekerProfileProvider from "./UseContexts/SeekerUseContext/SeekerProfileContent";
 import GeneralInformationProvider from "./UseContexts/SeekerUseContext/GeneralInformationContext";
@@ -65,6 +66,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                                     <SeekerProfileProvider>
                                       <ExpectedSalaryProvider>
                                         <ExperienceProvider>
+                                          <QualificationSpecificationProvider>
                                           <SeekerEduQualificationProvider>
                                             <EducationQualificationProvider>
                                               <CompartmentLevelProvider>
@@ -88,6 +90,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                                               </CompartmentLevelProvider>
                                             </EducationQualificationProvider>
                                           </SeekerEduQualificationProvider>
+                                          </QualificationSpecificationProvider>
                                         </ExperienceProvider>
                                       </ExpectedSalaryProvider>
                                     </SeekerProfileProvider>

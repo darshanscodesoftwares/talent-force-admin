@@ -37,6 +37,7 @@ import Subject from "./editpages/Subject.jsx";
 import ExpectedSalary from "./editpages/ExpectedSalary.jsx";
 import Languages from "./editpages/Languages.jsx";
 import Proficiency from "./editpages/Languages.jsx";
+import QualificationSpecification from "./editpages/QualificationSpecification.jsx";
 
 // profiles
 import GeneralInformation from "./editpages/GeneralInformation.jsx";
@@ -198,6 +199,10 @@ const App = () => {
             <Route
               path="seeker-search-filter/languages"
               element={<Proficiency />}
+            />
+            <Route
+              path="seeker-search-filter/qualification-specification"
+              element={<QualificationSpecification />}
             />
 
             {/* recruiter filters */}
