@@ -69,13 +69,13 @@ export default function QualificationSpecification() {
               className="qualificationspecfilter-title"
               onClick={() => navigate("/dashboard/seeker-search-filter")}
             >
-              <IoChevronBackOutline /> Qualification Specification List
+              <IoChevronBackOutline /> Qualification Specialization List
             </h2>
             <button
               className="qualificationspecfilter-add-btn"
               onClick={() => setIsAddModalOpen(true)}
             >
-              Add Specification
+              Add Specialization
             </button>
           </div>
 
@@ -86,7 +86,7 @@ export default function QualificationSpecification() {
             <table className="qualificationspecfilter-table">
               <thead>
                 <tr>
-                  <th>Specification</th>
+                  <th>Specialization</th>
                   <th>Posted on</th>
                   <th>Updated on</th>
                   <th>Action</th>

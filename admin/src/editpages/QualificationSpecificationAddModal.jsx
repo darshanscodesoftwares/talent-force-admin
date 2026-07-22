@@ -18,7 +18,7 @@ export default function QualificationSpecificationAddModal({ isOpen, onClose, on
   return (
     <div className="qualificationspec-modal-overlay">
       <div className="qualificationspec-modal-content">
-        <h3>Add Qualification Specification</h3>
+        <h3>Add Qualification Specialization</h3>
         <form onSubmit={handleSubmit}>
           <input
             type="text"

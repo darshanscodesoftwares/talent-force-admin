@@ -24,7 +24,7 @@ export default function QualificationSpecificationEditModal({
   return (
     <div className="qualificationspec-modal-overlay">
       <div className="qualificationspec-modal-content">
-        <h3>Edit Qualification Specification</h3>
+        <h3>Edit Qualification Specialization</h3>
         <form onSubmit={handleSubmit}>
           <input
             type="text"

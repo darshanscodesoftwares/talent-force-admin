@@ -443,7 +443,7 @@ export const seekerFilterRoutes = {
   "Location": "/dashboard/seeker-search-filter/location",
   "Expected Salary": "/dashboard/seeker-search-filter/salary",
   "Languages": "/dashboard/seeker-search-filter/Languages",
-  "Qualification Specification": "/dashboard/seeker-search-filter/qualification-specification",
+  "Qualification Specialization": "/dashboard/seeker-search-filter/qualification-specification",
 };
 
 // main search list
@@ -487,7 +487,7 @@ export const seekerSearchPages = [
   },
   {
     id: 10,
-    specifications: "Qualification Specification",
+    specifications: "Qualification Specialization",
     postedOn: "21 July 2026",
     createdBy: "Admin",
   },
