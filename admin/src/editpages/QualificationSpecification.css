@@ -148,6 +148,12 @@
   border-color: #007bff;
 }
 
+.pagination-ellipsis {
+  padding: 0 4px;
+  color: #888;
+  align-self: center;
+}
+
 /* Modal */
 .qualificationspec-modal-overlay {
   position: fixed;
