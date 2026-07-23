@@ -15,9 +15,12 @@ export default function SeekerFilterModal({
   const [taluks, setTaluks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Capitalize first letter (e.g. "receptionist" -> "Receptionist")
+  // 🔹 Title Case every word (e.g. "data entry operator" -> "Data Entry Operator")
   const capitalizeFirst = (value) =>
-    value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+    value
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
 
   // 🔹 Dedup values that only differ by case/whitespace (e.g. "Receptionist" vs "receptionist")
   const dedupeCaseInsensitive = (values) => {
