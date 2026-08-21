@@ -22,6 +22,7 @@ export default function SeekerProfile() {
   const seekersPerPage = 50;
   const [selectedSeekers, setSelectedSeekers] = useState([]);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const [activeCardFilter, setActiveCardFilter] = useState("all"); // "all" | "active" | "inactive"
   const [filters, setFilters] = useState({
     specialization: "",
     pincode: "",
@@ -89,9 +90,16 @@ export default function SeekerProfile() {
     allColumns.map((c) => c.key)
   );
 
+  // 🔹 Same active/inactive rule as the backend user-count query
+  const isActiveSeeker = (s) =>
+    s.status === "open_to_work" || s.status === "active";
+
   // 🔹 Apply filters
   const filteredSeekers = seekers.filter((s) => {
     return (
+      (activeCardFilter === "all" ||
+        (activeCardFilter === "active" && isActiveSeeker(s)) ||
+        (activeCardFilter === "inactive" && !isActiveSeeker(s))) &&
       (!filters.specialization ||
         s.specialization === filters.specialization) &&
       (!filters.pincode || s.pincode === filters.pincode) &&
@@ -413,10 +421,20 @@ export default function SeekerProfile() {
         <div className="seekerprofile-small-cards">
           <div className="seekerprofile-cards-container">
             {/* ✅ Card 1: Total Users */}
-            <div className="seekerprofile-card">
+            <div
+              className={`seekerprofile-card${
+                activeCardFilter === "all" ? " selected" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              onClick={() => {
+                setActiveCardFilter("all");
+                setCurrentPage(1);
+              }}
+            >
               <div className="seekerprofile-card-body">
                 <div className="seekerprofile-card-left">
-                  <div className="seekerprofile-card-icon">
+                  <div className="seekerprofile-card-icon total">
                     <IoIosPeople />
                   </div>
                   <h4>Total Users</h4>
@@ -426,10 +444,22 @@ export default function SeekerProfile() {
             </div>
 
             {/* ✅ Card 2: Active Users */}
-            <div className="seekerprofile-card">
+            <div
+              className={`seekerprofile-card${
+                activeCardFilter === "active" ? " selected" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              onClick={() => {
+                setActiveCardFilter((prev) =>
+                  prev === "active" ? "all" : "active"
+                );
+                setCurrentPage(1);
+              }}
+            >
               <div className="seekerprofile-card-body">
                 <div className="seekerprofile-card-left">
-                  <div className="seekerprofile-card-icon">
+                  <div className="seekerprofile-card-icon active">
                     <FaUserCheck />
                   </div>
                   <h4>Active Users</h4>
@@ -441,10 +471,22 @@ export default function SeekerProfile() {
             </div>
 
             {/* ✅ Card 3: Inactive Users */}
-            <div className="seekerprofile-card">
+            <div
+              className={`seekerprofile-card${
+                activeCardFilter === "inactive" ? " selected" : ""
+              }`}
+              role="button"
+              tabIndex={0}
+              onClick={() => {
+                setActiveCardFilter((prev) =>
+                  prev === "inactive" ? "all" : "inactive"
+                );
+                setCurrentPage(1);
+              }}
+            >
               <div className="seekerprofile-card-body">
                 <div className="seekerprofile-card-left">
-                  <div className="seekerprofile-card-icon">
+                  <div className="seekerprofile-card-icon inactive">
                     <FaUserClock />
                   </div>
                   <h4>Inactive Users</h4>

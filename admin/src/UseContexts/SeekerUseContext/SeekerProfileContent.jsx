@@ -24,8 +24,7 @@ export const SeekerProfileProvider = ({ children }) => {
 
       const data = await res.json();
       if (data.status === "success") {
-        // const seekerItems = data.users.map((user) => ({
-        const seekerItems = data.users.filter((user) => user.profile?.name).map((user) => ({
+        const seekerItems = data.users.map((user) => ({
           id: user.user_id,
           name: user.profile?.name || "",
           phone: user.profile?.phone || "",
