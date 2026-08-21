@@ -22,7 +22,7 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "https://api.hireezee.co.in/api/admin-login",
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin-login`,
         {
           method: "POST",
           headers: {

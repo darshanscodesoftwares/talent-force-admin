@@ -38,11 +38,18 @@
   border-radius: 12px;
   padding: 30px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
 }
 
 .seekerprofile-card:hover {
   transform: translateY(-3px);
+}
+
+.seekerprofile-card.selected {
+  border-color: #ef6a37;
+  box-shadow: 0 4px 12px rgba(239, 106, 55, 0.2);
 }
 
 .seekerprofile-card-body {
