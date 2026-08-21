@@ -113,7 +113,6 @@ export default function GeneralInformation() {
                 onClick={() =>
                   toggleAadhaarVerified(profile.id, profile.aadhaarVerified)
                 }
-                disabled={!profile.aadhaarNumber}
               >
                 {profile.aadhaarVerified ? "Verified" : "Unverified"}
               </button>
