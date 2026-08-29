@@ -100,8 +100,12 @@ export default function SeekerProfile() {
       (activeCardFilter === "all" ||
         (activeCardFilter === "active" && isActiveSeeker(s)) ||
         (activeCardFilter === "inactive" && !isActiveSeeker(s))) &&
+      // ✅ Specialization: partial match (e.g. "Tamil" also matches "Pgt Tamil", "Tamil Literature")
       (!filters.specialization ||
-        s.specialization === filters.specialization) &&
+        (s.specialization &&
+          s.specialization
+            .toLowerCase()
+            .includes(filters.specialization.toLowerCase()))) &&
       (!filters.pincode || s.pincode === filters.pincode) &&
       (!filters.status || s.status === filters.status) &&
       (!filters.district || s.area === filters.district) &&

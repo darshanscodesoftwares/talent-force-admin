@@ -75,7 +75,13 @@ export default function RecruiterProfile() {
 
   const uniquePincodes = [...new Set(recruiters.map((r) => r.pincode).filter((v) => v && v !== "N/A"))];
   const uniqueStates = [...new Set(recruiters.map((r) => r.recruiterAddress?.state).filter(Boolean))];
-  const uniqueDistricts = [...new Set(recruiters.map((r) => r.recruiterAddress?.city).filter(Boolean))];
+  // District dropdown lists every unique district (city) AND every unique taluk (area) together, in one flat list.
+  const uniqueDistrictOrTaluk = [
+    ...new Set([
+      ...recruiters.map((r) => r.recruiterAddress?.city).filter(Boolean),
+      ...recruiters.map((r) => r.recruiterAddress?.area).filter(Boolean),
+    ]),
+  ];
   const uniqueTaluks = [...new Set(recruiters.map((r) => r.recruiterAddress?.area).filter(Boolean))];
 
   const filteredRecruiters = recruiters.filter((r) => {
@@ -90,7 +96,9 @@ export default function RecruiterProfile() {
         r.membership?.toLowerCase() === appliedFilters.membership.toLowerCase()) &&
       (!appliedFilters.pincode || r.pincode === appliedFilters.pincode) &&
       (!appliedFilters.state || r.recruiterAddress?.state === appliedFilters.state) &&
-      (!appliedFilters.district || r.recruiterAddress?.city === appliedFilters.district) &&
+      (!appliedFilters.district ||
+        r.recruiterAddress?.city === appliedFilters.district ||
+        r.recruiterAddress?.area === appliedFilters.district) &&
       (!appliedFilters.taluk || r.recruiterAddress?.area === appliedFilters.taluk) &&
       (!appliedFilters.jobStatus ||
         (appliedFilters.jobStatus === "active"
@@ -863,12 +871,11 @@ export default function RecruiterProfile() {
                   }
                   options={[
                     { value: "", label: "All" },
-                    ...uniqueDistricts.map((d) => ({ value: d, label: d })),
+                    ...uniqueDistrictOrTaluk.map((d) => ({ value: d, label: d })),
                   ]}
                   placeholder="All"
                 />
               </div>
-
               <div className="recruiter-search-field-group">
                 <label className="recruiter-search-label mt-2">Taluk</label>
                 <CustomSelect
