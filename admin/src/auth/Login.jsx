@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
+import "./ForgotPassword.css";
 import { CiAt } from "react-icons/ci";
 import { GoLock } from "react-icons/go";
 import { PiEyeBold, PiEyeSlashBold } from "react-icons/pi";
@@ -111,6 +112,12 @@ const Login = () => {
                     {showPassword ? <PiEyeSlashBold /> : <PiEyeBold />}
                   </span>
                 </div>
+              </div>
+
+              <div className="forgot-row">
+                <Link to="/forgot-password" className="forgot-link">
+                  Forgot password?
+                </Link>
               </div>
 
               <button type="submit" className="login-btn" disabled={loading}>

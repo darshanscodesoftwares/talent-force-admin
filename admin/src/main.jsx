@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import HomeBannerProvider from "./UseContexts/SeekerUseContext/HomeBannerContext";
+import { ForgotPasswordProvider } from "./UseContexts/AuthUseContext/ForgotPasswordContext";
 import SubjectProvider from "./UseContexts/RecruiterUseContext/JobPostContext/SubjectContext";
 import JobRoleProvider from "./UseContexts/RecruiterUseContext/JobPostContext/JobRoleContext";
 import WorkTypeProvider from "./UseContexts/RecruiterUseContext/JobPostContext/WorkTypeContext";
@@ -44,76 +45,78 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <PartnerProvider>
     <PartnerReferralStatisticsProvider>
       <SurveyQuestionProvider>
-      <SurveyAnalyticsProvider>
-        <RecruiterSubscriptionProvider>
-          <RazorpayInvoiceDetailsContext>
-        <SeekerReportAnuseContext>
-        <RecruiterReportAbuseContext>
-        <SubscribedRecruiterContext>
-          <RecruiterPrivacyPolicyContext>
-            <RecruiterTermsConditionContext>
-              <SeekerPrivacyPolicyContext>
-                <SeekerTermsConditionContext>
-                  <HomeBannerRecruiterProvider>
-                    <DashboardMetricProvider>
-                      <DashboardGraphProvider>
-                        <SubscriptionPlanProvider>
-                          <RecruiterJobPostsProvider>
-                            <RecruiterProfileProvider>
-                              <ProficiencyProvider>
-                                <LanguageProvider>
-                                  <GeneralInformationProvider>
-                                    <SeekerProfileProvider>
-                                      <ExpectedSalaryProvider>
-                                        <ExperienceProvider>
-                                          <QualificationSpecificationProvider>
-                                          <SeekerEduQualificationProvider>
-                                            <EducationQualificationProvider>
-                                              <CompartmentLevelProvider>
-                                                <TeachingQualificationProvider>
-                                                <JobRoleCategoriesProvider>
-                                                  <HighestEducationProvider>
-                                                    <EndDateProvider>
-                                                      <WorkTypeProvider>
-                                                        <SubjectProvider>
-                                                          <JobRoleProvider>
-                                                            <HomeBannerProvider>
-                                                              <App />
-                                                            </HomeBannerProvider>
-                                                          </JobRoleProvider>
-                                                        </SubjectProvider>
-                                                      </WorkTypeProvider>
-                                                    </EndDateProvider>
-                                                  </HighestEducationProvider>
-                                                </JobRoleCategoriesProvider>
-                                                </TeachingQualificationProvider>
-                                              </CompartmentLevelProvider>
-                                            </EducationQualificationProvider>
-                                          </SeekerEduQualificationProvider>
-                                          </QualificationSpecificationProvider>
-                                        </ExperienceProvider>
-                                      </ExpectedSalaryProvider>
-                                    </SeekerProfileProvider>
-                                  </GeneralInformationProvider>
-                                </LanguageProvider>
-                              </ProficiencyProvider>
-                            </RecruiterProfileProvider>
-                          </RecruiterJobPostsProvider>
-                        </SubscriptionPlanProvider>
-                      </DashboardGraphProvider>
-                    </DashboardMetricProvider>
-                  </HomeBannerRecruiterProvider>
-                </SeekerTermsConditionContext>
-              </SeekerPrivacyPolicyContext>
-            </RecruiterTermsConditionContext>
-          </RecruiterPrivacyPolicyContext>
-        </SubscribedRecruiterContext>
-        </RecruiterReportAbuseContext>
-        </SeekerReportAnuseContext>
-      </RazorpayInvoiceDetailsContext>
-        </RecruiterSubscriptionProvider>
-      </SurveyAnalyticsProvider>
-    </SurveyQuestionProvider>
+        <SurveyAnalyticsProvider>
+          <RecruiterSubscriptionProvider>
+            <RazorpayInvoiceDetailsContext>
+              <SeekerReportAnuseContext>
+                <RecruiterReportAbuseContext>
+                  <SubscribedRecruiterContext>
+                    <RecruiterPrivacyPolicyContext>
+                      <RecruiterTermsConditionContext>
+                        <SeekerPrivacyPolicyContext>
+                          <SeekerTermsConditionContext>
+                            <HomeBannerRecruiterProvider>
+                              <DashboardMetricProvider>
+                                <DashboardGraphProvider>
+                                  <SubscriptionPlanProvider>
+                                    <RecruiterJobPostsProvider>
+                                      <RecruiterProfileProvider>
+                                        <ProficiencyProvider>
+                                          <LanguageProvider>
+                                            <GeneralInformationProvider>
+                                              <SeekerProfileProvider>
+                                                <ExpectedSalaryProvider>
+                                                  <ExperienceProvider>
+                                                    <QualificationSpecificationProvider>
+                                                      <SeekerEduQualificationProvider>
+                                                        <EducationQualificationProvider>
+                                                          <CompartmentLevelProvider>
+                                                            <TeachingQualificationProvider>
+                                                              <JobRoleCategoriesProvider>
+                                                                <HighestEducationProvider>
+                                                                  <EndDateProvider>
+                                                                    <WorkTypeProvider>
+                                                                      <SubjectProvider>
+                                                                        <JobRoleProvider>
+                                                                          <HomeBannerProvider>
+                                                                            <ForgotPasswordProvider>
+                                                                              <App />
+                                                                            </ForgotPasswordProvider>
+                                                                          </HomeBannerProvider>
+                                                                        </JobRoleProvider>
+                                                                      </SubjectProvider>
+                                                                    </WorkTypeProvider>
+                                                                  </EndDateProvider>
+                                                                </HighestEducationProvider>
+                                                              </JobRoleCategoriesProvider>
+                                                            </TeachingQualificationProvider>
+                                                          </CompartmentLevelProvider>
+                                                        </EducationQualificationProvider>
+                                                      </SeekerEduQualificationProvider>
+                                                    </QualificationSpecificationProvider>
+                                                  </ExperienceProvider>
+                                                </ExpectedSalaryProvider>
+                                              </SeekerProfileProvider>
+                                            </GeneralInformationProvider>
+                                          </LanguageProvider>
+                                        </ProficiencyProvider>
+                                      </RecruiterProfileProvider>
+                                    </RecruiterJobPostsProvider>
+                                  </SubscriptionPlanProvider>
+                                </DashboardGraphProvider>
+                              </DashboardMetricProvider>
+                            </HomeBannerRecruiterProvider>
+                          </SeekerTermsConditionContext>
+                        </SeekerPrivacyPolicyContext>
+                      </RecruiterTermsConditionContext>
+                    </RecruiterPrivacyPolicyContext>
+                  </SubscribedRecruiterContext>
+                </RecruiterReportAbuseContext>
+              </SeekerReportAnuseContext>
+            </RazorpayInvoiceDetailsContext>
+          </RecruiterSubscriptionProvider>
+        </SurveyAnalyticsProvider>
+      </SurveyQuestionProvider>
     </PartnerReferralStatisticsProvider>
   </PartnerProvider>
 );

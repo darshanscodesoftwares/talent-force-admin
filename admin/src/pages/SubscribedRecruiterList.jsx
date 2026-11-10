@@ -314,7 +314,11 @@ const SubscribedRecruiterList = () => {
                           </td>
 
                           {/* Status */}
-                          <td>{rec.plan?.status || "N/A"}</td>
+                          <td>
+                            <span className={`status-badge ${rec.plan?.status || ""}`}>
+                              {rec.plan?.status || "N/A"}
+                            </span>
+                          </td>
 
                           {/* Action */}
                           <td>

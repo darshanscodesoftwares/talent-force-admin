@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 // auth
 import Login from "/src/auth/Login";
+import ForgotPassword from "/src/auth/ForgotPassword";
 import ProtectedRoute from "/src/auth/ProtectedRoute";
 
 // layout
@@ -89,6 +90,7 @@ const App = () => {
         <Routes>
           {/* Public route */}
           <Route path="/" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* Protected routes */}
           <Route
