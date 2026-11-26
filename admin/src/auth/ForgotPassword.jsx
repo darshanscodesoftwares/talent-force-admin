@@ -10,16 +10,24 @@ import "react-toastify/dist/ReactToastify.css";
 import adminLogo from "../assets/adminlogo.png";
 import { useForgotPassword } from "../UseContexts/AuthUseContext/ForgotPasswordContext";
 
-const STEPS = ["email", "otp", "reset"];
+const STEPS = ["email", "otp", "identity", "reset"];
 const MIN_PASSWORD_LENGTH = 8;
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const { loading, sendOtp, resendOtp, verifyOtp, resetPassword } =
-    useForgotPassword();
+  const {
+    loading,
+    sendOtp,
+    resendOtp,
+    verifyOtp,
+    verifyIdentity,
+    resetPassword,
+  } = useForgotPassword();
   const [step, setStep] = useState("email");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
+  const [name, setName] = useState("");
+  const [passkey, setPasskey] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -52,10 +60,22 @@ const ForgotPassword = () => {
       setError(result.message);
       return;
     }
+    setStep("identity");
+  };
+
+  // Step 3: name and passkey must match the stored values -> new password
+  const handleIdentitySubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    const result = await verifyIdentity(email, name, passkey);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
     setStep("reset");
   };
 
-  // Step 3: new password -> back to login
+  // Step 4: new password -> back to login
   const handleResetSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -67,7 +87,13 @@ const ForgotPassword = () => {
       setError("Passwords do not match.");
       return;
     }
-    const result = await resetPassword(email, newPassword, confirmPassword);
+    const result = await resetPassword(
+      email,
+      name,
+      passkey,
+      newPassword,
+      confirmPassword
+    );
     if (!result.ok) {
       setError(result.message);
       return;
@@ -98,12 +124,16 @@ const ForgotPassword = () => {
             <h2 className="login2">
               {step === "email" && "Enter your admin email to receive an OTP"}
               {step === "otp" && "Enter the OTP sent to your email"}
+              {step === "identity" && "Enter your name and passkey"}
               {step === "reset" && "Create a new password"}
             </h2>
           </div>
 
           <div className="login-card">
-            <div className="fp-steps" aria-label={`Step ${stepIndex + 1} of 3`}>
+            <div
+              className="fp-steps"
+              aria-label={`Step ${stepIndex + 1} of ${STEPS.length}`}
+            >
               {STEPS.map((s, i) => (
                 <span
                   key={s}
@@ -178,6 +208,42 @@ const ForgotPassword = () => {
                     Resend OTP
                   </button>
                 </div>
+              </form>
+            )}
+
+            {step === "identity" && (
+              <form className="login-form" onSubmit={handleIdentitySubmit}>
+                <div className="form-group">
+                  <label>Name</label>
+                  <div className="input-wrapper">
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter your name"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Passkey</label>
+                  <div className="input-wrapper">
+                    <input
+                      type="text"
+                      value={passkey}
+                      onChange={(e) => setPasskey(e.target.value)}
+                      placeholder="Enter your passkey"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {error && <p className="fp-error">{error}</p>}
+
+                <button type="submit" className="login-btn">
+                  Continue
+                </button>
               </form>
             )}
 

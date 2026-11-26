@@ -1,3 +1,4 @@
+import axios from "axios";
 import { IoIosPeople } from "react-icons/io";
 
 import { FaSchool, FaWhatsapp } from "react-icons/fa";
@@ -24,7 +25,9 @@ export default function RecruiterProfile() {
   const [extendModalOpen, setExtendModalOpen] = useState(false);
   const [recruiterToExtend, setRecruiterToExtend] = useState(null);
   const { metrics, loadingMetrics, errorMetrics } = useDashboardMetrics();
-  const { subscriptions } = useSubscriptionPlans();
+  const { subscriptions, loading: plansLoading } = useSubscriptionPlans();
+  const [selectedPlans, setSelectedPlans] = useState({});
+  const [assigningPlans, setAssigningPlans] = useState({});
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -290,6 +293,30 @@ export default function RecruiterProfile() {
       ? `Downloaded all ${dataToExport.length} recruiters successfully`
       : `Downloaded ${dataToExport.length} recruiter(s) successfully`;
     toast.success(message);
+  };
+
+  const handleAssignPlan = async (event, recruiterId) => {
+    event.preventDefault();
+    const planId = selectedPlans[recruiterId];
+    if (!planId || assigningPlans[recruiterId]) return;
+
+    setAssigningPlans((previous) => ({ ...previous, [recruiterId]: true }));
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/admin/assign-plan-to-recruiter`,
+        { recruiter_id: recruiterId, new_plan_id: Number(planId) }
+      );
+      setSelectedPlans((previous) => ({ ...previous, [recruiterId]: "" }));
+      toast.success(data.message);
+      if (data.sms_sent === false) {
+        toast.warning("The plan is active, but the SMS could not be sent.");
+      }
+      await fetchRecruiters();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Could not assign the plan.");
+    } finally {
+      setAssigningPlans((previous) => ({ ...previous, [recruiterId]: false }));
+    }
   };
 
   const handleSoftDelete = async (id) => {
@@ -561,6 +588,7 @@ export default function RecruiterProfile() {
 
                       <th>Pincode</th>
                       <th>Membership</th>
+                      <th>Assign Plan</th>
                       <th>Extend Day</th>
                       <th>Action</th>
                     </tr>
@@ -690,6 +718,39 @@ export default function RecruiterProfile() {
                               </span>
                             );
                           })()}
+                        </td>
+
+                        <td onClick={(event) => event.stopPropagation()}>
+                          <form
+                            className="recruiterprofile-assign-plan"
+                            onSubmit={(event) => handleAssignPlan(event, recruiter.id)}
+                          >
+                            <select
+                              aria-label={`Assign plan for ${recruiter.schoolName}`}
+                              value={selectedPlans[recruiter.id] || ""}
+                              onChange={(event) => {
+                                const planId = event.target.value;
+                                setSelectedPlans((previous) => ({
+                                  ...previous,
+                                  [recruiter.id]: planId,
+                                }));
+                              }}
+                              disabled={plansLoading || assigningPlans[recruiter.id]}
+                              required
+                            >
+                              <option value="">{plansLoading ? "Loading plans…" : "Select a plan"}</option>
+                              {subscriptions.map((plan) => (
+                                <option key={plan.id} value={plan.id}>{plan.name}</option>
+                              ))}
+                            </select>
+                            <button
+                              className="extend-btn"
+                              type="submit"
+                              disabled={!selectedPlans[recruiter.id] || assigningPlans[recruiter.id]}
+                            >
+                              {assigningPlans[recruiter.id] ? "Assigning…" : "Assign"}
+                            </button>
+                          </form>
                         </td>
 
                         {/* Extend Day — Trial plan only */}

@@ -50,18 +50,34 @@ export const ForgotPasswordProvider = ({ children }) => {
 
   // Step 3: set the new password
   const resetPassword = useCallback(
-    (email, newPassword, confirmPassword) =>
+    (email, name, passkey, newPassword, confirmPassword) =>
       post("reset", {
         email,
+        name,
+        passkey,
         new_password: newPassword,
         confirm_password: confirmPassword,
       }),
     [post]
   );
 
+  // Between OTP and password: check name and passkey
+  const verifyIdentity = useCallback(
+    (email, name, passkey) =>
+      post("verify-identity", { email, name, passkey }),
+    [post]
+  );
+
   return (
     <ForgotPasswordContext.Provider
-      value={{ loading, sendOtp, resendOtp, verifyOtp, resetPassword }}
+      value={{
+        loading,
+        sendOtp,
+        resendOtp,
+        verifyOtp,
+        verifyIdentity,
+        resetPassword,
+      }}
     >
       {children}
     </ForgotPasswordContext.Provider>

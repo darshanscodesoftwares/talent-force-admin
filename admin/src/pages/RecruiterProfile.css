@@ -685,3 +685,23 @@
 .whatsapp-phone-link:active {
   transform: translateY(0);
 }
+
+.recruiterprofile-assign-plan {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.recruiterprofile-assign-plan select {
+  min-width: 120px;
+  padding: 6px 8px;
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.recruiterprofile-assign-plan button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}

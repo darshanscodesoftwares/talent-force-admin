@@ -34,6 +34,15 @@ export default function GeneralInformation() {
 
   if (loading) return <p className="loading-text">Loading...</p>;
 
+  // Word files have no built-in viewer in the browser, so open them with Microsoft's online viewer
+  const resumeFileName = profile.resume
+    ? decodeURIComponent(profile.resume.split("/").pop())
+    : "";
+  const isWordResume = /\.docx?$/i.test(resumeFileName);
+  const resumeHref = isWordResume
+    ? `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(profile.resume)}`
+    : profile.resume;
+
   return (
     <div className="generalinfo-container">
       {/* Header */}
@@ -154,14 +163,14 @@ export default function GeneralInformation() {
             <label>Resume</label>
             {profile.resume ? (
               <a
-                href={profile.resume}
+                href={resumeHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="resume-link"
               >
                 <FaFilePdf className="pdf-icon" />
                 <div className="resume-info">
-                  <span className="resume-text">{profile.user}_resume.pdf</span>
+                  <span className="resume-text">{resumeFileName}</span>
                   <span className="resume-size">500 KB</span>
                 </div>
               </a>
